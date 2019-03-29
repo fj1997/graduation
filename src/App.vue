@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import titleBar from '@/components/TitleBar'
+import titleBar from '@/components/Index'
 export default {
   components: {
     titleBar
@@ -13,8 +13,8 @@ export default {
 }
 </script>
 
-<style scoped>
-  @import '../src/assets/less/global.less';
+<style>
+  @import '../src/common/less/global.less';
 /*#app {*/
   /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
   /*-webkit-font-smoothing: antialiased;*/

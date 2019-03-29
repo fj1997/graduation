@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import App from '../App'
+import CoursePlaza from '../components/CoursePlaza.vue'
 
 Vue.use(Router)
 
@@ -8,8 +8,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'App',
-      component: App
+      name: 'CoursePlaza',
+      component: CoursePlaza
+    },
+    {
+      path: '/courseplaza',
+      name: 'CoursePlaza',
+      component: CoursePlaza
     }
   ]
 })
