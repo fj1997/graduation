@@ -1,15 +1,12 @@
 <template>
   <div id="app">
-    <title-bar></title-bar>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import titleBar from '@/components/Index'
+
 export default {
-  components: {
-    titleBar
-  }
 }
 </script>
 
@@ -23,4 +20,7 @@ export default {
   /*color: #2c3e50;*/
   /*margin-top: 60px;*/
 /*}*/
+  #app{
+    height: 100%;
+  }
 </style>
