@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '../components/Index.vue'
 import Register from '../components/register/index.vue'
-import Login from '../components/login/index.vue'
+import Findpassword from '../components/find-password/index.vue'
 import Incourse from '../components/in-course/index.vue'
 import Outcourse from '../components/out-course/index.vue'
 Vue.use(Router)
@@ -33,12 +33,13 @@ export default new Router({
     {
       path: '/register',
       name: 'Register',
+      alias: '/login',
       component: Register
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
+      path: '/findpassword',
+      name: 'Findpassword',
+      component: Findpassword
     }
   ]
 })

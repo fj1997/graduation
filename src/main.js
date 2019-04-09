@@ -7,10 +7,13 @@ import router from './router'
 import './icon/iconfont'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
-import http from './http'
+// import http from './http'
 import ports from './ports'
-Vue.prototype.http = http
+import axios from 'axios'
+// require('./mock'); //引入mock数据，关闭则注释该行
+// Vue.prototype.http = http
 Vue.prototype.ports = ports
+Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 new Vue({

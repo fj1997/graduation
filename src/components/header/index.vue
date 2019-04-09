@@ -7,7 +7,7 @@
     </svg>
     <div class="title-bar">
       <p class="course-box">
-        <router-link class="course" to="/index/incourse">校内课程</router-link>
+        <router-link class="course" to="/index/incourse">校内课程{{msg}}</router-link>
         <router-link class="course" to="/index/outcourse">校外课程</router-link>
       </p>
       <span class="login" @click="goLogin"> 登录</span>
@@ -20,17 +20,52 @@
 export default {
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: ''
     }
+  },
+  created () {
+    let vm =this;
+    vm.test();
+    // this.$axios.get(this.ports.manage.login)
+    //   .then(function(res){
+      
+
+    //   })
+    //   .catch(function(err){
+
+    //   });
+        
   },
   methods: {
     goLogin () {
       let vm = this
-      vm.$router.push('/login')
+      vm.$router.push({
+        path:'/login',
+        query: { 
+          activeName:'first'
+          }
+      })
     },
     goRegister () {
       let vm = this
-      vm.$router.push('/register')
+      vm.$router.push({
+        path:'/register',
+        query: { 
+          activeName:'second'
+          }
+      })
+    },
+    test(){
+      // this.$axios.post(this.ports.pwd.getcheckcode,{
+      //   phone:'15084306826'
+      // })
+      // .then(function(res){
+      // console.log(res.data)
+
+      // })
+      // .catch(function(err){
+
+      // });
     }
   }
 }

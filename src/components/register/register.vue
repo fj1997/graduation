@@ -1,0 +1,197 @@
+<template>
+    <div>
+        <p class="error-tip" v-show="!errorTip">
+            {{errorText}}
+        </p>
+        <el-form :model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="身份" prop="identity">
+              <el-select v-model="ruleForm.identity" placeholder="请选择身份">
+                <el-option label="自由学习人员" value="other"></el-option>
+                <el-option label="重邮学生" value="student"></el-option>
+                <el-option label="教师" value="teacher"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="学号/教工号" prop="usernumber" v-if="ruleForm.identity!=='other'&& ruleForm.identity">
+              <el-input v-model="ruleForm.usernumber" placeholder="请输入学号/教工号"></el-input>
+            </el-form-item>
+            <el-form-item label="姓名" prop="username">
+              <el-input v-model="ruleForm.username" placeholder="设置姓名（3-5个字符）"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="pass">
+              <el-input type="password" v-model="ruleForm.pass" autocomplete="off" placeholder="设置密码,（6~8个字符，含英文大小写和数字）"></el-input>
+            </el-form-item>
+            <el-form-item label="电话" prop="phone">
+              <el-input v-model.number="ruleForm.phone" placeholder="请输入电话号码"></el-input>
+            </el-form-item>
+            <el-form-item label="验证码" prop="checkcode">
+              <el-input type="password" v-model="ruleForm.checkcode" placeholder="请输入验证码" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="button" :disabled="disabled" v-if="disabled==false" @click="getVerificationCode">发送验证码
+              </el-button>
+              <el-button type="button"  :disabled="disabled" v-if="disabled==true&& inittimes ==1" @click="getVerificationCode">发送验证码
+              </el-button>
+              <el-button type="button"  :disabled="disabled" v-if="disabled==true && inittimes !==1" @click="getVerificationCode">{{btntxt}}
+              </el-button>
+              <el-button type="primary" @click="submitForm('ruleForm')">注册重邮帮</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+</template>
+
+<script>
+import {isvalidPhone, isvalidPass} from './validate'
+export default {
+  data () {
+    //  自定义手机号正则表达式
+    let validPhone = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入电话号码'))
+      } else if (!isvalidPhone(value)) {
+        callback(new Error('请输入正确的11位手机号码'))
+      } else {
+        callback()
+      }
+    }
+    // 自定义密码正则表达式
+    let validPass = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入密码'))
+      } else if (!isvalidPass(value)) {
+        callback(new Error('密码必须包括字母和数字，6~8个字符'))
+      } else {
+        callback()
+      }
+    }
+    return {
+        errorTip: false,
+        errorText: '', //错误提示文字
+        disabled: true,//禁用状态
+        time: 0, //发送验证码的秒数
+        inittimes:1, //控制发送验证码按钮的文字
+        btntxt: '重新发送',
+        // 表单字段
+        ruleForm: {
+            username: '',
+            usernumber: '',
+            identity: '',
+            pass: '',
+            checkcode: '',
+            phone: ''
+        },
+        // 表单验证规则
+        rules: {
+            username: [
+            { required: true, message: '请输入姓名', trigger: 'blur', },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            ],
+            usernumber: [
+            { required: true, message: '请输入学号或教工号', trigger: 'blur'},
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            ],
+            identity: [
+            { required: true, message: '请选择身份', trigger: 'change' }
+            ],
+            pass: [
+            { validator: validPass, trigger: 'blur' }
+            ],
+            phone: [
+            { trigger: 'blur', validator: validPhone }
+            ],
+            checkcode:[
+            { required: true,message: '请输入验证码', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            ]
+        }
+    }
+  },
+  computed: {
+    // 验证表单的手机号是否符合正则表达式
+    phonePass () {
+      let vm = this;
+      return isvalidPhone(vm.ruleForm.phone)
+    }
+  },
+  watch: {
+    // 监听手机号码
+    phonePass (newVal,oldVal) {
+      let vm = this;
+      if (newVal){
+        vm.disabled = false;
+      }else {
+        vm.disabled = true;
+      }
+    }
+  },
+  methods: {
+    
+    submitForm(formName) {
+      let vm =this;
+      vm.$refs[formName].validate((valid) => {
+        if (valid) {
+          vm.$axios.post(vm.ports.submit.register,vm.ruleForm)
+            .then(function(res){
+                let data = res.data;
+                vm.errorTip = data.success;
+                vm.errorText = data.data.msg;
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+        }else {
+          console.log('error submit!!',valid);
+          return false;
+        }
+      });
+    },
+
+    /**
+     * 获取严验证码
+     */
+    getVerificationCode () {
+      let vm = this;
+      vm.inittimes++;
+      if(isvalidPhone(vm.ruleForm.phone)){
+        vm.time = 60;
+        vm.disabled = true;
+        vm.timer();
+
+        //获取短信验证码
+        vm.$axios.post(vm.ports.pwd.getcheckcode,{
+          phone:vm.ruleForm.phone
+        }).then(function(res){
+          console.log(res.data)
+          })
+          .catch(function(err){
+
+          });
+      }
+    },
+
+    /**@augments
+     * 倒计时
+     */
+    timer() {
+      let vm = this;
+      if (vm.time > 0) {
+        vm.time--;
+        vm.btntxt = vm.time + 's后重新获取';
+        setTimeout(this.timer, 1000);
+      } else {
+        vm.time = 0;
+        vm.btntxt = '获取验证码';
+        vm.disabled = false;
+      }
+    }
+  }
+}
+</script>
+
+<style scoped lang="less">
+.error-tip{
+    color: red;
+    font-size: 12px;
+    margin-left: 100px;
+    margin-bottom: 10px;
+}
+</style>
