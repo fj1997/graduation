@@ -3,32 +3,42 @@
     <div class="register-box">
       <el-tabs v-model="activeName">
         <el-tab-pane label="找回密码" name="three">
-            <p class="findpass-title">
-                每个人都可能遇到这种情况哦
-            </p>
-            <el-form :model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="电话" prop="phone">
-                <el-input v-model.number="ruleForm.phone" placeholder="请输入电话号码"></el-input>
-                </el-form-item>
-                <el-form-item label="验证码" prop="checkcode">
-                <el-input type="password" v-model="ruleForm.checkcode" placeholder="请输入验证码" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="pass">
-                <el-input type="password" v-model="ruleForm.pass" autocomplete="off" placeholder="设置密码,（6~8个字符，含英文大小写和数字）"></el-input>
-                </el-form-item>
-                <el-form-item>
-                <el-button type="button" :disabled="disabled" v-if="disabled==false" @click="getVerificationCode">发送验证码
-                </el-button>
-                <el-button type="button"  :disabled="disabled" v-if="disabled==true&& inittimes ==1" @click="getVerificationCode">发送验证码
-                </el-button>
-                <el-button type="button"  :disabled="disabled" v-if="disabled==true && inittimes !==1" @click="getVerificationCode">{{btntxt}}
-                </el-button>
-                <el-button type="primary" @click="findPassword('ruleForm')" size="medium">找回密码</el-button>
-                </el-form-item>
-            </el-form>
-            <p class="forget-password" @click="goLogin()"> 
-            返回登陆?
-            </p>
+            <div  v-show="!regsuccess">
+                <p class="findpass-title">
+                    每个人都可能遇到这种情况哦
+                </p>
+                <el-form :model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                    <el-form-item label="电话" prop="phone">
+                    <el-input v-model.number="ruleForm.phone" placeholder="请输入电话号码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="验证码" prop="checkcode">
+                    <el-input type="password" v-model="ruleForm.checkcode" placeholder="请输入验证码" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="pass">
+                    <el-input type="password" v-model="ruleForm.pass" autocomplete="off" placeholder="设置密码,（6~8个字符，含英文大小写和数字）"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                    <el-button type="button" :disabled="disabled" v-if="disabled==false" @click="getVerificationCode">发送验证码
+                    </el-button>
+                    <el-button type="button"  :disabled="disabled" v-if="disabled==true&& inittimes ==1" @click="getVerificationCode">发送验证码
+                    </el-button>
+                    <el-button type="button"  :disabled="disabled" v-if="disabled==true && inittimes !==1" @click="getVerificationCode">{{btntxt}}
+                    </el-button>
+                    <el-button type="primary" @click="findPassword('ruleForm')" size="medium">找回密码</el-button>
+                    </el-form-item>
+                </el-form>
+                <p class="forget-password" @click="goLogin()"> 
+                返回登陆?
+                </p>
+            </div>
+            
+             <div v-show="regsuccess" class="success-box">           
+                <back :backText='backLogin'
+                    :dscrText='successText'
+                    :path='path'
+                    :query='query'
+                ></back>
+              </div>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -38,6 +48,8 @@
 
 <script>
 import {isvalidPhone, isvalidPass} from './validate'
+import {loginText} from '@assets/js/constText'
+import back from '@/components/common/back.vue'
 export default {
   data () {
     //  自定义手机号正则表达式
@@ -62,6 +74,13 @@ export default {
     }
     return {
         activeName: 'three',
+        regsuccess: false, //注册是否成功
+        successText:loginText.findPass,//注册成功文字提示,
+        backLogin:loginText.backLogin,   //返回登陆
+        path:'/login',
+        query: { 
+          activeName:'first'
+        },
         disabled: true,
         time: 0,
         inittimes:1,
@@ -105,6 +124,9 @@ export default {
         }
     }
   },
+  components:{
+    'back': back
+  },
   methods: {
     /***
      * 找回密码
@@ -115,7 +137,8 @@ export default {
         if (valid) {
           vm.$axios.post(vm.ports.pwd.resetpassword,vm.ruleForm)
             .then(function(res){
-              console.log(res.data)
+             let data = res.data;
+            vm.regsuccess = data.success;
              
             })
             .catch(function(err){
@@ -143,9 +166,11 @@ export default {
 
         //获取短信验证码
         vm.$axios.post(vm.ports.pwd.getcheckcode,{
-            phone:'15084306826'
-            }).then(function(res){
-            console.log(res.data)
+          phone:vm.ruleForm.phone
+        })
+        .then(function(res){
+            // let data = res.data;
+            // vm.regsuccess = data.success;
             })
             .catch(function(err){
 
@@ -228,7 +253,20 @@ export default {
             text-decoration: underline;
         }
     }
+    
   }
+  .success-box{
+    margin-top: 50px;
+    margin-left: 90px;
+    .icon-chenggong{
+        color: #409EFF;
+        font-size: 20px;
+        vertical-align: -10px;
+    }
+    .success-tip{
+        font-size: 20px;
+    }
+}
 
 </style>
 <style lang="less">
@@ -245,4 +283,5 @@ export default {
       margin-left: 150px;
     }
   }
+  
 </style>

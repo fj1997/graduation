@@ -1,46 +1,61 @@
 <template>
     <div>
-        <p class="error-tip" v-show="!errorTip">
-            {{errorText}}
-        </p>
-        <el-form :model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="身份" prop="identity">
-              <el-select v-model="ruleForm.identity" placeholder="请选择身份">
-                <el-option label="自由学习人员" value="other"></el-option>
-                <el-option label="重邮学生" value="student"></el-option>
-                <el-option label="教师" value="teacher"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="学号/教工号" prop="usernumber" v-if="ruleForm.identity!=='other'&& ruleForm.identity">
-              <el-input v-model="ruleForm.usernumber" placeholder="请输入学号/教工号"></el-input>
-            </el-form-item>
-            <el-form-item label="姓名" prop="username">
-              <el-input v-model="ruleForm.username" placeholder="设置姓名（3-5个字符）"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="pass">
-              <el-input type="password" v-model="ruleForm.pass" autocomplete="off" placeholder="设置密码,（6~8个字符，含英文大小写和数字）"></el-input>
-            </el-form-item>
-            <el-form-item label="电话" prop="phone">
-              <el-input v-model.number="ruleForm.phone" placeholder="请输入电话号码"></el-input>
-            </el-form-item>
-            <el-form-item label="验证码" prop="checkcode">
-              <el-input type="password" v-model="ruleForm.checkcode" placeholder="请输入验证码" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="button" :disabled="disabled" v-if="disabled==false" @click="getVerificationCode">发送验证码
-              </el-button>
-              <el-button type="button"  :disabled="disabled" v-if="disabled==true&& inittimes ==1" @click="getVerificationCode">发送验证码
-              </el-button>
-              <el-button type="button"  :disabled="disabled" v-if="disabled==true && inittimes !==1" @click="getVerificationCode">{{btntxt}}
-              </el-button>
-              <el-button type="primary" @click="submitForm('ruleForm')">注册重邮帮</el-button>
-            </el-form-item>
-        </el-form>
+      <!-- 注册页面 -->
+        <div v-show="!regsuccess">
+            <p class="error-tip" v-show="!errorTip">
+                {{errorText}}
+            </p>
+            <el-form :model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="身份" prop="identity">
+                <el-select v-model="ruleForm.identity" placeholder="请选择身份">
+                    <el-option label="自由学习人员" value="other"></el-option>
+                    <el-option label="重邮学生" value="student"></el-option>
+                    <el-option label="教师" value="teacher"></el-option>
+                </el-select>
+                </el-form-item>
+                <el-form-item label="学号/教工号" prop="usernumber" v-if="ruleForm.identity!=='other'&& ruleForm.identity">
+                <el-input v-model="ruleForm.usernumber" placeholder="请输入学号/教工号"></el-input>
+                </el-form-item>
+                <el-form-item label="姓名" prop="username">
+                <el-input v-model="ruleForm.username" placeholder="设置姓名（3-5个字符）"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="pass">
+                <el-input type="password" v-model="ruleForm.pass" autocomplete="off" placeholder="设置密码,（6~8个字符，含英文大小写和数字）"></el-input>
+                </el-form-item>
+                <el-form-item label="电话" prop="phone">
+                <el-input v-model.number="ruleForm.phone" placeholder="请输入电话号码"></el-input>
+                </el-form-item>
+                <el-form-item label="验证码" prop="checkcode">
+                <el-input type="password" v-model="ruleForm.checkcode" placeholder="请输入验证码" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item>
+                <el-button type="button" :disabled="disabled" v-if="disabled==false" @click="getVerificationCode">发送验证码
+                </el-button>
+                <el-button type="button"  :disabled="disabled" v-if="disabled==true&& inittimes ==1" @click="getVerificationCode">发送验证码
+                </el-button>
+                <el-button type="button"  :disabled="disabled" v-if="disabled==true && inittimes !==1" @click="getVerificationCode">{{btntxt}}
+                </el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">注册重邮帮</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <!-- 注册成功后的页面 -->
+        <div v-show="regsuccess" class="success-box">
+           
+            <back :backText='backLogin'
+                  :dscrText='successText'
+                  :path='path'
+                  :query='query'
+            ></back>
+        </div>
     </div>
+    
 </template>
 
 <script>
 import {isvalidPhone, isvalidPass} from './validate'
+import {loginText} from '@assets/js/constText'
+import back from '@/components/common/back.vue'
 export default {
   data () {
     //  自定义手机号正则表达式
@@ -64,8 +79,15 @@ export default {
       }
     }
     return {
-        errorTip: false,
+        errorTip: false, //控制提示出现
         errorText: '', //错误提示文字
+        regsuccess: false, //注册是否成功
+        successText:loginText.regSuccess,//注册成功文字提示,
+        backLogin:loginText.backLogin,   //返回登陆
+        path:'/login',
+        query: { 
+          activeName:'first'
+        },
         disabled: true,//禁用状态
         time: 0, //发送验证码的秒数
         inittimes:1, //控制发送验证码按钮的文字
@@ -123,6 +145,9 @@ export default {
       }
     }
   },
+  components:{
+    'back': back
+  },
   methods: {
     
     submitForm(formName) {
@@ -133,6 +158,7 @@ export default {
             .then(function(res){
                 let data = res.data;
                 vm.errorTip = data.success;
+                vm.regsuccess = data.success;
                 vm.errorText = data.data.msg;
             })
             .catch(function(err){
@@ -182,6 +208,12 @@ export default {
         vm.btntxt = '获取验证码';
         vm.disabled = false;
       }
+    },
+    findPassword () {
+        let vm = this
+        vm.$router.push({
+            path:'/findpassword'
+        })
     }
   }
 }
@@ -194,4 +226,9 @@ export default {
     margin-left: 100px;
     margin-bottom: 10px;
 }
+.success-box{
+    margin-top: 50px;
+    margin-left: 90px;
+}
+
 </style>

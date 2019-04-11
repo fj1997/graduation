@@ -1,7 +1,7 @@
 <template>
   <div class="register-banner">
     <div class="register-box">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName" >
         <el-tab-pane label="登陆" name="first">
          <login></login>
         </el-tab-pane>
@@ -29,6 +29,7 @@ export default {
     'Login': Login
   },
    methods:{
+     /** */
       handleClick(tab) {
         let vm = this;
         if(tab.name == "first") {
