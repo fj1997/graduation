@@ -11,22 +11,41 @@
       </div>
     </div>
     <ul class="course-list-wrap clearfix">
-      <li v-for="i in 10" :key="i">
+      <li v-for="(item,idx) in courseList" :key="idx">
         <img src="../../assets/img/course1.jpg" alt="" >
-        <p class="course-name">中国传统文化 </p>
+        <p class="course-name">{{item.name}}</p>
         <p class="course-teacher-info">
-          <span>重庆邮电大学</span><span>李馨</span>
+          <span>{{item.school}}</span><span>{{item.teacher}}</span>
         </p>
       </li>
     </ul>
+    <pagination 
+      v-on:getList="getCourseList1"
+      :url="url"
+      >
+
+    </pagination>
   </div>
 </template>
 
 <script>
+import Pagination from '@/components/common/pagination.vue'
 export default {
   data () {
+    let vm = this;
     return {
-      msg: 'Welcome to Your Vue.js App'
+     courseList:[],
+     url:vm.ports.course.in
+    }
+  },
+  components:{
+    'pagination': Pagination
+  },
+  methods:{
+    getCourseList1(courseList){
+      let vm = this;
+      vm.courseList = courseList;
+      console.log(vm.courseList)
     }
   }
 }
@@ -34,9 +53,7 @@ export default {
 
 <style scoped lang="less">
   .main-box {
-    position: relative;
-    top: 70px;
-    z-index: -1;
+    padding-top: 70px;
     .course-img {
       width: 100%;
       height: 476px;

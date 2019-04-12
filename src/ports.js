@@ -9,7 +9,11 @@ export default {
     resetpassword: '/api/user/findpass'    //找回密码
   },
   submit: {
-    register:'/api/user/form',    //注册
-    login:'/api/user/login'       //登陆
+    register: '/api/user/form',    //注册
+    login: '/api/user/login'       //登陆
+  },
+  course: {
+    in: '/api/course/inlist',       //校内课程
+    out:'/api/course/outlist'       //校外课程
   }
 }

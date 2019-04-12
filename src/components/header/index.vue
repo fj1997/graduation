@@ -80,6 +80,7 @@ export default {
     margin: auto;
     line-height: 70px;
     background-color: #fff;
+    
   }
   .school-logo{
     /*display: inline-block;*/

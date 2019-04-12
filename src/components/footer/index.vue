@@ -16,6 +16,6 @@ export default {
 
 <style scoped lang="less">
   div{
-    position: relative;
+   margin-top: 100px;
   }
 </style>
