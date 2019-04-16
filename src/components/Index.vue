@@ -12,7 +12,7 @@ import Footer from '@/components/footer/index'
 export default {
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+     
     }
   },
   components: {

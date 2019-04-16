@@ -5,6 +5,7 @@ import Register from '../components/register/index.vue'
 import Findpassword from '../components/find-password/index.vue'
 import Incourse from '../components/in-course/index.vue'
 import Outcourse from '../components/out-course/index.vue'
+import Search from '../components/search/index.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -40,6 +41,11 @@ export default new Router({
       path: '/findpassword',
       name: 'Findpassword',
       component: Findpassword
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search
     }
   ]
 })

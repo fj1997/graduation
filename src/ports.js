@@ -14,6 +14,7 @@ export default {
   },
   course: {
     in: '/api/course/inlist',       //校内课程
-    out:'/api/course/outlist'       //校外课程
+    out:'/api/course/outlist',       //校外课程
+    search:'/api/course/search'      //搜索课程
   }
 }

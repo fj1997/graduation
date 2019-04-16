@@ -1,13 +1,20 @@
 <template>
   <div class="title-box">
     <img  class="school-logo" src="../../assets/img/school_logo.png">
-    <input type="text" placeholder="搜索课程名称、老师等" class="search">
-    <svg class="icon icon-sousuo" aria-hidden="true" >
-      <use xlink:href="#icon-sousuo"></use>
-    </svg>
+    <input type="text" 
+          placeholder="搜索课程名称、老师等" 
+          class="search" 
+          v-model="searchName"
+          @keyup.enter="search">
+    <span @click="search" class="icon-sousuo">
+      <svg class="icon" aria-hidden="true" >
+        <use xlink:href="#icon-sousuo"></use>
+      </svg>
+    </span>
+    
     <div class="title-bar">
       <p class="course-box">
-        <router-link class="course" to="/index/incourse">校内课程{{msg}}</router-link>
+        <router-link class="course" to="/index/incourse">校内课程</router-link>
         <router-link class="course" to="/index/outcourse">校外课程</router-link>
       </p>
       <span class="login" @click="goLogin"> 登录</span>
@@ -20,21 +27,8 @@
 export default {
   data () {
     return {
-      msg: ''
+      searchName: ''
     }
-  },
-  created () {
-    let vm =this;
-    vm.test();
-    // this.$axios.get(this.ports.manage.login)
-    //   .then(function(res){
-      
-
-    //   })
-    //   .catch(function(err){
-
-    //   });
-        
   },
   methods: {
     goLogin () {
@@ -55,17 +49,16 @@ export default {
           }
       })
     },
-    test(){
-      // this.$axios.post(this.ports.pwd.getcheckcode,{
-      //   phone:'15084306826'
-      // })
-      // .then(function(res){
-      // console.log(res.data)
-
-      // })
-      // .catch(function(err){
-
-      // });
+    search () {
+      let vm = this
+      if(vm.searchName) {
+        vm.$router.push({
+        path:'/search',
+        query: { 
+          searchName:vm.searchName
+          }
+        })
+      }
     }
   }
 }
@@ -117,6 +110,7 @@ export default {
     position: relative;
     left: -32px;
     top:6px;
+    cursor: pointer;
   }
   .title-bar{
     line-height: 70px;

@@ -5,3 +5,14 @@
   fill: currentColor;
   overflow: hidden;
 }
+
+.clearfix::after{
+  display: block;
+  clear: both;
+  content: '';
+}
+.ellipsis{
+  overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
