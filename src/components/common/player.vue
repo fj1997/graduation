@@ -1,13 +1,11 @@
 <template>
-  <div>
+ 
     <video-player  class="video-player vjs-custom-skin"
-     ref="videoPlayer"
-     :playsinline="true"
-     :options="playerOptions"
-></video-player>
+                  ref="videoPlayer"
+                  :playsinline="true"
+                  :options="playerOptions">
+     </video-player>
 
-
-  </div>
 </template>
 
 <script>
@@ -42,6 +40,5 @@ export default {
 <style scoped lang="less">
 .video-player{
     width: 500px;
-    height: 400px;
 }
 </style>

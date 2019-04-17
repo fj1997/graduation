@@ -54,7 +54,6 @@ export default {
   .main-box {
     position: relative;
     top: 70px;
-    z-index: -1;
     .course-img {
       width: 100%;
       height: 476px;
