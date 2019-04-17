@@ -12,6 +12,10 @@ import ports from './ports'
 import axios from 'axios'
 // require('./mock'); //引入mock数据，关闭则注释该行
 // Vue.prototype.http = http
+import VideoPlayer from 'vue-video-player'
+require('video.js/dist/video-js.css')
+require('vue-video-player/src/custom-theme.css')
+Vue.use(VideoPlayer)
 Vue.prototype.ports = ports
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
