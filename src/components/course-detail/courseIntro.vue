@@ -2,8 +2,12 @@
   <div class="course-detail-box clearfix">
     <div class="course-box">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="课程详情" name="first">用户管理</el-tab-pane>
-      <el-tab-pane label="课程评价" name="second">课程评价</el-tab-pane>
+      <el-tab-pane label="课程详情" name="first">
+        <detail></detail>
+      </el-tab-pane>
+      <el-tab-pane label="课程评价" name="second">
+        <evaluate></evaluate>
+      </el-tab-pane>
     </el-tabs>
     </div>
     <div class="techer-intro">
@@ -13,11 +17,17 @@
 </template>
 
 <script>
+import detail from './detail/index.vue'
+import evaluate from './evaluate/index.vue'
 export default {
   data () {
     return {
-      activeName: 'second'
+      activeName: 'first'
     }
+  },
+  components:{
+    detail,
+    evaluate
   },
   methods: {
     handleClick(tab, event) {
