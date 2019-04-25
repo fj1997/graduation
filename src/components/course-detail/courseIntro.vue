@@ -10,8 +10,19 @@
       </el-tab-pane>
     </el-tabs>
     </div>
-    <div class="techer-intro">
-      老师介绍
+    <div class="teacher-intro">
+      <img src="../../assets/img/portrait.png" class="head-portrait">
+      <div class="teacher-basic-info">
+        <p>
+          <span>李芳菲</span> · <span>计算机学院</span>
+        </p>
+        <p>
+          <span>博士</span> <span>副教授</span>
+        </p>
+      </div>
+      <div class="teacher-detail-info">
+        目前在吉林大学材料学院无机非金属材料工程专业，从事相关的教学与科研工作，研究领域为无机功能材料、矿物材料功能化利用、工业废弃物资源循环利用。所在专业设有国土资源部功能矿物物化性能检测方法开放研究实验室，和吉林省固体废弃物资源化利用工程研究中心。
+      </div>
     </div>
   </div>
 </template>
@@ -48,13 +59,29 @@ export default {
       padding: 0 40px;
       background: #fff;
     }
-    .techer-intro{
+    .teacher-intro{
       width: 245px;
-      height: 250px;
       padding: 25px;
+      // float: left;
       display: inline-block;
       background: #fff;
-      
+      .head-portrait{
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .teacher-basic-info{
+        display: inline-block;
+        line-height: 28px;
+        color: #3D4059;
+      }
+      .teacher-detail-info{
+        margin-top: 15px;
+        font-size: 13px;
+        color: #999;
+
+      }
     }
 }
 </style>
