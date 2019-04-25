@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-        <span class="average-score-text">3.7</span>
+        <span class="average-score-text">{{evaluate.averageScore}}</span>
         <div class="average-score">
             <el-rate
                 v-model="value"
@@ -9,7 +9,7 @@
                 text-color="#ff9900"
                 score-template="{value}">
             </el-rate>
-            <p>共XXX条数据</p>
+            <p>共{{evaluate.total}}条数据</p>
         </div>
         <span class="my-evaluate">
             <el-button type="primary"  @click="dialogFormVisible = true">我要评论</el-button>
@@ -53,11 +53,11 @@
     </div>
     
     <ul>
-        <li class="evaluate-list" v-for="i in 10" :key="i"> 
+        <li class="evaluate-list" v-for="(item,idx) in evaluate.evaluateList" :key="idx"> 
             <img src="../../../assets/img/portrait.png" class="head-portrait">
             <div class="evaluate-info">
                 
-                <p class="evaluate-name">傅杰</p>
+                <p class="evaluate-name">{{item.name}}</p>
                 <div class="evaluate-per-score">
                     <el-rate
                         v-model="aa[0]"
@@ -68,10 +68,10 @@
                 </el-rate>
                 </div>
                 <div class="evaluate-content">
-                    我是一个理科生，向来都论述类的东西不太感兴趣，也觉得枯燥，其实很多时候一开始在学习论述类，发展史之类的东西，就会有疑问，我为什么要学这些，这些对我有什么用，我的答案是毫无用处，可是有时候在实际实例中可能偶然会有一天觉得我可能应该回过头去看看当时的论述。 我希望老师在讲解课程中，能引用当下的实例，能让我们切实感受到生活中处处是心理，如何更好的应用心理，如何应用心理在当下生活学习工作中我们能成长的更快更好，在讲解实例和应用过程中无意间渗透出某个实例应用...
+                    {{item.content}}
                 </div> 
                 <p class="evaluate-time clearfix">
-                    <span>发表于2018年08月23日</span>
+                    <span>发表于{{item.time}}</span>
                     <span class="delete-evaluate">删除</span>
                     <span @click="dialogFormVisible = true" class="edit-evaluate">编辑</span>
             
@@ -93,6 +93,11 @@ export default {
     textarea:'',
     dialogFormVisible: false
     
+    }
+  },
+  props:{
+    evaluate:{
+      type: Object
     }
   },
   computed:{

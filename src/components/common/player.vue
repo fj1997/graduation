@@ -12,7 +12,22 @@
 export default {
   data () {
    return {
-        playerOptions: {
+      }
+    },
+    props:{
+      videoSrc:{
+        type:String,
+        default:'/static/mp4/test.mp4'
+      },
+      videoPoster:{
+        type:String,
+        default:'http://static.smartisanos.cn/pr/img/video/video_03_cc87ce5bdb.jpg'
+      }
+    },
+    computed:{
+      playerOptions(){
+        let vm = this;
+        return {
           playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
           autoplay: false, //如果true,浏览器准备好时开始回放。
           controls: true, //控制条
@@ -24,9 +39,9 @@ export default {
           fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
           sources: [{
             type: "video/mp4",
-            src: "/static/mp4/test.mp4"
+            src: vm.videoSrc
           }],
-          poster: "http://static.smartisanos.cn/pr/img/video/video_03_cc87ce5bdb.jpg", //你的封面地址
+          poster: vm.videoPoster, //你的封面地址
           width: 500,
           notSupportedMessage: '此视频暂无法播放，请稍后再试' //允许覆盖Video.js无法播放媒体源时显示的默认信息。
         }

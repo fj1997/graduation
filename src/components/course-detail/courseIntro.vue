@@ -3,10 +3,10 @@
     <div class="course-box">
       <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="课程详情" name="first">
-        <detail></detail>
+        <detail :courseDetail="courseDetail"></detail>
       </el-tab-pane>
       <el-tab-pane label="课程评价" name="second">
-        <evaluate></evaluate>
+        <evaluate :evaluate="evaluate"></evaluate>
       </el-tab-pane>
     </el-tabs>
     </div>
@@ -14,14 +14,14 @@
       <img src="../../assets/img/portrait.png" class="head-portrait">
       <div class="teacher-basic-info">
         <p>
-          <span>李芳菲</span> · <span>计算机学院</span>
+          <span>{{courseDetail.teacherInfo.name}}</span> · <span>{{courseDetail.teacherInfo.college}}</span>
         </p>
         <p>
-          <span>博士</span> <span>副教授</span>
+          <span>{{courseDetail.teacherInfo.college}}</span> <span>{{courseDetail.teacherInfo.degree}}</span>
         </p>
       </div>
       <div class="teacher-detail-info">
-        目前在吉林大学材料学院无机非金属材料工程专业，从事相关的教学与科研工作，研究领域为无机功能材料、矿物材料功能化利用、工业废弃物资源循环利用。所在专业设有国土资源部功能矿物物化性能检测方法开放研究实验室，和吉林省固体废弃物资源化利用工程研究中心。
+        {{courseDetail.teacherInfo.intro}}
       </div>
     </div>
   </div>
@@ -33,8 +33,19 @@ import evaluate from './evaluate/index.vue'
 export default {
   data () {
     return {
-      activeName: 'first'
+      activeName: 'first',
+      courseDetail:{
+        teacherInfo:{
+          name:''
+        }
+      },
+      evaluate:{}
     }
+  },
+  mounted(){
+    let vm = this;
+    vm.getCourseDetail();
+    vm.getEvaluate();
   },
   components:{
     detail,
@@ -43,6 +54,38 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+     getCourseDetail(){
+      let vm = this;
+      vm.$axios.post(vm.ports.course.detail.coursedetail,{
+          courseID: "95651"
+        }).then(function(res){
+          let data = res.data.data;
+            if(res.data.success){
+              vm.courseDetail = data;
+              
+            }
+          })
+          .catch(function(err){
+
+          });
+    },
+    getEvaluate(){
+      let vm = this;
+      vm.$axios.post(vm.ports.course.detail.evaluate,{
+          "currentPage": 1,
+          "pageSize": 86886,
+          "courseID": "79922"
+        }).then(function(res){
+          let data = res.data.data;
+            if(res.data.success){
+              vm.evaluate = data;
+              
+            }
+          })
+          .catch(function(err){
+
+          });
     }
   }
 }

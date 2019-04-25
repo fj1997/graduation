@@ -1,10 +1,10 @@
 <template>
   <div class="course-box">
-    <p class="course-name">女子防身术</p>
+    <p class="course-name">{{basicData.courseName}}</p>
     <div class="course-info">
       <p class="course-time">
           <span>课程类型：</span>
-          <span>校内</span>
+          <span>{{courseType}}</span>
       </p>
       <p class="course-time">
           <span>开课时间：</span>
@@ -15,32 +15,44 @@
           <svg class="icon icon-style" aria-hidden="true" >
               <use xlink:href="#icon-shijian2"></use>
           </svg>
-          <span class="course-count">学分:</span><span class="">2</span>
+          <span class="course-count">学分:</span><span class="">{{basicData.courseCount}}</span>
         </p>
         <p class="course-creidt-wrap">
           <svg class="icon icon-style" aria-hidden="true" >
             <use xlink:href="#icon-xueshimao"></use>
         </svg>
-        <span class="course-count">课时:</span><span>12</span>
+        <span class="course-count">课时:</span><span>{{basicData.courseHour}}</span>
         </p>
         <p class="course-creidt-wrap">
           <svg class="icon icon-style teacher-name" aria-hidden="true" >
             <use xlink:href="#icon-rentou"></use>
         </svg>
-        <span class="course-count">教师</span><span>xxxx</span>
+        <span class="course-count">教师</span><span>{{basicData.courseTeacher}}</span>
         </p>
       </div>
     </div>
-    <p class="add-count">共有12156个人参加</p>
+    <p class="add-count">共有{{basicData.studentNum}}个人参加</p>
     <p class="add-course-button">立即参加</p>
   </div>
 </template>
 
 <script>
+import {courseType} from '@assets/js/constText';
 export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  props:{
+    basicData:{
+      type: Object
+    }
+  },
+  computed:{
+    courseType(){
+      let vm = this;
+      return courseType[vm.basicData.courseType]
     }
   }
 }

@@ -8,7 +8,7 @@
         <span class="detail-title">课程概述</span>
       </p>
       <p class="course-intro-text">
-        人格理论所描述的人格类型，并没有好坏之别，只不过不同类型的人回应世界的方式不同而已。人格理论作为一张详尽描绘人类性格特征的活地图，是我们了解自己、认识和理解他人的一把金钥匙，是一件与人沟通及有效交流的利器。本课程选取生动有趣的案例教学为切入点，描绘“完美主义者”“好好先生”“追求关注者”“被动攻击者”等不同人格类型者的心理模式，试图探索各种人格特点的成因，追溯他们的早期经历和原生家庭。
+        {{courseDetail.courseOverview}}
       </p>
     </div>
     <div class="course-target">
@@ -19,7 +19,7 @@
         <span class="detail-title">授课目标</span>
       </p>
       <p class="course-intro-text">
-        人格理论所描述的人格类型，并没有好坏之别，只不过不同类型的人回应世界的方式不同而已。人格理论作为一张详尽描绘人类性格特征的活地图，是我们了解自己、认识和理解他人的一把金钥匙，是一件与人沟通及有效交流的利器。本课程选取生动有趣的案例教学为切入点，描绘“完美主义者”“好好先生”“追求关注者”“被动攻击者”等不同人格类型者的心理模式，试图探索各种人格特点的成因，追溯他们的早期经历和原生家庭。
+        {{courseDetail.courseTarget}}
       </p>
     </div>
     <div class="course-chapter">
@@ -30,13 +30,13 @@
         <span class="detail-title">课程大纲</span>
       </p>
       <ul>
-          <li v-for="i in 10" :key="i" class="chapter-box">
+          <li v-for="(item,idx) in courseDetail.courseChapter" :key="idx" class="chapter-box">
             <div class="chapter-list">
-              <p class="chapter-title">第一章 中国传统文化的基本精神</p>
+              <p class="chapter-title">第一章 {{item.bigChapter}}</p>
               <ul>
-                <li v-for="i in 5" :key="i" class="chapter-list-wrap">
+                <li v-for="(i,index) in item.smallChapter" :key="index" class="chapter-list-wrap">
                   <p class="cricle"></p>
-                  <p class="small-chapter">人格理论所描述的人格类型，并没有好坏之别</p>
+                  <p class="small-chapter">{{i}}</p>
                 </li>
               </ul>
             </div>
@@ -58,7 +58,12 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
-  }
+  },
+  props:{
+    courseDetail:{
+      type: Object
+    }
+  },
 }
 </script>
 

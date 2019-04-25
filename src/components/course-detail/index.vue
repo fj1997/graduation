@@ -4,14 +4,14 @@
     <div class="mian-box">
       <div class="courseHome-wrap clearfix">
         <div class="video-box">
-          <video-player></video-player>
+          <video-player :videoSrc="videoSrc" :videoPoster="videoPoster"></video-player>
         </div>
         <div class="add-course">
-          <add-course></add-course>
+          <add-course :basicData="basicData" ></add-course>
         </div>
       </div>
       <div class="intro-box">
-        <course-intro></course-intro>
+        <course-intro :courseDetail="courseDetail"></course-intro>
       </div>
     </div>
   </div>
@@ -23,10 +23,15 @@ import VideoPlayer from '@/components/common/player'
 import AddCourse from './addCourse'
 import CouserIntro from './courseIntro'
 import courseIntro from './courseIntro.vue';
+import { ifError } from 'assert';
 export default {
   data () {
    return {
-        
+      videoSrc:'',
+      videoPoster:'',
+      basicData:{},
+      courseDetail:{},
+      evaluateDetail:{}
     }
   },
   components:{
@@ -34,6 +39,65 @@ export default {
     'header-bar': Header,
     'add-course': AddCourse,
     'course-intro': courseIntro
+  },
+  mounted(){
+    let vm = this;
+    vm.getBasicInfo();
+    
+  },
+  methods:{
+    getBasicInfo(){
+      let vm = this;
+      vm.$axios.post(vm.ports.course.detail.courseintro,{
+          courseID: "95651"
+        }).then(function(res){
+          let data = res.data.data;
+            if(res.data.success){
+              vm.videoSrc = data.videoSrc;
+              vm.videoPoster = data.VideoPlayer;
+              vm.basicData = data;
+              
+            }
+          })
+          .catch(function(err){
+
+          });
+    },
+   
+    getCourseDetail2(){
+      let vm = this;
+      vm.$axios.post(vm.ports.course.detail.coursedetail,{
+          courseID: "95651"
+        }).then(function(res){
+          let data = res.data.data;
+            if(res.data.success){
+              vm.videoSrc = data.videoSrc;
+              vm.videoPoster = data.VideoPlayer;
+              vm.basicData = data;
+              
+            }
+          })
+          .catch(function(err){
+
+          });
+    },
+    getEvaluate(){
+      let vm = this;
+      vm.$axios.post(vm.ports.course.detail.evaluate,{
+          courseID: "95651"
+        }).then(function(res){
+          let data = res.data.data;
+            if(res.data.success){
+              vm.videoSrc = data.videoSrc;
+              vm.videoPoster = data.VideoPlayer;
+              vm.basicData = data;
+              
+            }
+          })
+          .catch(function(err){
+
+          });
+    }
   }
   }
 
