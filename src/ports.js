@@ -4,13 +4,16 @@ export default {
     login: '/user/login', // 登录
     logout: '/manage/company/loginOut' // // 退出
   },
+  user:{
+    user:'user/user' // 【用户】获取用户信息（用户登录后）
+  },
   pwd: {
     getcheckcode: '/validCode/validCode',   //获取验证码
     resetpassword: '/user/password'    //找回密码
   },
   submit: {
     register: '/user/register',    //注册
-    login: '/user/login'       //登陆
+    login: '/user/login',   //登陆
   },
   course: {
     in: '/course/inlist',       //校内课程

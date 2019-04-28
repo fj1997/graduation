@@ -12,6 +12,7 @@ const state={
 const mutations={
   getUserPassword(state,n){
     state.userPassword = n;
+    console.log(state.userPassword)
   },
   getUserPhone(state,n){
     state.userPassword = n;
@@ -19,12 +20,12 @@ const mutations={
   getUserType(state,n){
     state.userType = n;
   },
-  getUseruserName(state,n){
-    state.useruserName = n;
+  getUserName(state,n){
+    state.userName = n;
   },
   getUserNumber(state,n){
     state.Number = n;
-  },
+  }
 
 }
 const getters={

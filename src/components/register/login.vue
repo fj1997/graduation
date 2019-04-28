@@ -27,6 +27,8 @@
 
 <script>
 import {isvalidPhone, isvalidPass} from './validate'
+import store from '@/vuex/store';
+import {mapState,mapMutations,mapGetters,mapActions} from 'vuex'
 export default {
   data () {
     //  自定义手机号正则表达式
@@ -71,25 +73,45 @@ export default {
     }
   },
   methods: {
-    
+    ...mapMutations(['getUserPassword','getUserPhone','getUserType','getUserName','getUserNumber']),
     submitForm (formName) {
         let vm = this;
         
         vm.$refs[formName].validate((valid) => {
             if (valid) {
-            
+
+            //用户登录
             vm.$axios.post(vm.ports.submit.login,vm.loginForm)
                 .then(function(res){
                     let data = res.data
+
+                    //成功后
                     if(data.result){
+
+                        //获取用户信息（用户登录后）
+                        vm.$axios.get(vm.ports.user.user)
+                            .then(function (res) {
+                                if(res.data.result){
+                                    let userData = res.data.data;
+                                    vm.getUserPassword(userData.userPassword);
+                                    vm.getUserPhone(userData.userPhone);
+                                    vm.getUserType(userData.userType);
+                                    vm.getUserName(userData.userName);
+                                    vm.getUserNumber(userData.userNumber);
+                                }
+                                
+                            })
+                            .catch(function (err) {
+                                console.log(err);
+                            });
+
+                        //  登陆成功后进入校内课程  
                         vm.$router.push({
                             path:'/index/incourse'
                         })
                     }else{
                         vm.errorTip = data.result;
                     }
-                    
-                
                 })
                 .catch(function(err){
                     return false
