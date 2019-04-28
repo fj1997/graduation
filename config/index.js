@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api':{
+      '/':{
         target:'https://result.eolinker.com/7NNP7qG5ddf6d7db9d4aa1ec8d81594aefd92ad37d4be9d?uri=',
         changeOrigin:true,
         pathRewrite:{
-          '^/api': '/api'
+          '^/api': '/'
         }
       }
     },

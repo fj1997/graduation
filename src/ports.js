@@ -1,16 +1,16 @@
 export default {
   manage: {
-    register: '/manage/company/register', // 注册接口
-    login: '/api/user/userInfo', // 登录
+    register: '/user/login', // 注册接口
+    login: '/user/login', // 登录
     logout: '/manage/company/loginOut' // // 退出
   },
   pwd: {
-    getcheckcode: '/api/user/checkcode',   //获取验证码
-    resetpassword: '/api/user/findpass'    //找回密码
+    getcheckcode: '/validCode/validCode',   //获取验证码
+    resetpassword: '/user/password'    //找回密码
   },
   submit: {
-    register: '/api/user/form',    //注册
-    login: '/api/user/login'       //登陆
+    register: '/user/register',    //注册
+    login: '/user/login'       //登陆
   },
   course: {
     in: '/api/course/inlist',       //校内课程

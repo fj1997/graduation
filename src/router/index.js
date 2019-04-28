@@ -13,7 +13,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/index/incourse'
+      redirect: '/login'
     },
     {
       path: '/index',
@@ -33,9 +33,9 @@ export default new Router({
       ]
     },
     {
-      path: '/register',
+      path: '/login',
       name: 'Register',
-      alias: '/login',
+      // alias: '/login',
       component: Register
     },
     {

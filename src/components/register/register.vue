@@ -2,31 +2,31 @@
     <div>
       <!-- 注册页面 -->
         <div v-show="!regsuccess">
-            <p class="error-tip" v-show="!errorTip">
+            <p class="error-tip" v-show="errorTip">
                 {{errorText}}
             </p>
             <el-form :model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="身份" prop="identity">
-                <el-select v-model="ruleForm.identity" placeholder="请选择身份">
-                    <el-option label="自由学习人员" value="other"></el-option>
-                    <el-option label="重邮学生" value="student"></el-option>
-                    <el-option label="教师" value="teacher"></el-option>
+                <el-form-item label="身份" prop="userType">
+                <el-select v-model="ruleForm.userType" placeholder="请选择身份">
+                    <el-option label="自由学习人员" value=0></el-option>
+                    <el-option label="重邮学生" value=1></el-option>
+                    <el-option label="教师" value=2></el-option>
                 </el-select>
                 </el-form-item>
-                <el-form-item label="学号/教工号" prop="usernumber" v-if="ruleForm.identity!=='other'&& ruleForm.identity">
-                <el-input v-model="ruleForm.usernumber" placeholder="请输入学号/教工号"></el-input>
+                <el-form-item label="学号/教工号" prop="userNumber" v-if="ruleForm.userType!=0">
+                <el-input v-model="ruleForm.userNumber" placeholder="请输入学号/教工号"></el-input>
                 </el-form-item>
-                <el-form-item label="姓名" prop="username">
-                <el-input v-model="ruleForm.username" placeholder="设置姓名（3-5个字符）"></el-input>
+                <el-form-item label="姓名" prop="userName">
+                <el-input v-model="ruleForm.userName" placeholder="设置姓名（3-5个字符）"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="pass">
-                <el-input type="password" v-model="ruleForm.pass" autocomplete="off" placeholder="设置密码,（6~8个字符，含英文大小写和数字）"></el-input>
+                <el-form-item label="密码" prop="userPassword">
+                <el-input type="password" v-model="ruleForm.userPassword" autocomplete="off" placeholder="设置密码,（6~8个字符，含英文大小写和数字）"></el-input>
                 </el-form-item>
-                <el-form-item label="电话" prop="phone">
-                <el-input v-model.number="ruleForm.phone" placeholder="请输入电话号码"></el-input>
+                <el-form-item label="电话" prop="userPhone">
+                <el-input v-model.number="ruleForm.userPhone" placeholder="请输入电话号码"></el-input>
                 </el-form-item>
-                <el-form-item label="验证码" prop="checkcode">
-                <el-input type="password" v-model="ruleForm.checkcode" placeholder="请输入验证码" autocomplete="off"></el-input>
+                <el-form-item label="验证码" prop="validCode">
+                <el-input type="password" v-model="ruleForm.validCode" placeholder="请输入验证码" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item>
                 <el-button type="button" :disabled="disabled" v-if="disabled==false" @click="getVerificationCode">发送验证码
@@ -94,33 +94,33 @@ export default {
         btntxt: '重新发送',
         // 表单字段
         ruleForm: {
-            username: '',
-            usernumber: '',
-            identity: '',
-            pass: '',
-            checkcode: '',
-            phone: ''
+            userName: '',
+            userNumber: '',
+            userType: '',
+            userPassword: '',
+            userPhone: '',
+            validCode: ''
         },
         // 表单验证规则
         rules: {
-            username: [
+            userName: [
             { required: true, message: '请输入姓名', trigger: 'blur', },
             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
             ],
-            usernumber: [
+            userNumber: [
             { required: true, message: '请输入学号或教工号', trigger: 'blur'},
             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
             ],
-            identity: [
+            userType: [
             { required: true, message: '请选择身份', trigger: 'change' }
             ],
-            pass: [
+            userPassword: [
             { validator: validPass, trigger: 'blur' }
             ],
-            phone: [
+            userPhone: [
             { trigger: 'blur', validator: validPhone }
             ],
-            checkcode:[
+            validCode:[
             { required: true,message: '请输入验证码', trigger: 'blur' },
             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
             ]
@@ -131,7 +131,7 @@ export default {
     // 验证表单的手机号是否符合正则表达式
     phonePass () {
       let vm = this;
-      return isvalidPhone(vm.ruleForm.phone)
+      return isvalidPhone(vm.ruleForm.userPhone)
     }
   },
   watch: {
@@ -156,16 +156,20 @@ export default {
         if (valid) {
           vm.$axios.post(vm.ports.submit.register,vm.ruleForm)
             .then(function(res){
-                let data = res.data;
-                vm.errorTip = data.success;
-                vm.regsuccess = data.success;
-                vm.errorText = data.data.msg;
+              let data = res.data;
+              if(data.result){
+                
+                vm.regsuccess = data.msg;
+                
+              }else{
+                vm.errorTip = data.result;
+                vm.errorText = data.msg;
+              }
             })
             .catch(function(err){
                 console.log(err);
             });
         }else {
-          console.log('error submit!!',valid);
           return false;
         }
       });
@@ -177,14 +181,14 @@ export default {
     getVerificationCode () {
       let vm = this;
       vm.inittimes++;
-      if(isvalidPhone(vm.ruleForm.phone)){
+      if(isvalidPhone(vm.ruleForm.userPhone)){
         vm.time = 60;
         vm.disabled = true;
         vm.timer();
 
         //获取短信验证码
         vm.$axios.post(vm.ports.pwd.getcheckcode,{
-          phone:vm.ruleForm.phone
+          phone:vm.ruleForm.userPhone
         }).then(function(res){
           console.log(res.data)
           })
@@ -208,12 +212,6 @@ export default {
         vm.btntxt = '获取验证码';
         vm.disabled = false;
       }
-    },
-    findPassword () {
-        let vm = this
-        vm.$router.push({
-            path:'/findpassword'
-        })
     }
   }
 }

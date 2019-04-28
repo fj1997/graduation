@@ -21,7 +21,7 @@ export default {
   data () {
     let vm = this;
     return {
-     activeName: vm.$route.query.activeName
+     activeName: 'first'
     }
   },
   components:{

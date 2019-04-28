@@ -8,14 +8,14 @@
                     每个人都可能遇到这种情况哦
                 </p>
                 <el-form :model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                    <el-form-item label="电话" prop="phone">
-                    <el-input v-model.number="ruleForm.phone" placeholder="请输入电话号码"></el-input>
+                    <el-form-item label="电话" prop="userPhone">
+                    <el-input v-model.number="ruleForm.userPhone" placeholder="请输入电话号码"></el-input>
                     </el-form-item>
-                    <el-form-item label="验证码" prop="checkcode">
-                    <el-input type="password" v-model="ruleForm.checkcode" placeholder="请输入验证码" autocomplete="off"></el-input>
+                    <el-form-item label="验证码" prop="validCode">
+                    <el-input type="password" v-model="ruleForm.validCode" placeholder="请输入验证码" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" prop="pass">
-                    <el-input type="password" v-model="ruleForm.pass" autocomplete="off" placeholder="设置密码,（6~8个字符，含英文大小写和数字）"></el-input>
+                    <el-form-item label="新密码" prop="userPassword">
+                    <el-input type="password" v-model="ruleForm.userPassword" autocomplete="off" placeholder="6~8个字符，含英文大小写和数字"></el-input>
                     </el-form-item>
                     <el-form-item>
                     <el-button type="button" :disabled="disabled" v-if="disabled==false" @click="getVerificationCode">发送验证码
@@ -87,19 +87,19 @@ export default {
         btntxt: '重新发送',
         // 表单字段
         ruleForm: {
-            pass: '',
-            checkcode: '',
-            phone: ''
+            userPassword: '',
+            validCode: '',
+            userPhone: ''
         },
         // 表单验证规则
         rules: {
-            pass: [
+            userPassword: [
             { validator: validPass, trigger: 'blur' }
             ],
-            phone: [
+            userPhone: [
             { trigger: 'blur', validator: validPhone }
             ],
-            checkcode:[
+            validCode:[
             { required: true,message: '请输入验证码', trigger: 'blur' },
             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
             ]
@@ -110,7 +110,7 @@ export default {
     // 验证表单的手机号是否符合正则表达式
     phonePass () {
         let vm = this;
-        return isvalidPhone(vm.ruleForm.phone)
+        return isvalidPhone(vm.ruleForm.userPhone)
     }
   },
   watch: {
@@ -138,16 +138,22 @@ export default {
           vm.$axios.post(vm.ports.pwd.resetpassword,vm.ruleForm)
             .then(function(res){
              let data = res.data;
-            vm.regsuccess = data.success;
+             if(data.result){
+               vm.regsuccess = data.result;
+             }else{
+              vm.$message({
+                type: 'error',
+                message: '找回密码失败!'
+              });
+               vm.regsuccess = data.result;
+             }
+            
              
             })
             .catch(function(err){
-                console.log(err);
-                
                 return false;
             });
         }else {
-          console.log('error submit!!',valid);
           return false;
         }
       });
@@ -159,22 +165,32 @@ export default {
     getVerificationCode () {
         let vm = this;
         vm.inittimes++;
-        if(isvalidPhone(vm.ruleForm.phone)){
+        if(isvalidPhone(vm.ruleForm.userPhone)){
             vm.time = 60;
             vm.disabled = true;
             vm.timer();
 
         //获取短信验证码
         vm.$axios.post(vm.ports.pwd.getcheckcode,{
-          phone:vm.ruleForm.phone
+          phone:vm.ruleForm.userPhone
         })
         .then(function(res){
-            // let data = res.data;
-            // vm.regsuccess = data.success;
-            })
-            .catch(function(err){
-
+          let data =res.data;
+          if(data.result){
+              vm.$message({
+              type: 'success',
+              message: '短信验证码发送成功!'
             });
+          }else{
+            vm.$message({
+              type: 'error',
+              message: '短信验证码发送错误!'
+            });
+          }
+        })
+        .catch(function(err){
+
+        });
       }
     },
 
@@ -201,7 +217,7 @@ export default {
         vm.$router.push({
             path:'/login',
             query: { 
-          activeName:'first'
+            activeName:'first'
           }
         })
     }

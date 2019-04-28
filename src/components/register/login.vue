@@ -7,11 +7,11 @@
             用户名和密码错误，请再试一次
         </p>
         <el-form :model="loginForm" :rules="rules" :hide-required-asterisk="true" ref="loginForm" label-width="100px" class="demo-loginForm">
-            <el-form-item label="电话" prop="phone">
-              <el-input v-model.number="loginForm.phone" placeholder="请输入电话号码"></el-input>
+            <el-form-item label="电话" prop="userPhone">
+              <el-input v-model.number="loginForm.userPhone" placeholder="请输入电话号码"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="pass">
-              <el-input type="password" v-model="loginForm.pass" autocomplete="off" placeholder="设置密码,（6~8个字符，含英文大小写和数字）"></el-input>
+            <el-form-item label="密码" prop="userPassword">
+              <el-input type="password" v-model="loginForm.userPassword" autocomplete="off" placeholder="6~8个字符，含英文大小写和数字"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm('loginForm')">登陆</el-button>
@@ -55,16 +55,16 @@ export default {
         // 表单字段
         loginForm: {
             
-            pass: '',
+            userPassword: '',
         
-            phone: ''
+            userPhone: ''
         },
         // 表单验证规则
         rules: {
-            pass: [
+            userPassword: [
             { validator: validPass, trigger: 'blur' }
             ],
-            phone: [
+            userPhone: [
             { trigger: 'blur', validator: validPhone }
             ]
         }
@@ -81,7 +81,14 @@ export default {
             vm.$axios.post(vm.ports.submit.login,vm.loginForm)
                 .then(function(res){
                     let data = res.data
-                    vm.errorTip = data.success;
+                    if(data.result){
+                        vm.$router.push({
+                            path:'/index/incourse'
+                        })
+                    }else{
+                        vm.errorTip = data.result;
+                    }
+                    
                 
                 })
                 .catch(function(err){
