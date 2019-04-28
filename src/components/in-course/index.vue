@@ -45,7 +45,6 @@ export default {
     getCourseList1(courseList){
       let vm = this;
       vm.courseList = courseList;
-      console.log(vm.courseList)
     }
   }
 }

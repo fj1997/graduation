@@ -7,7 +7,7 @@ import router from './router'
 import './icon/iconfont'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
-// import http from './http'
+import store from './vuex/store'
 import ports from './ports'
 import axios from 'axios'
 // require('./mock'); //引入mock数据，关闭则注释该行
@@ -23,6 +23,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
