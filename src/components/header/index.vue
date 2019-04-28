@@ -17,8 +17,8 @@
         <router-link class="course" to="/index/incourse">校内课程</router-link>
         <router-link class="course" to="/index/outcourse">校外课程</router-link>
       </p>
-      <span class="login" @click="goLogin"> 登录</span>
-      <span class="register" @click="goRegister">注册</span>
+      <span class="login" @click="goLogin"> 个人中心</span>
+      <span class="register" @click="loginOut">退出</span>
     </div>
   </div>
 </template>
@@ -40,14 +40,9 @@ export default {
           }
       })
     },
-    goRegister () {
+    loginOut () {
       let vm = this
-      vm.$router.push({
-        path:'/register',
-        query: { 
-          activeName:'second'
-          }
-      })
+      
     },
     search () {
       let vm = this
@@ -136,7 +131,7 @@ export default {
     }
     .login,
     .register{
-      width: 50px;
+      width: 80px;
       height: 30px;
       margin-right: 20px;
       line-height: 30px;
