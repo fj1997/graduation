@@ -63,7 +63,7 @@ export default {
   float: left;
   background: #fff;
   width: 200px;
-  
+  position: fixed;
   li{
     list-style: none;
     height: 50px;
