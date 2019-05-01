@@ -26,7 +26,8 @@ export default {
       evaluate:'/course/detail/evaluate', //课程评价模块
       myevaluate:'/course/detail/myevaluate',  //添加/编辑/删除自己的课程评价，通过传的参数判断
 
-    }       
+    } ,
+    add:'/course/course'      //老师添加课程
 
   }
 }

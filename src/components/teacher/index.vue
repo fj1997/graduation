@@ -3,7 +3,7 @@
     <div class="header">
       头部
     </div>
-    <div class="mian-container">
+    <div class="mian-container clearfix">
       <div class="main-nav">
         <ul>
           <li>
@@ -56,8 +56,8 @@ export default {
   height: 55px;
 }
 .mian-container{
-  overflow: hidden;
   margin: 10px 0;
+  // background: #ccc;
   }
 .main-nav{
   float: left;
@@ -77,8 +77,10 @@ export default {
   }
   }
 .mian-content{
-  background: #09c;
-  margin-left: 225px;
+  width: calc(100% - 200px);
+	float: right;/*或者float:left*/
+
+ 
  
   }
 </style>
