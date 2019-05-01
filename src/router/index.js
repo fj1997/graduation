@@ -7,6 +7,13 @@ import Incourse from '../components/in-course/index.vue'
 import Outcourse from '../components/out-course/index.vue'
 import Search from '../components/search/index.vue'
 import CourseDetail from '../components/course-detail/index.vue'
+import Teacher from '../components/teacher/index.vue'
+import AddCourse from '../components/teacher/add-course/index.vue'
+import CorrectWork from '../components/teacher/correct-work/index.vue'
+import CourseManage from '../components/teacher/course-manage/index.vue'
+import PublishWork from '../components/teacher/publish-work/index.vue'
+import ReplyQuestion from '../components/teacher/reply-question/index.vue'
+import StudentManage from '../components/teacher/student-manage/index.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -52,6 +59,45 @@ export default new Router({
       path: '/detail',
       name: 'CourseDetail',
       component: CourseDetail
+    },
+    {
+      path: '/teacher',
+      name: 'Teacher',
+      component: Teacher,
+      children: [
+        {
+          path: 'addCourse',
+          name: 'AddCourse',
+          component: AddCourse
+        },
+        {
+          path: 'courseManage',
+          name: 'CourseManage',
+          component: CourseManage
+        },
+        {
+          path: 'correctWork',
+          name: 'CorrectWork',
+          component: CorrectWork
+        },
+        {
+          path: 'publishWork',
+          name: 'PublishWork',
+          component: PublishWork
+        },
+        {
+          path: 'replyQuestion',
+          name: 'ReplyQuestion',
+          component: ReplyQuestion
+        },
+        {
+          path: 'studentManage',
+          name: 'StudentManage',
+          component: StudentManage
+        },
+
+      ]
     }
+
   ]
 })

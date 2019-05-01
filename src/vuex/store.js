@@ -12,7 +12,6 @@ const state={
 const mutations={
   getUserPassword(state,n){
     state.userPassword = n;
-    console.log(state.userPassword)
   },
   getUserPhone(state,n){
     state.userPassword = n;

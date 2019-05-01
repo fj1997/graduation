@@ -1,6 +1,6 @@
 <template>
   <div>
-   课程管理
+    批改作业
   </div>
 </template>
 
