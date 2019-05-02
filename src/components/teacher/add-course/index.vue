@@ -6,10 +6,10 @@
       </svg>
     </span> -->
    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="活动名称" prop="courseName">
+  <el-form-item label="课程名称" prop="courseName">
     <el-input v-model="ruleForm.courseName"></el-input>
   </el-form-item>
-  <el-form-item label="活动时间" required>
+  <el-form-item label="开课时间" required>
     <el-col :span="11">
       <el-form-item prop="courseBeginTime">
         <el-date-picker type="date" 
@@ -109,6 +109,7 @@ export default {
                         type: 'success',
                         message: '该课程创建成功'
                         });
+                      
                     }else{
                         vm.$message({
                         type: 'error',
