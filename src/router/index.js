@@ -14,6 +14,10 @@ import CourseManage from '../components/teacher/course-manage/index.vue'
 import PublishWork from '../components/teacher/publish-work/index.vue'
 import ReplyQuestion from '../components/teacher/reply-question/index.vue'
 import StudentManage from '../components/teacher/student-manage/index.vue'
+import Manage from '../components/manage/index.vue'
+import ManageStudent from '../components/manage/student/index.vue'
+import ManageTeacher from '../components/manage/teacher/index.vue'
+import ManageCourse from '../components/manage/course/index.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -97,7 +101,28 @@ export default new Router({
         },
 
       ]
+    },
+    {
+      path: '/manage',
+      name: 'Manage',
+      component: Manage,
+      children:[
+        {
+          path: 'manageStudent',
+          name: '学生管理',
+          component: ManageStudent
+        },{
+          path: 'manageTeacher',
+          name: '教师管理',
+          component: ManageTeacher
+        },{
+          path: 'manageCourse',
+          name: '课程管理',
+          component: ManageCourse
+        },
+      ]
     }
+    
 
   ]
 })
