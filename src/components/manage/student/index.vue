@@ -25,7 +25,7 @@
         >
         <template slot-scope="scope">
           <span style="margin-left: 10px" v-if="scope.row.userNumber">{{ scope.row.userNumber }}</span>
-          <span style="margin-left: 10px" v-else="!scope.row.userNumber">--</span>
+          <span style="margin-left: 10px" v-else>--</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -35,7 +35,7 @@
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -135,7 +135,31 @@ export default {
      * 删除学生
      */
     handleDelete(index, row) {
-      console.log(index, row);
+      let vm= this;
+        vm.$axios.delete(`/user/${row.userId}`)
+        .then(function(res){
+          let data =res.data;
+          if(data.result){
+            vm.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+          if( vm.userType ==1){
+            vm.getStudent()
+          }else{
+            vm.getOther();
+          }
+        }else{
+            vm.$message({
+            type: 'error',
+            message: '删除失败!'
+            });
+        }
+          
+        })
+        .catch(err => {
+          return false
+        });
     }
   }
 }
