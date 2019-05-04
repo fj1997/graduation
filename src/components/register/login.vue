@@ -81,7 +81,7 @@ export default {
             if (valid) {
 
             //用户登录
-            vm.$axios.post(vm.ports.address+'/user/login',vm.loginForm)
+            vm.$axios.post('/user/login',vm.loginForm)
                 .then(function(res){
                     let data = res.data
 
@@ -89,7 +89,7 @@ export default {
                     if(data.result){
 
                         //获取用户信息（用户登录后）
-                        vm.$axios.get(vm.ports.address+'/user/user')
+                        vm.$axios.get('/user/user')
                             .then(function (res) {
                                 if(res.data.result){
                                     let userData = res.data.data;

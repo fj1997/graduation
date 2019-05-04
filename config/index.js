@@ -11,13 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/':{
-      //   target:'https://result.eolinker.com/7NNP7qG5ddf6d7db9d4aa1ec8d81594aefd92ad37d4be9d?uri=',
-      //   changeOrigin:true,
-      //   pathRewrite:{
-      //     '^/api': '/'
-      //   }
-      // }
+      '/':{
+        target:'http://62.234.57.192:8080/studywebsite',
+        changeOrigin:true,
+        pathRewrite:{
+          '^/api': '/'
+        }
+      }
     },
 
     // Various Dev Server settings

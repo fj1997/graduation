@@ -154,7 +154,7 @@ export default {
       let vm =this;
       vm.$refs[formName].validate((valid) => {
         if (valid) {
-          vm.$axios.post(vm.ports.address+'/user/login',vm.ruleForm)
+          vm.$axios.post('/user/login',vm.ruleForm)
             .then(function(res){
               let data = res.data;
               if(data.result){
@@ -187,7 +187,7 @@ export default {
         vm.timer();
 
         //获取短信验证码
-        vm.$axios.post(vm.ports.address+'/validCode/validCode',{
+        vm.$axios.post('/validCode/validCode',{
           phone:vm.ruleForm.userPhone
         }).then(function(res){
           console.log(res.data)
