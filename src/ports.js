@@ -1,4 +1,5 @@
 export default {
+  address:'http://62.234.57.192:8080/studywebsite',
   manage: {
     register: '/user/login', // 注册接口
     login: '/user/login', // 登录

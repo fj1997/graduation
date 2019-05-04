@@ -8,9 +8,9 @@
             <el-form :model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="身份" prop="userType">
                 <el-select v-model="ruleForm.userType" placeholder="请选择身份">
-                    <el-option label="自由学习人员" value=0></el-option>
-                    <el-option label="重邮学生" value=1></el-option>
-                    <el-option label="教师" value=2></el-option>
+                    <el-option label="自由学习人员" value=1></el-option>
+                    <el-option label="重邮学生" value=2></el-option>
+                    <el-option label="教师" value=3></el-option>
                 </el-select>
                 </el-form-item>
                 <el-form-item label="学号/教工号" prop="userNumber" v-if="ruleForm.userType!=0">
@@ -154,7 +154,7 @@ export default {
       let vm =this;
       vm.$refs[formName].validate((valid) => {
         if (valid) {
-          vm.$axios.post(vm.ports.submit.register,vm.ruleForm)
+          vm.$axios.post(vm.ports.address+'/user/login',vm.ruleForm)
             .then(function(res){
               let data = res.data;
               if(data.result){
@@ -187,7 +187,7 @@ export default {
         vm.timer();
 
         //获取短信验证码
-        vm.$axios.post(vm.ports.pwd.getcheckcode,{
+        vm.$axios.post(vm.ports.address+'/validCode/validCode',{
           phone:vm.ruleForm.userPhone
         }).then(function(res){
           console.log(res.data)

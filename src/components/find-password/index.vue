@@ -135,7 +135,7 @@ export default {
       let vm =this;
       vm.$refs[formName].validate((valid) => {
         if (valid) {
-          vm.$axios.patch(vm.ports.pwd.resetpassword,vm.ruleForm)
+          vm.$axios.patch(vm.ports.address+'/user/password',vm.ruleForm)
             .then(function(res){
              let data = res.data;
              if(data.result){
