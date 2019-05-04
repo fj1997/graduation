@@ -36,7 +36,7 @@ export default {
             path:vm.path,
             query:vm.query
         })
-    //    vm.$router.go(0)
+       vm.$router.go(0)
     }
   }
 }

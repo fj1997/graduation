@@ -101,7 +101,7 @@ export default {
             ],
             validCode:[
             { required: true,message: '请输入验证码', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { min: 6, max: 6, message: '请输入验证码', trigger: 'blur' }
             ]
         }
     }
@@ -135,7 +135,7 @@ export default {
       let vm =this;
       vm.$refs[formName].validate((valid) => {
         if (valid) {
-          vm.$axios.post(vm.ports.pwd.resetpassword,vm.ruleForm)
+          vm.$axios.patch(vm.ports.pwd.resetpassword,vm.ruleForm)
             .then(function(res){
              let data = res.data;
              if(data.result){

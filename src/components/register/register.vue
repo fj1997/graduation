@@ -105,11 +105,11 @@ export default {
         rules: {
             userName: [
             { required: true, message: '请输入姓名', trigger: 'blur', },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
             ],
             userNumber: [
             { required: true, message: '请输入学号或教工号', trigger: 'blur'},
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { min: 10, max: 10, message: '输入正确的学号或教工号', trigger: 'blur' }
             ],
             userType: [
             { required: true, message: '请选择身份', trigger: 'change' }
@@ -122,7 +122,7 @@ export default {
             ],
             validCode:[
             { required: true,message: '请输入验证码', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { min: 6, max: 6,message:'请输入验证码',trigger: 'blur' }
             ]
         }
     }
