@@ -56,12 +56,8 @@
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
-      class="table-list"
-      @selection-change="handleSelectionChange">
-       <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
+      class="table-list">
+      
       <el-table-column
         prop="userName"
         label="姓名"
@@ -88,11 +84,18 @@
           <span style="margin-left: 10px">未审核</span>
         </template>
       </el-table-column>
+      <el-table-column
+        label="操作"
+        align="right">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="success"
+            @click="letPass(scope.$index, scope.row)">通过</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <div style="margin-top: 30px" v-show="userAttest==0">
-      <el-button @click="toggleSelection([tableData[1], tableData[2]])">通过</el-button>
-      <el-button  type="danger" @click="toggleSelection()">不通过</el-button>
-    </div>
+
     <!-- 分页 -->
     <div class="block">
     <el-pagination
@@ -108,7 +111,6 @@
 </template>
 
 <script>
-import { runInDebugContext } from 'vm';
 export default {
   data () {
     return {
@@ -154,13 +156,11 @@ export default {
     getList() {
         let vm= this;
           vm.loading = true;
-        vm.$axios.get('/user/type/attest',{
-            params:{
+        vm.$axios.post('/user/type/attest',{
             pageNum:vm.pageNum,
             pageSize:vm.pageSize,
             userType:vm.userType,
             userAttest:vm.userAttest
-            }
         })
         .then(function(res){
         let data = res.data
@@ -202,9 +202,9 @@ export default {
                 message: '删除成功!'
               });
           if( vm.userType ==1){
-            vm.getStudent()
+            vm.getChecked()
           }else{
-            vm.getOther();
+            vm.getUnChecked();
           }
         }else{
             vm.$message({
@@ -219,29 +219,35 @@ export default {
         });
     },
     /**
-     * 审核不通过
-     */
-    handleDelete(index, row) {
-      console.log(index, row);
-    },
-    /**
      * 审核通过
      */
-    handleEdit(index, row) {
-      console.log(index, row);
-    },
-    toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
+    letPass(index, row) {
+      let vm= this;
+        vm.$axios.patch(`/user/attest/${row.userId}`)
+        .then(function(res){
+          let data =res.data;
+          if(data.result){
+            vm.$message({
+                type: 'success',
+                message: '审核成功!'
+              });
+          if( vm.userType ==1){
+            vm.getChecked()
+          }else{
+            vm.getUnChecked();
+          }
+        }else{
+            vm.$message({
+            type: 'error',
+            message: '审核失败!'
+            });
         }
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;    //获取选取的数据
-      }
+          
+        })
+        .catch(err => {
+          return false
+        });
+    }
   }
 }
 </script>
