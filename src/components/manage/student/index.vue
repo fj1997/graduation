@@ -59,7 +59,7 @@ export default {
     return {
       isActive:true,
       loading:true,
-      userType:1,
+      userType:2,
       pageNum:1,
        pageSize: 10,
        total:100,
@@ -78,7 +78,7 @@ export default {
     getStudent() {
       let vm = this;
      vm.isActive = true;
-      vm.userType = 1;
+      vm.userType = 2;
       vm.pageNum=1;
       vm.getList();
     },
@@ -88,7 +88,7 @@ export default {
     getOther() {
       let vm = this;
       vm.isActive = false;
-      vm.userType = 0;
+      vm.userType = 1;
        vm.pageNum=1;
       vm.getList();
     },
@@ -98,12 +98,11 @@ export default {
     getList() {
         let vm= this;
           vm.loading = true;
-        vm.$axios.get('/user/type',{
-            params:{
-            pageNum:vm.pageNum,
-            pageSize:vm.pageSize,
-            userType:vm.userType
-            }
+        vm.$axios.post('user/type',{
+          pageNum:vm.pageNum,
+          pageSize:vm.pageSize,
+          userType:vm.userType
+            
         })
         .then(function(res){
         let data = res.data
@@ -144,7 +143,7 @@ export default {
                 type: 'success',
                 message: '删除成功!'
               });
-          if( vm.userType ==1){
+          if( vm.userType ==2){
             vm.getStudent()
           }else{
             vm.getOther();
