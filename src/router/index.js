@@ -18,6 +18,8 @@ import Manage from '../components/manage/index.vue'
 import ManageStudent from '../components/manage/student/index.vue'
 import ManageTeacher from '../components/manage/teacher/index.vue'
 import ManageCourse from '../components/manage/course/index.vue'
+import ManageInCourse from '../components/manage/course/in-course.vue'
+import ManageOutCourse from '../components/manage/course/out-course.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -116,10 +118,15 @@ export default new Router({
           name: '教师管理',
           component: ManageTeacher
         },{
-          path: 'manageCourse',
-          name: '课程管理',
-          component: ManageCourse
+          path: 'ManageInCourse',
+          name: '校内课程',
+          component: ManageInCourse
         },
+        {
+          path: 'ManageOutCourse',
+          name: '校外课程',
+          component: ManageOutCourse
+        }
       ]
     }
     

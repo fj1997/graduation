@@ -99,7 +99,7 @@ export default {
             console.log(' submit!!',vm.ruleForm);
 
             //【课程】添加课程（需要登陆）
-            vm.$axios.post(vm.ports.course.add,vm.ruleForm)
+            vm.$axios.post('/course/course',vm.ruleForm)
                 .then(function(res){
                     let data = res.data
 
