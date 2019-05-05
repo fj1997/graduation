@@ -11,6 +11,7 @@ import Teacher from '../components/teacher/index.vue'
 import AddCourse from '../components/teacher/add-course/index.vue'
 import CorrectWork from '../components/teacher/correct-work/index.vue'
 import CourseManage from '../components/teacher/course-manage/index.vue'
+import AddSection from '../components/teacher/course-manage/add-section.vue'
 import PublishWork from '../components/teacher/publish-work/index.vue'
 import ReplyQuestion from '../components/teacher/reply-question/index.vue'
 import StudentManage from '../components/teacher/student-manage/index.vue'
@@ -75,11 +76,17 @@ export default new Router({
           path: 'addCourse',
           name: 'AddCourse',
           component: AddCourse
+          
         },
         {
           path: 'courseManage',
           name: 'CourseManage',
           component: CourseManage
+        },
+        {
+          path: 'courseManage/addSection',
+          name: 'AddSection',
+          component: AddSection,
         },
         {
           path: 'correctWork',
@@ -100,8 +107,7 @@ export default new Router({
           path: 'studentManage',
           name: 'StudentManage',
           component: StudentManage
-        },
-
+        }
       ]
     },
     {
