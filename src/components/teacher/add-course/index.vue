@@ -33,8 +33,8 @@
   </el-form-item>
   <el-form-item label="课程类型" prop="courseType">
     <el-radio-group v-model="ruleForm.courseType">
-      <el-radio label="校内课程"></el-radio>
-      <el-radio label="校外课程"></el-radio>
+      <el-radio :label='1'>校内课程</el-radio>
+      <el-radio :label='2'>校外课程</el-radio>
     </el-radio-group>
   </el-form-item>
     <el-form-item label="上传封面" prop="coursePhotoUrl">
@@ -91,13 +91,8 @@ export default {
         let vm =this;
         vm.$refs[formName].validate((valid) => {
           if (valid) {
-            if(vm.ruleForm.courseType =='校外课程'){
-                vm.ruleForm.courseType = 1
-            }else if(vm.ruleForm.courseType =='校内课程'){
-                    vm.ruleForm.courseType = 2
-            }
-            console.log(' submit!!',vm.ruleForm);
-
+    
+            vm.ruleForm.userId = window.localStorage.userId;
             //【课程】添加课程（需要登陆）
             vm.$axios.post('/course/course',vm.ruleForm)
                 .then(function(res){
@@ -120,8 +115,6 @@ export default {
                 .catch(function(err){
                     return false
                 });
-
-            
           } else {
             return false;
           }
