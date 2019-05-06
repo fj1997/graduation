@@ -7,7 +7,8 @@ const state={
   userPhone: '', //用户手机号
   userType: '', //用户类型
   userName: '', //用户名
-  userNumber: ''  //教工号/学号
+  userNumber: '',  //教工号/学号
+  userId:''  //用户ID
 }
 const mutations={
   getUserPassword(state,n){
@@ -24,6 +25,9 @@ const mutations={
   },
   getUserNumber(state,n){
     state.Number = n;
+  },
+  getUserId(state,n){
+    state.userId = n;
   }
 
 }

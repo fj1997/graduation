@@ -8,7 +8,7 @@
         </p>
         <el-form :model="loginForm" :rules="rules" :hide-required-asterisk="true" ref="loginForm" label-width="100px" class="demo-loginForm">
             <el-form-item label="电话" prop="userPhone">
-              <el-input v-model.number="loginForm.userPhone" placeholder="请输入电话号码"></el-input>
+              <el-input v-model="loginForm.userPhone" placeholder="请输入电话号码"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="userPassword">
               <el-input type="password" v-model="loginForm.userPassword" autocomplete="off" placeholder="6~8个字符，含英文大小写和数字"></el-input>
@@ -20,8 +20,6 @@
         <p class="forget-password" @click="findPassword()"> 
             忘记密码?
         </p>
-       
-       
     </div>
 </template>
 
@@ -64,16 +62,22 @@ export default {
         // 表单验证规则
         rules: {
             userPassword: [
-            { validator: validPass, trigger: 'blur' }
+                { 
+                    // validator: validPass, 
+                    trigger: 'blur' 
+                }
             ],
             userPhone: [
-            { trigger: 'blur', validator: validPhone }
+                { 
+                    // validator: validPhone,
+                    trigger: 'blur'
+                }
             ]
         }
     }
   },
   methods: {
-    ...mapMutations(['getUserPassword','getUserPhone','getUserType','getUserName','getUserNumber']),
+    ...mapMutations(['getUserPassword','getUserPhone','getUserType','getUserName','getUserNumber','getUserId']),
     submitForm (formName) {
         let vm = this;
         
@@ -89,26 +93,46 @@ export default {
                     if(data.result){
 
                         //获取用户信息（用户登录后）
-                        vm.$axios.get('/user/user')
+                        
+
+                        vm.$axios.get('/user/user/'+data.data)
                             .then(function (res) {
                                 if(res.data.result){
                                     let userData = res.data.data;
-                                    vm.getUserPassword(userData.userPassword);
-                                    vm.getUserPhone(userData.userPhone);
-                                    vm.getUserType(userData.userType);
-                                    vm.getUserName(userData.userName);
-                                    vm.getUserNumber(userData.userNumber);
+                                    // vm.getUserPassword(userData.userPassword);
+                                    // vm.getUserPhone(userData.userPhone);
+                                    // vm.getUserType(userData.userType);
+                                    // vm.getUserName(userData.userName);
+                                    // vm.getUserNumber(userData.userNumber);
+                                    // vm.getUserId(userData.userId);
+
+                                    
+                                    window.localStorage.userPassword = userData.userPassword;
+                                    window.localStorage.userPhone = userData.userPhone;
+                                    window.localStorage.userType = userData.userType;
+                                    window.localStorage.userName = userData.userName;
+                                    window.localStorage.userNumber= userData.userNumber;
+                                    window.localStorage.userId = userData.userId;
+                                    if(userData.userType =='教师'){
+                                        //老师管理页面
+                                        vm.$router.push({
+                                            path:'/teacher/courseManage'
+                                        })
+                                    }else{
+                                        //  学习人员登陆成功后进入校内课程  
+                                        vm.$router.push({
+                                            path:'/index/incourse'
+                                        })
+                                    }
                                 }
-                                
+                               
                             })
                             .catch(function (err) {
                                 console.log(err);
                             });
 
-                        //  登陆成功后进入校内课程  
-                        vm.$router.push({
-                            path:'/index/incourse'
-                        })
+                        
+                    
                     }else{
                         vm.errorTip = data.result;
                     }
@@ -119,6 +143,18 @@ export default {
             }else {
             return false;
             }
+
+            // $.ajax({
+            //     url: '/user/login',
+            //     type: 'POST',
+            //     data: JSON.stringify(vm.loginForm),
+            //     dataType: 'json',
+            //     success: function (data, status, xhr) {             
+            //         console.log(xhr.getResponseHeader('Date'));
+            //     }
+            // });
+            
+            
         });
     },
     findPassword () {
@@ -126,7 +162,31 @@ export default {
         vm.$router.push({
             path:'/findpassword'
         })
-    }
+    },
+
+setCookie(c_name,value,expiredays){
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate()+expiredays);
+    document.cookie=c_name+ "=" +escape(value)+
+    ((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+},
+ getCookie(name){
+     var strcookie = document.cookie;//获取cookie字符串
+    var arrcookie = strcookie.split("; ");//分割
+    //遍历匹配
+    for ( var i = 0; i < arrcookie.length; i++) {
+        var arr = arrcookie[i].split("=");
+        if (arr[0] == name){
+    debugger
+            return arr[1];
+        }
+    }
+    return "";
+},
+
+clearCookie(name) {
+    setCookie(name, "", -1);
+}
 
    
     
