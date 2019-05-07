@@ -1,12 +1,12 @@
 <template>
   <div>
     <ul class="course-list-wrap clearfix">
-      <li v-for="(item,idx) in list" :key="idx" @click='courseDetail(item.courseId)'>
+      <li v-for="(item,idx) in list" :key="idx" @click.capture='courseDetail(item.courseId)'>
         <img src="../../../assets/img/course1.jpg" alt="" >
         <p class="course-name">{{item.courseName}}</p>
         <p class="course-teacher-info">
           <span>{{item.courseBeginTime}}</span><span>{{item.courseEndTime}}</span>
-          <span style="z-index:100" @click='deleteCourse(item.courseId)'>删除</span>
+          <span style="z-index:100,position:relative" @click.stop='deleteCourse(item.courseId)'>删除</span>
         </p>
       </li>
     </ul>
@@ -82,6 +82,10 @@ export default {
     }
   },
   methods:{
+
+    getCourseList(){
+      let vm= this;
+    },
     /**
      * 删除课程
      */
@@ -117,7 +121,7 @@ export default {
      * 进去课程详情页面
      */
    courseDetail(id){
-      let vm = this
+      let vm = this;
         vm.$router.push({
             path:'/teacher/courseManage/addSection',
             query:{

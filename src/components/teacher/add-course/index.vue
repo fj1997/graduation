@@ -38,9 +38,14 @@
     </el-radio-group>
   </el-form-item>
     <el-form-item label="上传封面" prop="coursePhotoUrl">
-    <el-input type="file" v-model="ruleForm.coursePhotoUrl"></el-input>
+    <el-upload
+      class="upload-demo"
+      action="http://62.234.57.192:8080/studywebsite/file/upload"
+      :on-success="handleAvatarSuccess">
+      <el-button slot="trigger" size="small" type="primary">上传图片</el-button>
+    </el-upload>
   </el-form-item>
-  <el-form-item label="活动形式" prop="courseContent">
+  <el-form-item label="课程介绍" prop="courseContent">
     <el-input type="textarea" v-model="ruleForm.courseContent"></el-input>
   </el-form-item>
   <el-form-item>
@@ -48,7 +53,6 @@
     <el-button @click="resetForm('ruleForm')">重置</el-button>
   </el-form-item>
 </el-form>
-
   </div>
 </template>
 
@@ -56,6 +60,7 @@
 export default {
   data () {
     return {
+       fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
      ruleForm: {
           courseName: '',
           courseBeginTime: '',
@@ -78,7 +83,7 @@ export default {
             { required: true, message: '请选择活动资源', trigger: 'change' }
           ],
           courseContent: [
-            { required: true, message: '请填写活动形式', trigger: 'blur' }
+            { required: true, message: '请填写课程介绍', trigger: 'blur' }
           ],
           coursePhotoUrl: [
               { required: true, message: '请上传封面', trigger: 'blur' }
@@ -123,14 +128,9 @@ export default {
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
-      },
-      handlePreview(file) {
-        console.log(file);
+      handleAvatarSuccess(response, file, fileList) {
+        let vm = this;
+        vm.ruleForm.coursePhotoUrl=response.data;
       }
     }
 }
