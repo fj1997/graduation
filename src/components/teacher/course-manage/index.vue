@@ -1,90 +1,112 @@
 <template>
-  <div>
+  <div class="course-manage">
+    <el-button :autofocus="true" @click="getPublish" :class="isActive?'active-button':''">已发布</el-button>
+    <el-button @click="getUnPublish" :class="!isActive?'active-button':''">未发布</el-button>
     <ul class="course-list-wrap clearfix">
-      <li v-for="(item,idx) in list" :key="idx" @click.capture='courseDetail(item.courseId)'>
+      <li v-for="(item,idx) in tableData" :key="idx" @click='courseDetail(item.courseId)'>
         <img src="../../../assets/img/course1.jpg" alt="" >
         <p class="course-name">{{item.courseName}}</p>
         <p class="course-teacher-info">
-          <span>{{item.courseBeginTime}}</span><span>{{item.courseEndTime}}</span>
-          <span style="z-index:100,position:relative" @click.stop='deleteCourse(item.courseId)'>删除</span>
+          <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
+          <span class="detele" @click.stop='deleteCourse(item.courseId)'>删除</span>
         </p>
       </li>
     </ul>
+
+    <!-- 分页 -->
+    <div class="block">
+    <el-pagination
+      background
+      @current-change= "handleCurrentChange"
+      :current-page.sync= "pageNum"
+      :page-size= "pageSize"
+      layout= "prev, pager, next, jumper"
+      :total= "total">
+    </el-pagination>
+  </div>
   </div>
 </template>
 <script>
+import { format } from '@assets/js/date.js';
 export default {
   data () {
     return {
-        list:[
-          {
-              courseEndTime: "161321311213",
-              courseName: "《操作系统》",
-              courseType: 1,
-              coursePhotoUrl: "xxxxxxxxxx",
-              courseBeginTime: "161321319613",
-              courseId: 1,
-              courseContent: "这里是操作系统的简介哦，操作系统简介可以看这里"
-          },
-          {
-              courseEndTime: "161321311213",
-              courseName: "《数据库》",
-              courseType: 1,
-              coursePhotoUrl: "xxxxxxxxxx",
-              courseBeginTime: "161321319613",
-              courseId: 2,
-              courseContent: "这里是数据库的简介哦，数据库简介可以看这里"
-          },
-          {
-              courseEndTime: "161321311213",
-              courseName: "《数据库》",
-              courseType: 1,
-              coursePhotoUrl: "xxxxxxxxxx",
-              courseBeginTime: "161321319613",
-              courseId: 2,
-              courseContent: "这里是数据库的简介哦，数据库简介可以看这里"
-          },{
-              courseEndTime: "161321311213",
-              courseName: "《数据库》",
-              courseType: 1,
-              coursePhotoUrl: "xxxxxxxxxx",
-              courseBeginTime: "161321319613",
-              courseId: 2,
-              courseContent: "这里是数据库的简介哦，数据库简介可以看这里"
-          },
-          {
-              courseEndTime: "161321311213",
-              courseName: "《数据库》",
-              courseType: 1,
-              coursePhotoUrl: "xxxxxxxxxx",
-              courseBeginTime: "161321319613",
-              courseId: 2,
-              courseContent: "这里是数据库的简介哦，数据库简介可以看这里"
-          },
-          {
-              courseEndTime: "161321311213",
-              courseName: "《数据库》",
-              courseType: 1,
-              coursePhotoUrl: "xxxxxxxxxx",
-              courseBeginTime: "161321319613",
-              courseId: 2,
-              courseContent: "这里是数据库的简介哦，数据库简介可以看这里"
-          },{
-              courseEndTime: "161321311213",
-              courseName: "《数据库》",
-              courseType: 1,
-              coursePhotoUrl: "xxxxxxxxxx",
-              courseBeginTime: "161321319613",
-              courseId: 2,
-              courseContent: "这里是数据库的简介哦，数据库简介可以看这里"
-          }
-      ]
+      isActive:true,
+      pageNum:1,
+      pageSize: 10,
+      total:100,
+      courseStatus: 1, //1未发布，2已发布
+      tableData: []
     }
+  },
+  mounted(){
+    let vm = this;
+    vm.getPublish();
   },
   methods:{
 
-    getCourseList(){
-      let vm= this;
+     /**
+     * 获取已发布课程列表
+     */
+   getPublish() {
+      let vm = this;
+     vm.isActive = true;
+      vm.courseStatus = 2;
+      vm.pageNum=1;
+      vm.getList();
+    },
+    /**
+     * 获取未发布课程列表
+     */
+    getUnPublish() {
+      let vm = this;
+      vm.isActive = false;
+      vm.courseStatus = 1;
+       vm.pageNum=1;
+      vm.getList();
+    },
+    /**
+     * 获取校内课程列表
+     */
+    getList() {
+        let vm= this;
+          vm.loading = true;
+        vm.$axios.post('/course/status',{
+            pageNum:vm.pageNum,
+            pageSize:vm.pageSize,
+            userId:window.localStorage.userId,
+            courseStatus:vm.courseStatus
+        })
+        .then(function(res){
+        let data = res.data
+        //成功后
+         
+        if(data.result){
+            vm.tableData = data.data.list;
+            vm.tableData.forEach(function (item, index, array) {
+                item.courseBeginTime = format(item.courseBeginTime);
+                item.courseEndTime = format(item.courseEndTime);
+            });
+            vm.total = data.data.total;
+            vm.loading=false;
+        }else{
+            vm.$message({
+            type: 'error',
+            message: '未知错误!'
+            });
+        }
+    })
+    .catch(function(err){
+        return false
+    });
+    },
+     /**
+     * 获取当前页的数据
+     */
+    handleCurrentChange(val) {
+        let vm=this;
+        vm.pageNum=val;
+        vm.getCourseList();
     },
     /**
      * 删除课程
@@ -92,30 +114,30 @@ export default {
     deleteCourse(courseId){
       let vm= this;
       console.log(courseId)
-        // vm.$axios.delete(`/course/course/${courseId}`)
-        // .then(function(res){
-        //   let data =res.data;
-        //   if(data.result){
-        //     vm.$message({
-        //         type: 'success',
-        //         message: '删除成功!'
-        //       });
-        //   if( vm.userType ==1){
-        //     vm.getPublish()
-        //   }else{
-        //     vm.getUnPublish();
-        //   }
-        // }else{
-        //     vm.$message({
-        //     type: 'error',
-        //     message: '删除失败!'
-        //     });
-        // }
-          
-        // })
-        // .catch(err => {
-        //   return false
-        // });
+      vm.$axios.delete(`/course/course/${courseId}`)
+      .then(function(res){
+        let data =res.data;
+        if(data.result){
+          vm.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+        if( vm.userType ==1){
+          vm.getPublish()
+        }else{
+          vm.getUnPublish();
+        }
+      }else{
+          vm.$message({
+          type: 'error',
+          message: '删除失败!'
+          });
+      }
+        
+      })
+      .catch(err => {
+        return false
+      });
     },
     /**
      * 进去课程详情页面
@@ -134,6 +156,22 @@ export default {
 </script>
 
 <style scoped lang="less">
+.course-manage{
+  position: relative;
+}
+.active-button{
+  color: #409EFF;
+  border-color: #c6e2ff;
+  background-color: #ecf5ff;
+}
+.block{
+    width: 572px;
+    text-align: center;
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    margin-left: -289px;
+}
 .course-list-wrap {
       // width: 1300px;
       margin: 30px auto;
@@ -176,6 +214,11 @@ export default {
             font-size: 12px;
             margin-right: 10px;
           }
+          .delete{
+            z-index:100;
+            position:relative;
+          }
+          
         }
       }
       .clearfix {
@@ -183,4 +226,5 @@ export default {
         zoom: 1;
       }
     }
+    
 </style>
