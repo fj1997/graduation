@@ -14,9 +14,6 @@
             
           </li>
           <li>
-            <router-link to="/teacher/publishWork">发布作业</router-link>|
-          </li>
-          <li>
             <router-link to="/teacher/correctWork">作业批改</router-link>|
           </li>
           <li>
