@@ -41,10 +41,39 @@ export default {
   components:{
     'pagination': Pagination
   },
+  mounted(){
+    this.getList()
+  },
   methods:{
     getCourseList1(courseList){
       let vm = this;
       vm.courseList = courseList;
+    },
+    getList() {
+        let vm= this;
+          vm.loading = true;
+        vm.$axios.post('/name/type',{
+            pageNum:1,
+            pageSize:10,
+            courseType:1
+            // courseStatus:2
+        })
+        .then(function(res){
+        let data = res.data
+        //成功后
+        //  debugger
+        if(data.result){
+            
+        }else{
+            vm.$message({
+            type: 'error',
+            message: '未知错误!'
+            });
+        }
+    })
+    .catch(function(err){
+        return false
+    });
     }
   }
 }

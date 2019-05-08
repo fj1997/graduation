@@ -47,7 +47,7 @@
       </div>
       <div v-for="(item,idx) in questionData" :key="idx" class="text item">
         <span>{{idx+1}}</span> <span>{{item.questionContent}}</span>
-        <el-button @click="deleteCourseQuestion(item.questionId)" type="text" size="small" style="float:right">删除测试</el-button>
+        <el-button @click="deleteCourseQuestion(item.questionId)" type="text" size="small" style="position:absolute;right:10px">删除测试</el-button>
       </div>
     </el-card>
    
@@ -510,4 +510,7 @@ export default {
 .question-box{
   margin-top: 20px;
 }
+.text{
+  position: relative;
+  }
 </style>
