@@ -78,8 +78,9 @@ export default {
   }
 .mian-content{
   width: calc(100% - 200px);
-	float: right;/*或者float:left*/
-
+  float: right;/*或者float:left*/
+  position: relative;
+  min-height: 500px;
  
  
   }

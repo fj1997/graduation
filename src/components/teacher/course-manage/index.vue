@@ -2,8 +2,8 @@
   <div class="course-manage">
     <el-button :autofocus="true" @click="getPublish" :class="isActive?'active-button':''">已发布</el-button>
     <el-button @click="getUnPublish" :class="!isActive?'active-button':''">未发布</el-button>
-    <ul class="course-list-wrap clearfix">
-      <li v-for="(item,idx) in tableData" :key="idx" @click='courseDetail(item.courseId)'>
+    <ul class="course-list-wrap clearfix" v-if="tableData.length">
+      <li v-for="(item,idx) in tableData" :key="idx" @click='courseDetail(item.courseId,item.courseName)'>
         <img src="../../../assets/img/course1.jpg" alt="" >
         <p class="course-name">{{item.courseName}}</p>
         <p class="course-teacher-info">
@@ -12,7 +12,9 @@
         </p>
       </li>
     </ul>
-
+    <div v-if="!tableData.length" class="empty">
+      暂无数据
+    </div>
     <!-- 分页 -->
     <div class="block">
     <el-pagination
@@ -141,12 +143,13 @@ export default {
     /**
      * 进去课程详情页面
      */
-   courseDetail(id){
+   courseDetail(id,name){
       let vm = this;
         vm.$router.push({
             path:'/teacher/courseManage/addSection',
             query:{
-              courseId:id
+              courseId:id,
+              courseName:name
             }
         })
     }
@@ -156,7 +159,11 @@ export default {
 
 <style scoped lang="less">
 .course-manage{
-  position: relative;
+  // position: relative;
+}
+.empty{
+  text-align: center;
+  margin-top: 200px;
 }
 .active-button{
   color: #409EFF;

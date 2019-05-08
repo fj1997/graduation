@@ -1,6 +1,8 @@
 <template>
   <div>
+    
      <div class="button-position">
+      <span style="float:left">{{courseName}}</span>
       <el-button type="text" @click="outerAddSection = true">添加章节</el-button>
       <el-button type="text" @click="addCourseQuestionButton">添加期末测试</el-button>
     </div>
@@ -187,6 +189,10 @@ export default {
     courseId (){
       let vm = this;
       return vm.$route.query.courseId;
+    },
+    courseName(){
+      let vm = this;
+      return vm.$route.query.courseName;
     }
   },
 
