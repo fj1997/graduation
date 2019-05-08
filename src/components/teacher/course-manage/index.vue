@@ -113,7 +113,6 @@ export default {
      */
     deleteCourse(courseId){
       let vm= this;
-      console.log(courseId)
       vm.$axios.delete(`/course/course/${courseId}`)
       .then(function(res){
         let data =res.data;
