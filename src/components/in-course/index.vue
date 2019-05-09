@@ -11,17 +11,18 @@
       </div>
     </div>
     <ul class="course-list-wrap clearfix">
-      <li v-for="(item,idx) in courseList" :key="idx">
+      <li v-for="(item,idx) in list" :key="idx">
         <img src="../../assets/img/course1.jpg" alt="" >
-        <p class="course-name">{{item.name}}</p>
+        <p class="course-name">{{item.courseName}}</p>
         <p class="course-teacher-info">
-          <span>{{item.school}}</span><span>{{item.teacher}}</span>
+          <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
         </p>
       </li>
     </ul>
     <pagination 
       v-on:getList="getCourseList1"
       :url="url"
+      :courseType="courseType"
       >
 
     </pagination>
@@ -34,8 +35,9 @@ export default {
   data () {
     let vm = this;
     return {
-     courseList:[],
-     url:vm.ports.course.in
+     list:[],
+     url:'/course/type',
+     courseType:1
     }
   },
   components:{
@@ -45,35 +47,9 @@ export default {
     this.getList()
   },
   methods:{
-    getCourseList1(courseList){
+    getCourseList1(list){
       let vm = this;
-      vm.courseList = courseList;
-    },
-    getList() {
-        let vm= this;
-          vm.loading = true;
-        vm.$axios.post('/name/type',{
-            pageNum:1,
-            pageSize:10,
-            courseType:1
-            // courseStatus:2
-        })
-        .then(function(res){
-        let data = res.data
-        //成功后
-        //  debugger
-        if(data.result){
-            
-        }else{
-            vm.$message({
-            type: 'error',
-            message: '未知错误!'
-            });
-        }
-    })
-    .catch(function(err){
-        return false
-    });
+      vm.list = list;
     }
   }
 }

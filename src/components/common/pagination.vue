@@ -3,7 +3,7 @@
     <el-pagination
       background
       @current-change= "handleCurrentChange"
-      :current-page.sync= "currentPage"
+      :current-page.sync= "pageNum"
       :page-size= "pageSize"
       layout= "prev, pager, next, jumper"
       :total= "total">
@@ -12,17 +12,19 @@
 </template>
 
 <script>
+import { format } from '@assets/js/date.js';
 export default {
   data () {
     return {
-       currentPage:1,
+       pageNum:1,
        pageSize: 12,
        total:100,
-       courseList:[]
+       list:[]
       }
     },
     props:{
-        url:String
+        url:String,
+        courseType:Number
     },
     mounted(){
         let vm = this;
@@ -35,15 +37,20 @@ export default {
         getCourseList() {
             let vm= this;
             vm.$axios.post(vm.url,{
-                currentPage:vm.currentPage,
-                pageSize: vm.pageSize,
+                pageNum:vm.pageNum,
+                pageSize:vm.pageSize,
+                courseType:vm.courseType
             })
             .then(function(res){
                 let data = res.data;
-                if(data.success){
-                    vm.courseList = data.data.courseList,
+                if(data.result){
+                    vm.list = data.data.list,
+                    vm.list.forEach(function (item, index, array) {
+                        item.courseBeginTime = format(item.courseBeginTime);
+                        item.courseEndTime = format(item.courseEndTime);
+                    });
                     vm.total = data.data.total;
-                    vm.$emit('getList', vm.courseList);
+                    vm.$emit('getList', vm.list);
                    
                 }else{
                     return false
@@ -58,8 +65,8 @@ export default {
          */
         handleCurrentChange(val) {
             let vm=this;
-            vm.currentPage=val;
-            console.log(vm.currentPage)
+            vm.pageNum=val;
+            console.log(vm.pageNum)
             vm.getCourseList();
         }
     }

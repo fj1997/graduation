@@ -10,19 +10,21 @@
         <p class="couser-explain">自主学习，让优秀成为一种习惯</p>
       </div>
     </div>
-   <ul class="course-list-wrap clearfix">
-      <li v-for="(item,idx) in courseList" :key="idx">
+    <ul class="course-list-wrap clearfix">
+      <li v-for="(item,idx) in list" :key="idx">
         <img src="../../assets/img/course1.jpg" alt="" >
-        <p class="course-name">{{item.name}}</p>
+        <p class="course-name">{{item.courseName}}</p>
         <p class="course-teacher-info">
-          <span>{{item.school}}</span><span>{{item.teacher}}</span>
+          <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
         </p>
       </li>
     </ul>
     <pagination 
       v-on:getList="getCourseList1"
       :url="url"
+      :courseType="courseType"
       >
+
     </pagination>
   </div>
 </template>
@@ -33,18 +35,21 @@ export default {
   data () {
     let vm = this;
     return {
-     courseList:[],
-     url:vm.ports.course.out
+     list:[],
+     url:'/course/type',
+     courseType:2
     }
   },
   components:{
     'pagination': Pagination
   },
+  mounted(){
+    this.getList()
+  },
   methods:{
-    getCourseList1(courseList){
+    getCourseList1(list){
       let vm = this;
-      vm.courseList = courseList;
-      console.log(vm.courseList)
+      vm.list = list;
     }
   }
 }
@@ -52,8 +57,7 @@ export default {
 
 <style scoped lang="less">
   .main-box {
-    position: relative;
-    top: 70px;
+    padding-top: 70px;
     .course-img {
       width: 100%;
       height: 476px;
