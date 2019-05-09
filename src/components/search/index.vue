@@ -8,140 +8,97 @@
             <div class="search-box">
                 <input type="text" 
                     class="search-text"
-                    v-model="searchValue"
-                    @keyup.enter="changeFilter"
+                    v-model="courseName"
+                    @keyup.enter="getCourseList1"
                     placeholder="输入课程名称或教师">
-                <span class="search-button" @click="changeFilter">搜索</span>
+                <span class="search-button" @click="getCourseList">搜索</span>
             </div>
         </div>
-        <div class="main-box clearfix">
-            <ul >
-                <li class="course-list clearfix" v-for="(item ,idx) in list" :key="idx">
-                    <img src="../../assets/img/course1.jpg" class="course-img" >
-                    <div class="course-info">
-                        <p class="course-name ellipsis">{{ item.courseName}}</p>
-                        <span class="course-type">校内</span>
-                        <p class="teacher-info">
-                            <span>{{item.courseTeacher}}</span>
-                            <span>{{item.courseSchool}}</span>
-                        </p>
-                        <p>
-                            <dl class="course-attribute-dl clearfix">
-                                <dd>
-                                    <svg class="icon icon-style" aria-hidden="true" >
-                                        <use xlink:href="#icon-shijian"></use>
-                                    </svg>
-                                    <span class="course-count">{{item.creditHour}}</span>学分
-                                    <span class="course-count">{{item.classHour}}</span>课时
-                                </dd>
-                                <dd class="course-time">
-                                    <svg class="icon icon-style" aria-hidden="true" >
-                                        <use xlink:href="#icon-rili"></use>
-                                    </svg>
-                                    <span class="course-count">{{item.runTermCount}}</span>运行学期
-                                </dd>
-                                <dd class="course-please">
-                                    <svg class="icon icon-style" aria-hidden="true" >
-                                        <use xlink:href="#icon-manyidu"></use>
-                                    </svg>
-                                    <span class="course-count">{{item.pleasedDegree}}</span>满意度
-                                </dd>
-                            </dl>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-  <!--infinite-loading这个组件要放在列表的底部，滚动的盒子里面！-->
-            <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
-            <span slot="no-more" v-show="!list.length">
-                <empty-state>
-                    <p slot="tip">{{keyWord}}</p>
-                </empty-state>
-            </span>
-        </infinite-loading>
-        </div>
+        <ul class="course-list-wrap clearfix">
+      <li v-for="(item,idx) in list" :key="idx">
+        <img :src="`http://62.234.57.192:8080/file/`+item.coursePhotoUrl" alt="" >
+        <p class="course-name">{{item.courseName}}</p>
+        <p class="course-teacher-info">
+          <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
+        </p>
+      </li>
+    </ul>
+
+    <div class="block">
+        <el-pagination
+        background
+        @current-change= "handleCurrentChange"
+        :current-page.sync= "pageNum"
+        :page-size= "pageSize"
+        layout= "prev, pager, next, jumper"
+        :total= "total">
+        </el-pagination>
+    </div>
         
     </div>
    
 </template>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading';
-import EmptyState from '@/components/common/empty-state.vue';
-import {emptyText} from '@assets/js/constText';
+import Pagination from '@/components/common/pagination.vue'
+import { format } from '@assets/js/date.js';
 export default {
-    data () {
+     data () {
+    return {
+       courseName:'',
+       pageNum:1,
+       pageSize: 12,
+       total:100,
+       list:[]
+      }
+    },
+    mounted(){
         let vm = this;
-        return {
-            searchValue: vm.$route.query.searchName,
-            list:  [],
-            currentPage:1,
-            pageSize:10
-
-        }
-    },
-    computed:{
-        keyWord(){
-            let vm = this;
-            if(vm.list.length==0){
-                    if(!vm.searchValue){
-                        return emptyText.noKey;
-                    }else{
-                        return emptyText.noResult;
-                    }
-            }
-            
-        }
-    },
-    components: {
-        InfiniteLoading,
-        EmptyState
+        vm.getCourseList();
     },
     methods:{
-        search () {
-            let vm = this
-            if(vm.searchValue) {
-                console.log(vm.searchValue)
-            }
-        },
+      
     /**
-     * 滚动分页
+     * 获取课程列表
      */
-    infiniteHandler($state) {
+    getCourseList() {
         let vm= this;
-        vm.$axios.post(vm.ports.course.search,{
-            search:vm.searchValue,
-            currentPage:vm.currentPage,
-            pageSize: vm.pageSize,
+        vm.$axios.post('/course/name',{
+            pageNum:vm.pageNum,
+            pageSize:vm.pageSize,
+            courseName:vm.courseName
         })
         .then(function(res){
             let data = res.data;
-            if(data.success){
-                vm.list = vm.list.concat(data.data.list);  //response.data为你请求接口返回的数组列表
-                vm.currentPage++;
-                $state.loaded();
-                if (data.data.list.length== 0) {
-                    $state.complete(); //这里是加载了10页数据，设置不在加载
-                }
+            if(data.result){
+                vm.list = data.data.list,
+                vm.list.forEach(function (item, index, array) {
+                    item.courseBeginTime = format(item.courseBeginTime);
+                    item.courseEndTime = format(item.courseEndTime);
+                });
+                vm.total = data.data.total;
+                vm.$emit('getList', vm.list);
+                
             }else{
-               
-                $state.complete();
+                return false
             }
         })
         .catch(function(err){
             return false
         });
     },
-    //搜索框触发滚动分页
-    changeFilter() {
-        let vm = this;
-        vm.list = [];
-        vm.currentPage = 1;
-        vm.$nextTick(() => {
-            vm.$refs.infiniteLoading.$emit('$InfiniteLoading:reset');
-        });
+    /**
+     * 获取当前页的数据
+     */
+    handleCurrentChange(val) {
+        let vm=this;
+        vm.pageNum=val;
+        console.log(vm.pageNum)
+        vm.getCourseList();
     },
-    //返回首页
+    
+
+     //返回首页
     goIndex(){
         let vm = this
         vm.$router.push({
@@ -154,7 +111,58 @@ export default {
 </script>
  <style lang="less" scoped>
     @import './index.less';
-
+    .block{
+        text-align: center
+    }
+    .course-list-wrap {
+      width: 1300px;
+      margin: 30px auto;
+      li {
+        width: 285px;
+        display: inline-block;
+        margin: 0 20px 25px;
+        background: #fff;
+        border-radius: 6px;
+        list-style: none ;
+        cursor: pointer;
+        &:hover{
+          -moz-box-shadow: 2px 2px 2px #777; /* 老的 Firefox */
+          box-shadow: 2px 2px 2px #ddd;
+        }
+        img{
+          width: 285px;
+          height: 160px;
+          object-fit: cover;
+          border-radius: 6px;
+        }
+        .course-name{
+          padding: 0 15px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin-top: 17px;
+          line-height: 22px;
+          color: #3D4059;
+          font-size: 16px;
+        }
+        .course-teacher-info{
+          padding: 0 15px;
+          margin-top: 11px;
+          line-height: 16px;
+          color: #a1a2b2;
+          margin-bottom: 50px;
+          span{
+            color: #777993;
+            font-size: 12px;
+            margin-right: 10px;
+          }
+        }
+      }
+      .clearfix {
+        clear: both;
+        zoom: 1;
+      }
+    }
 </style>
 
 

@@ -4,7 +4,7 @@
     <el-button @click="getUnPublish" :class="!isActive?'active-button':''">未发布</el-button>
     <ul class="course-list-wrap clearfix" v-if="tableData.length">
       <li v-for="(item,idx) in tableData" :key="idx" @click='courseDetail(item.courseId,item.courseName)'>
-        <img src="../../../assets/img/course1.jpg" alt="" >
+        <img :src="`http://62.234.57.192:8080/file/`+item.coursePhotoUrl" alt="" >
         <p class="course-name">{{item.courseName}}</p>
         <p class="course-teacher-info">
           <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>

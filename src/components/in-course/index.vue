@@ -12,7 +12,7 @@
     </div>
     <ul class="course-list-wrap clearfix">
       <li v-for="(item,idx) in list" :key="idx">
-        <img src="../../assets/img/course1.jpg" alt="" >
+        <img :src="`http://62.234.57.192:8080/file/`+item.coursePhotoUrl" alt="" >
         <p class="course-name">{{item.courseName}}</p>
         <p class="course-teacher-info">
           <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
@@ -44,7 +44,7 @@ export default {
     'pagination': Pagination
   },
   mounted(){
-    this.getList()
+    
   },
   methods:{
     getCourseList1(list){

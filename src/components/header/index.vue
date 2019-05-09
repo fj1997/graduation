@@ -2,7 +2,7 @@
   <div class="title-box">
     <img  class="school-logo" src="../../assets/img/school_logo.png">
     <input type="text" 
-          placeholder="搜索课程名称、老师等" 
+          placeholder="搜索课程名称" 
           class="search" 
           v-model="searchName"
           @keyup.enter="search">
@@ -14,8 +14,17 @@
     
     <div class="title-bar">
       <p class="course-box">
-        <router-link class="course" to="/index/incourse">校内课程</router-link>
-        <router-link class="course" to="/index/outcourse">校外课程</router-link>
+        <router-link 
+          class="course"
+          to="/index/incourse">
+          <span @click="activeIn" :class="activeName?'active-color':''">校内课程</span>
+          
+        </router-link>
+        <router-link 
+          class="course" 
+          to="/index/outcourse">
+           <span @click="activeOut" :class="!activeName?'active-color':''">校外课程</span>
+        </router-link>
       </p>
       <span class="login" @click="goLogin"> 个人中心</span>
       <span class="register" @click="loginOut">退出</span>
@@ -27,7 +36,8 @@
 export default {
   data () {
     return {
-      searchName: ''
+      searchName: '',
+      activeName:true
     }
   },
   methods: {
@@ -39,6 +49,14 @@ export default {
           activeName:'first'
           }
       })
+    },
+    activeIn(){
+      let vm = this;
+      vm.activeName = true;
+    },
+    activeOut(){
+      let vm = this;
+      vm.activeName = false;
     },
     loginOut () {
       let vm = this
@@ -116,6 +134,9 @@ export default {
     .course-box{
       display: inline-block;
       padding-right: 40px;
+      .active-color{
+        color: #00c896
+      }
       .course{
         padding-right: 30px;
         color: #777;
