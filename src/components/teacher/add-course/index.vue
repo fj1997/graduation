@@ -41,6 +41,8 @@
     <el-upload
       class="upload-demo"
       action="http://62.234.57.192:8080/studywebsite/file/upload"
+      :show-file-list="false"
+      :limit="1"
       :on-success="handleAvatarSuccess">
       <el-button slot="trigger" size="small" type="primary">上传图片</el-button>
     </el-upload>
@@ -128,8 +130,13 @@ export default {
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
+      
       handleAvatarSuccess(response, file, fileList) {
         let vm = this;
+        vm.$message({
+          type: 'success',
+          message: '上传成功'
+          });
         vm.ruleForm.coursePhotoUrl=response.data;
       }
     }
