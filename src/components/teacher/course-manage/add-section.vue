@@ -289,10 +289,20 @@ export default {
                 });
               }
             })
+            .catch(function(err){
+                    return console.log(err)
+                });
           } else {
             return false;
           }
         });
+    },
+    handleVideoSuccess(response, file, fileList){
+      let vm = this;
+      vm.$message({
+        type: 'success',
+        message: '上传成功'
+      });
     },
 
     //添加章节
