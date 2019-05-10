@@ -1,28 +1,14 @@
 <template>
   <div class="course-detail-box clearfix">
     <div class="course-box">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName" @tab-click="handleClick" tab-position="left">
       <el-tab-pane label="课程详情" name="first">
-        <detail :courseDetail="courseDetail"></detail>
+        <detail></detail>
       </el-tab-pane>
       <el-tab-pane label="课程评价" name="second">
         <evaluate :evaluate="evaluate"></evaluate>
       </el-tab-pane>
     </el-tabs>
-    </div>
-    <div class="teacher-intro">
-      <img src="../../assets/img/portrait.png" class="head-portrait">
-      <div class="teacher-basic-info">
-        <p>
-          <span>{{courseDetail.teacherInfo.name}}</span> · <span>{{courseDetail.teacherInfo.college}}</span>
-        </p>
-        <p>
-          <span>{{courseDetail.teacherInfo.college}}</span> <span>{{courseDetail.teacherInfo.degree}}</span>
-        </p>
-      </div>
-      <div class="teacher-detail-info">
-        {{courseDetail.teacherInfo.intro}}
-      </div>
     </div>
   </div>
 </template>
@@ -93,12 +79,9 @@ export default {
 
 <style scoped lang="less">
 .course-detail-box{
-    width: 1205px;
-    margin: 0 auto;
+    
     .course-box{
-      width: 808px;
-      float: left;
-      margin-right: 20px;
+      width: 1000px;
       padding: 0 40px;
       background: #fff;
     }

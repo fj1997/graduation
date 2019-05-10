@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="intro-box">
-        <course-intro :courseDetail="courseDetail"></course-intro>
+        <course-intro></course-intro>
       </div>
     </div>
   </div>
@@ -26,9 +26,7 @@ export default {
   data () {
    return {
       count:0,
-      basicData:{},
-      courseDetail:{},
-      evaluateDetail:{}
+      basicData:{}
     }
   },
   components:{
@@ -70,40 +68,23 @@ export default {
           });
     },
     
-    getCourseDetail2(){
-      let vm = this;
-      vm.$axios.post(vm.ports.course.detail.coursedetail,{
-          courseID: "95651"
-        }).then(function(res){
-          let data = res.data.data;
-            if(res.data.success){
-              vm.videoSrc = data.videoSrc;
-              vm.videoPoster = data.VideoPlayer;
-              vm.basicData = data;
-              
-            }
-          })
-          .catch(function(err){
-
-          });
-    },
-    getEvaluate(){
-      let vm = this;
-      vm.$axios.post(vm.ports.course.detail.evaluate,{
-          courseID: "95651"
-        }).then(function(res){
-          let data = res.data.data;
-            if(res.data.success){
-              vm.videoSrc = data.videoSrc;
-              vm.videoPoster = data.VideoPlayer;
-              vm.basicData = data;
-              
-              
-            }
-          })
-          .catch(function(err){
-
-          });
+    /**
+      获取章节列表
+     */
+    getSectionList(){
+      let vm= this;
+      vm.$axios.get(`/section/course/${vm.courseId}`)
+        .then(function(res){
+          let data = res.data
+        //成功后
+         
+        if(data.result){
+            
+          }
+        })
+      .catch(err => {
+        return false
+      });
     }
   }
   }
@@ -133,7 +114,7 @@ export default {
   }
   .intro-box{
     padding-top: 25px;
-    background: #f5f5f5;
+    
     
   }
   

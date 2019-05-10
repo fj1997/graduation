@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="course-overview">
+    <!-- <div class="course-overview">
       <p>
         <svg class="icon icon-style" aria-hidden="true" >
           <use xlink:href="#icon-gaishu"></use>
@@ -10,8 +10,8 @@
       <p class="course-intro-text">
         {{courseDetail.courseOverview}}
       </p>
-    </div>
-    <div class="course-target">
+    </div> -->
+    <!-- <div class="course-target">
       <p>
         <svg class="icon icon-style" aria-hidden="true" >
           <use xlink:href="#icon-xueshimao2"></use>
@@ -21,7 +21,7 @@
       <p class="course-intro-text">
         {{courseDetail.courseTarget}}
       </p>
-    </div>
+    </div> -->
     <div class="course-chapter">
       <p>
         <svg class="icon icon-style" aria-hidden="true" >
@@ -29,17 +29,18 @@
         </svg>
         <span class="detail-title">课程大纲</span>
       </p>
-      <ul>
-          <li v-for="(item,idx) in courseDetail.courseChapter" :key="idx" class="chapter-box">
-            <div class="chapter-list">
-              <p class="chapter-title">第一章 {{item.bigChapter}}</p>
+      <ul class="chapter-list">
+          <li v-for="(item,idx) in sectionList" :key="idx" class="chapter-box">
+            <!-- <p class="cricle"></p> -->
+            <span>{{idx+1}}、</span>{{item.sectionName}}
+            <!-- <div class="chapter-list">
               <ul>
-                <li v-for="(i,index) in item.smallChapter" :key="index" class="chapter-list-wrap">
+                <li v-for="(i,index) in sectionList" :key="index" class="chapter-list-wrap">
                   <p class="cricle"></p>
-                  <p class="small-chapter">{{i}}</p>
+                  <p class="small-chapter">{{i.sectionName}}</p>
                 </li>
               </ul>
-            </div>
+            </div> -->
             
           </li>
         </ul>
@@ -56,14 +57,34 @@
 export default {
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      sectionList:[]
     }
   },
-  props:{
-    courseDetail:{
-      type: Object
-    }
-  },
+ mounted(){
+   let vm = this;
+   vm.getSectionList();
+ },
+  methods:{
+    /**
+      获取章节列表
+     */
+    getSectionList(){
+      let vm= this;
+      let courseId = vm.$route.query.courseId;
+      vm.$axios.get(`/section/course/${courseId}`)
+        .then(function(res){
+          let data = res.data
+        //成功后
+         
+        if(data.result){
+            vm.sectionList = data.data;
+          }
+        })
+      .catch(err => {
+        return false
+      });
+    },
+  }
 }
 </script>
 
@@ -93,8 +114,14 @@ export default {
     // white-space: pre-wrap;
     color: #666;
 }
+.chapter-list{
+  margin-left: -10px;
+  margin-top: 10px;
+}
 .chapter-box{
   list-style: none;
+  height: 25px;
+  line-height: 25px;
 }
 .chapter-title{
   margin-bottom: 10px;
