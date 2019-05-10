@@ -32,7 +32,10 @@
       <ul class="chapter-list">
           <li v-for="(item,idx) in sectionList" :key="idx" class="chapter-box">
             <!-- <p class="cricle"></p> -->
-            <span>{{idx+1}}、</span>{{item.sectionName}}
+            <span>{{idx+1}}、</span>
+            <span>{{item.sectionName}}:</span>
+            <span>{{item.sectionDescription}}</span>
+            
             <!-- <div class="chapter-list">
               <ul>
                 <li v-for="(i,index) in sectionList" :key="index" class="chapter-list-wrap">
