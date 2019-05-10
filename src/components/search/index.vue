@@ -15,7 +15,7 @@
             </div>
         </div>
         <ul class="course-list-wrap clearfix">
-      <li v-for="(item,idx) in list" :key="idx">
+      <li v-for="(item,idx) in list" :key="idx" @click='courseDetail(item.courseId,item.courseName)'>
         <img :src="`http://62.234.57.192:8080/file/`+item.coursePhotoUrl" alt="" >
         <p class="course-name">{{item.courseName}}</p>
         <p class="course-teacher-info">
@@ -96,7 +96,19 @@ export default {
         console.log(vm.pageNum)
         vm.getCourseList();
     },
-    
+    /**
+     * 进去课程详情页面
+     */
+   courseDetail(id,name){
+      let vm = this;
+        vm.$router.push({
+            path:'/detail',
+            query:{
+              courseId:id,
+              courseName:name
+            }
+        })
+    },
 
      //返回首页
     goIndex(){

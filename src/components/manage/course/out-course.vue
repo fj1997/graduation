@@ -12,7 +12,7 @@
             <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
                 <el-form-item label="课程封面：">
-                    <img src="../../../assets/img/book.jpg" style="width:50px;height:50px;">
+                    <img :src="`http://62.234.57.192:8080/file/`+props.row.coursePhotoUrl" style="width:50px;height:50px;">
                 </el-form-item>
                 <el-form-item label="课程名称：">
                     <span>{{ props.row.courseName }}</span>

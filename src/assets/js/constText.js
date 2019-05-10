@@ -20,6 +20,6 @@ export const emptyText = {
  * 课程类型
  */
 export const courseType = {
-    in: "校内",
-    out: "校外"
+    1: "校内",
+    2: "校外"
 }

@@ -4,35 +4,25 @@
     <div class="course-info">
       <p class="course-time">
           <span>课程类型：</span>
-          <span>{{courseType}}</span>
+          <span>{{type}}</span>
+      </p>
+      <p class="course-time">
+          <span>授课教师：</span>
+          <span>{{basicData.courseUserName}}</span>
       </p>
       <p class="course-time">
           <span>开课时间：</span>
-          <span>2019年03月26日 ~ 2019年06月15日</span>
+          <span>{{basicData.courseBeginTime}} ~ {{basicData.courseEndTime}}</span>
       </p>
-      <div class="course-creidt">
-        <p class="course-creidt-wrap">
-          <svg class="icon icon-style" aria-hidden="true" >
-              <use xlink:href="#icon-shijian2"></use>
-          </svg>
-          <span class="course-count">学分:</span><span class="">{{basicData.courseCount}}</span>
-        </p>
-        <p class="course-creidt-wrap">
-          <svg class="icon icon-style" aria-hidden="true" >
-            <use xlink:href="#icon-xueshimao"></use>
-        </svg>
-        <span class="course-count">课时:</span><span>{{basicData.courseHour}}</span>
-        </p>
-        <p class="course-creidt-wrap">
-          <svg class="icon icon-style teacher-name" aria-hidden="true" >
-            <use xlink:href="#icon-rentou"></use>
-        </svg>
-        <span class="course-count">教师</span><span>{{basicData.courseTeacher}}</span>
-        </p>
-      </div>
+      <p class="course-time">
+          <span>课程介绍：</span>
+          <span>{{basicData.courseContent}}</span>
+      </p>
+    
     </div>
-    <p class="add-count">共有{{basicData.studentNum}}个人参加</p>
-    <p class="add-course-button">立即参加</p>
+    <p class="add-count">共有{{count}}个人参加</p>
+    <el-button type="primary" @click="addCourse">立即参加</el-button>
+    <!-- <input type="button" class="add-course-button" value="立即参加" disabled="disabled"> -->
   </div>
 </template>
 
@@ -41,7 +31,8 @@ import {courseType} from '@assets/js/constText';
 export default {
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      disabled:true,
+      count:0
     }
   },
   props:{
@@ -49,10 +40,65 @@ export default {
       type: Object
     }
   },
+  mounted(){
+    let vm = this;
+    vm.getCourseCount();
+  },
   computed:{
-    courseType(){
+    type(){
       let vm = this;
-      return courseType[vm.basicData.courseType]
+      return courseType[vm.basicData.courseType];
+    },
+    userId(){
+      let vm = this;
+      return window.localStorage.userId;
+    },
+    courseId (){
+      let vm = this;
+      return vm.$route.query.courseId;
+    }
+  },
+  methods:{
+     /**
+     * 获取课程报名人数
+     */
+     getCourseCount(){
+      let vm = this;
+      vm.$axios.get(`/curriculum/course/count/${vm.courseId}`)
+        .then(function(res){
+          let data = res.data;
+            if(data.result){
+              vm.count = data.data;
+            }
+          })
+          .catch(function(err){
+              return false
+          });
+    },  
+   /**
+     * 报名参加课程
+     */
+     addCourse(){
+       
+      let vm = this;
+      vm.$axios.post('/curriculum/course/'+vm.courseId+'/'+vm.userId)
+        .then(function(res){
+          let data = res.data;
+            if(data.result){
+              vm.$message({
+                type: 'success',
+                message: '成功报名,请进入个人中心进行学习！'
+              });
+            }else{
+              vm.$message({
+                type: 'error',
+                message: data.msg
+              });
+            }
+          })
+          .catch(function(err){
+              return false
+          });
     }
   }
 }
@@ -75,27 +121,6 @@ export default {
     .course-time{
       padding-top: 10px;
     }
-    .course-creidt{
-      line-height: 50px;
-      .course-creidt-wrap{
-      display: inline-block;
-      width: 150px;
-      .course-count{
-        padding: 0 5px;
-        display: inline-block;
-        margin-left: -7px;
-      }
-      .icon-style{
-          vertical-align: -5px;
-          color: #A0A6AD;
-      }
-      .teacher-name{
-        vertical-align:-2px;
-      }
-    }
-    }
-    
-    
   }
   .add-count{
     font-size: 13px;
