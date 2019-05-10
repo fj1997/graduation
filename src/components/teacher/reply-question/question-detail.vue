@@ -1,7 +1,9 @@
 <template>
   <div>
+    <el-button :autofocus="true" @click="getComment" :class="comment?'active-button':''">已评论</el-button>
+    <el-button @click="getUnComment" :class="uncomment?'active-button':''">未评论</el-button>
+    <el-button @click="getIgnore" :class="ignore?'active-button':''">忽略</el-button>
     <div>
-
         <div class="average-score">
             <p>共{{total}}条数据</p>
         </div>
@@ -81,8 +83,12 @@ export default {
         pageSize: 10,
         total:100,
         tableData: [],
+        commentStatus:1,//commentStatus: 1、老师未评论 2、已评论（会有个commentAnswer字段） 3、忽略（老师忽略，即老师不再评论）
         commentContent:'',
-        dialogFormVisible: false
+        dialogFormVisible: false,
+        ignore:false,
+        uncomment:false,
+        comment:true
     }
   },
   computed:{
@@ -101,20 +107,57 @@ export default {
   },
   mounted(){
     let vm = this;
-    vm.getList();
+    vm. getComment();
   },
   methods:{
 
+      /**
+       * 获取已经评论的列表
+       */
+      getComment(){
+        let vm = this;
+        vm.comment= true;
+        vm.uncomment=false;
+        vm.ignore = false;
+        vm.commentStatus = 2;
+        vm.pageNum=1;
+        vm.getList();
+      },
+      /**
+       * 获取未评论的列表
+       */
+      getUnComment(){
+        let vm = this;
+        vm.comment= false;
+        vm.uncomment=true;
+        vm.ignore = false;
+        vm.commentStatus = 1;
+        vm.pageNum=1;
+        vm.getList();
+      },
+      /**
+       * 获取忽略的列表
+       */
+      getIgnore(){
+        let vm = this;
+        vm.comment= false;
+        vm.uncomment=false;
+        vm.ignore = true;
+        vm.commentStatus = 3;
+        vm.pageNum=1;
+        vm.getList();
+      },
       /**
        * 获取评论列表
        */
       getList() {
         let vm= this;
         //   vm.loading = true;
-        vm.$axios.post('/comment/course/',{
+        vm.$axios.post('/comment/course/status',{
             pageNum:vm.pageNum,
             pageSize:vm.pageSize,
-            courseId:vm.courseId
+            commentCourseId:vm.courseId,
+            commentStatus:vm.commentStatus
         })
         .then(function(res){
             let data = res.data

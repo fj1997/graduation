@@ -13,6 +13,7 @@ import CorrectWork from '../components/teacher/correct-work/index.vue'
 import CourseManage from '../components/teacher/course-manage/index.vue'
 import AddSection from '../components/teacher/course-manage/add-section.vue'
 import ReplyQuestion from '../components/teacher/reply-question/index.vue'
+import QuestionDetail from '../components/teacher/reply-question/question-detail.vue'
 import StudentManage from '../components/teacher/student-manage/index.vue'
 import Manage from '../components/manage/index.vue'
 import ManageStudent from '../components/manage/student/index.vue'
@@ -97,6 +98,11 @@ export default new Router({
           name: 'ReplyQuestion',
           component: ReplyQuestion
         },
+        { 
+          path: 'replyQuestion/questionDetail',
+          name: 'QuestionDetail',
+          component: QuestionDetail
+          },
         {
           path: 'studentManage',
           name: 'StudentManage',
