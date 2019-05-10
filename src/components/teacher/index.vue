@@ -1,34 +1,40 @@
 <template>
-  <div>
-    <div class="header">
-      头部
-    </div>
-    <div class="mian-container clearfix">
-      <div class="main-nav">
-        <ul>
-          <li>
-            <router-link to="/teacher/addCourse">添加课程</router-link>|
-          </li>
-          <li>
-            <router-link to="/teacher/courseManage">课程管理</router-link>|
-            
-          </li>
-          <li>
-            <router-link to="/teacher/correctWork">作业批改</router-link>|
-          </li>
-          <li>
-             <router-link to="/teacher/studentManage">学生管理</router-link>|
-          </li>
-          <li>
-             <router-link to="/teacher/replyQuestion">回答问题</router-link>|
-          </li>
+  <div class="index">
+    <el-container>
+      <el-aside width="200px">
+        <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :router="true">
+          <el-menu-item index="/teacher/addCourse">
+            <i class="el-icon-menu"></i>
+            <span slot="title">添加课程</span>
+          </el-menu-item>
+          <el-menu-item index="/teacher/courseManage">
+            <i class="el-icon-setting"></i>
+            <span slot="title">课程管理</span>
+          </el-menu-item>
+          <el-menu-item index="/teacher/correctWork">
+            <i class="el-icon-menu"></i>
+            <span slot="title">作业批改</span>
+          </el-menu-item>
+          <el-menu-item index="/teacher/studentManage">
+            <i class="el-icon-document"></i>
+            <span slot="title">学生管理</span>
+          </el-menu-item>
+          <el-menu-item index="/teacher/replyQuestion">
+            <i class="el-icon-setting"></i>
+            <span slot="title">回答问题</span>
+          </el-menu-item>
           
-        </ul>
-      </div>
-      <div class="mian-content">
-        <router-view/>
-      </div>
-    </div>
+        </el-menu>
+      </el-aside>
+      
+      <el-container>
+        <el-main>
+          <transition>
+            <router-view></router-view>
+          </transition>
+        </el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
@@ -80,5 +86,23 @@ export default {
   min-height: 500px;
  
  
+  }
+  .el-menu {
+    height: 100vh;
+  }
+
+  .el-header {
+    background-color: #B3C0D1;
+    color: #333;
+    line-height: 60px;
+  }
+  
+  .el-aside {
+    height: 100vh;
+    color: #333;
+  }
+
+  .el-container {
+    height: 100vh;
   }
 </style>

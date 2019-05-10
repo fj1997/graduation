@@ -15,6 +15,10 @@ import AddSection from '../components/teacher/course-manage/add-section.vue'
 import ReplyQuestion from '../components/teacher/reply-question/index.vue'
 import QuestionDetail from '../components/teacher/reply-question/question-detail.vue'
 import StudentManage from '../components/teacher/student-manage/index.vue'
+import Student from '../components/student/index.vue'
+import StudentCourse from '../components/student/course-manage.vue'
+import StudentScore from '../components/student/score.vue'
+
 import Manage from '../components/manage/index.vue'
 import ManageStudent from '../components/manage/student/index.vue'
 import ManageTeacher from '../components/manage/teacher/index.vue'
@@ -108,6 +112,23 @@ export default new Router({
           name: 'StudentManage',
           component: StudentManage
         }
+      ]
+    },{
+      path: '/student',
+      name: 'Student',
+      component: Student,
+      children:[
+        {
+          path: '/student/courseManage',
+          name: 'StudentCourse',
+          component: StudentCourse,
+        },
+        {
+          path: '/student/studentScore',
+          name: 'StudentScore',
+          component: StudentScore,
+        }
+        
       ]
     },
     {
