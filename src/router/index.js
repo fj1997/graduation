@@ -7,6 +7,8 @@ import Incourse from '../components/in-course/index.vue'
 import Outcourse from '../components/out-course/index.vue'
 import Search from '../components/search/index.vue'
 import CourseDetail from '../components/course-detail/index.vue'
+import StudyCourse from '../components/study-course/index.vue'
+
 import Teacher from '../components/teacher/index.vue'
 import AddCourse from '../components/teacher/add-course/index.vue'
 import CorrectWork from '../components/teacher/correct-work/index.vue'
@@ -15,6 +17,7 @@ import AddSection from '../components/teacher/course-manage/add-section.vue'
 import ReplyQuestion from '../components/teacher/reply-question/index.vue'
 import QuestionDetail from '../components/teacher/reply-question/question-detail.vue'
 import StudentManage from '../components/teacher/student-manage/index.vue'
+
 import Student from '../components/student/index.vue'
 import StudentCourse from '../components/student/course-manage.vue'
 import StudentScore from '../components/student/score.vue'
@@ -70,6 +73,11 @@ export default new Router({
       path: '/detail',
       name: 'CourseDetail',
       component: CourseDetail
+    },
+    {
+      path: '/study',
+      name: 'StudyCourse',
+      component: StudyCourse
     },
     {
       path: '/teacher',
