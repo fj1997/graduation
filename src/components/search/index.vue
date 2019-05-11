@@ -45,7 +45,7 @@ import { format } from '@assets/js/date.js';
 export default {
      data () {
     return {
-       courseName:'',
+       
        pageNum:1,
        pageSize: 12,
        total:100,
@@ -55,6 +55,12 @@ export default {
     mounted(){
         let vm = this;
         vm.getCourseList();
+    },
+    computed:{
+        courseName(){
+            let vm = this;
+            return vm.$route.query.searchName
+        }
     },
     methods:{
       
