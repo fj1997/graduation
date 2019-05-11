@@ -26,7 +26,7 @@
            <span @click="activeOut" :class="!activeName?'active-color':''">校外课程</span>
         </router-link>
       </p>
-      <span class="login" @click="goLogin"> 个人中心</span>
+      <span class="login" @click="goPersonal"> 个人中心</span>
       <span class="register" @click="loginOut">退出</span>
     </div>
   </div>
@@ -41,13 +41,10 @@ export default {
     }
   },
   methods: {
-    goLogin () {
+    goPersonal() {
       let vm = this
       vm.$router.push({
-        path:'/login',
-        query: { 
-          activeName:'first'
-          }
+        path:'/student/courseManage'
       })
     },
     activeIn(){
