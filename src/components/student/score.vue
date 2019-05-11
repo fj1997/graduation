@@ -112,6 +112,7 @@ export default {
             })
           }else{
             vm.dataList=[];
+            vm.loading = false;
           }
         }else{
           vm.$message({

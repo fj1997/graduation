@@ -8,7 +8,7 @@
           <p>授课老师：{{item.courseUserName}}</p>
           <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
           <p class="event">
-            <span class="study">继续学习</span>
+            <span class="study" @click="studyCourse(item.courseId)">继续学习</span>
             <span class="cancleCourse" @click="cancleCourse(item.courseId)">取消课程</span>
           </p>
         </div>
@@ -81,7 +81,18 @@ export default {
         return false
       });
     },
-
+    /**
+     * 
+     */
+    studyCourse(id){
+      let vm = this;
+      vm.$router.push({
+            path:'/study',
+            query:{
+              courseId:id
+            }
+        })
+    },
     /**
      * 取消课程
      */
