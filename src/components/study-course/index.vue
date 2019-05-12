@@ -5,9 +5,9 @@
   <el-container>
     <el-aside width="200px">
         <el-menu
-            default-active="0"
+            default-active="0Stirng"
             class="el-menu-vertical-demo">
-            <el-menu-item  v-for="(item,idx) in dataList" :key="idx" :index="idx" >
+            <el-menu-item  v-for="(item,idx) in dataList" :key="idx" :index="idx+'Stirng'">
                 <span slot="title" @click="changeSection(item.sectionId,item.sectionType,item.sectionFileUrl)">{{item.sectionName}}</span>
             </el-menu-item>
         </el-menu>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import Header from '@/components/header/index'
+import Header from '@/components/header/index.vue'
 import player from '@/components/common/player.vue' 
 export default {
   data () {
