@@ -167,6 +167,7 @@ export default {
                 message: '评论成功!'
             })
             vm.dialogFormVisible = false;
+            vm.getList();
         }else{
             vm.$message({
                 type: 'error',
