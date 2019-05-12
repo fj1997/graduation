@@ -45,14 +45,25 @@
       <div slot="header" class="clearfix">
         <span>期末测试题目</span>
       </div>
+      <h3 v-if="radioData.length">单选题</h3>
+      <div v-for="(i,idx) in radioData" :key="i.choiceQuestion">
+        <div>{{idx+1}}、{{i.choiceQuestion}}</div>
+        <el-radio disabled>{{i.choiceA}}</el-radio>
+        <el-radio disabled>{{i.choiceB}}</el-radio>
+        <el-radio  disabled>{{i.choiceC}}</el-radio>
+        <el-radio  disabled>{{i.choiceD}}</el-radio>
+        <p>正确答案：{{i.ChoiceAnswer}}</p>
+      </div>
+      <h3 v-if="questionData.length">简答题</h3>
       <div v-for="(item,idx) in questionData" :key="idx" class="text item">
         <span>{{idx+1}}</span> <span>{{item.questionContent}}</span>
         <el-button @click="deleteCourseQuestion(item.questionId)" type="text" size="small" style="position:absolute;right:10px">删除测试</el-button>
       </div>
     </el-card>
+
    
     
-<!--  添加章节  -->
+<!--  添加章节弹框  -->
 <el-dialog title="添加章节" :visible.sync="outerAddSection">
     <el-form :model="outerAddForm" :rules="outerRules" ref="outerAddForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="资源类型" prop="sectionType">
@@ -93,7 +104,7 @@
    
 </el-dialog>
 
-<!-- 添加测试  -->
+<!-- 添加章节测试  -->
 <el-dialog :title="title" :visible.sync="dialogTest">
    <el-form :model="questionForm" :rules="questionRules" ref="questionForm" label-width="100px" class="demo-ruleForm">
   <el-form-item label="测试题目" prop="questionContent">
@@ -109,6 +120,60 @@
   </el-form-item>
 </el-form>
 </el-dialog>
+
+<!-- 添加期末测试 -->
+<el-dialog :title="title" :visible.sync="finalTest">
+  <span @click="showRadio = true">单选题</span><span @click="showRadio = false">主观题</span>
+   <!-- 添加单选 -->
+    <el-form ref="ridioForm" :model="ridioForm" :rules="ridioRules" label-width="80px" v-show="showRadio">
+        <el-form-item label="单选题目">
+          <el-input type="textarea" v-model="ridioForm.choiceQuestion"></el-input>
+        </el-form-item>
+        <el-form-item label="A：">
+          <el-input type="text" v-model="ridioForm.choiceA"></el-input> 
+        </el-form-item>
+        <el-form-item label="B：">
+          <el-input type="text" v-model="ridioForm.choiceB"></el-input>
+        </el-form-item>
+        <el-form-item label="C：">
+        <el-input type="text" v-model="ridioForm.choiceC"></el-input>
+        </el-form-item>
+        <el-form-item label="D：">
+          <el-input type="text" v-model="ridioForm.choiceD"></el-input>
+        </el-form-item>
+        <el-form-item label="正确答案:" prop="choiceAnswer">
+          <el-radio-group v-model="ridioForm.choiceAnswer">
+            <el-radio :label="ridioForm.choiceA">A</el-radio>
+            <el-radio :label="ridioForm.choiceB">B</el-radio>
+            <el-radio :label="ridioForm.choiceC">C</el-radio>
+            <el-radio :label="ridioForm.choiceD">D</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      
+      
+      <el-form-item>
+        <el-button type="primary" @click="addRadio('ridioForm')">立即创建</el-button>
+        <el-button @click="finalTest=false">取消</el-button>
+      </el-form-item>
+</el-form>
+
+<!-- 添加主观题 -->
+   <el-form  v-show="!showRadio" :model="questionForm" :rules="questionRules" ref="questionForm" label-width="100px" class="demo-ruleForm">
+  <el-form-item label="测试题目" prop="questionContent">
+    <el-input 
+      type="textarea" 
+      v-model="questionForm.questionContent"
+      placeholder="期末测试可以添加多道，章节测试添加一次"
+      ></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="addCourseQuestion('questionForm',type,id)" :disabled="disabled">添加测试</el-button>
+    <el-button @click="finalTest=false">取消</el-button>
+  </el-form-item>
+</el-form>
+</el-dialog>
+
+<!-- 查看章节测试题目 -->
 <el-dialog title="测试题目" :visible.sync="dialogLookTest">
   <div>
     <div v-for="(item,idx) in questionSectionData" :key="idx" v-if="questionSectionData.length">
@@ -131,15 +196,16 @@ export default {
     return {
       loading:true,
       questionLoading:false,
-      tableData: [],
-      questionData:[],
-      questionSectionData:[],
+      tableData: [],          //章节列表
+      questionData:[],        //期末测试主观题列表
+      questionSectionData:[],   //章节测试主观题列表
+      radioData:[],
+      radio:'',
+      showRadio:true,
       disabled:false,
       title:'添加期末测试',
-      type:1,
-      id:1,
-      outerAddSection: false,
-      innerAddSection:false,
+      type:1,        //1、章节问题 （平时作业）2、课程问题（课程测试）                 
+      id:1,     //指章节ID 为2指课程ID
       outerAddForm: {
         sectionType: '',
         sectionFileUrl: ''
@@ -150,6 +216,14 @@ export default {
         sectionType: '',
         sectionFileUrl: '',
         sectionCourseId:''
+      },
+      ridioForm:{       //添加单选
+        choiceQuestion: '',
+        choiceA:'',
+        choiceB:'',
+        choiceC:'',
+        choiceD:'',
+        choiceAnswer:''
       },
       questionForm:{
         questionType:'',   //1、章节问题 （平时作业）2、课程问题（课程测试）
@@ -173,16 +247,39 @@ export default {
         ]
         
       },
-      questionRules:{
+      questionRules:{         //添加课后作业
         questionContent:[
            { required: true, message: '请填写测试题目', trigger: 'blur' }
         ]
          
         
       },
+      ridioRules:{             //添加期末单选测试题规则
+        choiceQuestion: [
+          { required: true, message: '请输入题目', trigger: 'blur' }
+        ],
+        choiceA: [
+          { required: true, message: '请填写A选选项内容', trigger: 'blur' }
+        ],
+        choiceB: [
+          { required: true, message: '请填写B选选项内容', trigger: 'blur' }
+        ],
+        choiceC: [
+          { required: true, message: '请填写C选选项内容', trigger: 'blur' }
+        ],
+        choiceD: [
+          { required: true, message: '请填写D选选项内容', trigger: 'blur' }
+        ],
+        choiceAnswer: [
+          { required: true, message: '请选择答案', trigger: 'blur' }
+        ]
+      },
       formLabelWidth: '120px',
+      outerAddSection: false,
+      innerAddSection:false,
       dialogTest:false,
-      dialogLookTest:false
+      dialogLookTest:false,
+      finalTest:false
     }
   },
   computed:{
@@ -198,10 +295,13 @@ export default {
 
   mounted(){
     this.getSectionList();
-    this.getQuestionList(2,this.courseId)
+    this.getQuestionList(2,this.courseId);
+    this.getRadioList();
   },
   methods:{
-
+    onSubmit() {
+        console.log(this.form.resource);
+      },
     /**
       获取章节列表
      */
@@ -297,6 +397,8 @@ export default {
           }
         });
     },
+
+    //上传资源
     handleVideoSuccess(response, file, fileList){
       let vm = this;
       vm.$message({
@@ -350,14 +452,21 @@ export default {
         });
     },
 
+    /**
+    *添加期末测试:客观题
+     */
     addCourseQuestionButton(){
       let vm = this;
       vm.type = 2;
       vm.id = vm.courseId;
       vm.title = '添加期末测试';
-      vm.dialogTest = true;
+      vm.finalTest = true;
        vm.disabled = false;
     },
+
+    /**
+    *添加章节测试：客观题
+    */
     addSectionQuestion(row){
       let vm = this;
       vm.type = 1;
@@ -366,6 +475,10 @@ export default {
       vm.dialogTest = true;
       vm.getQuestionList(vm.type,vm.id);
     },
+
+    /**
+      *查看章节测试题目
+     */
     LookSectionQuestion(row){
       let vm = this;
       vm.type = 1;
@@ -373,8 +486,9 @@ export default {
       vm.dialogLookTest=true;
       vm.getQuestionList(vm.type,vm.id);
     },
+
     /**
-      *添加测试
+      *添加测试：课后作业
       */
     addCourseQuestion(formName,type,id){
       let vm = this;
@@ -411,8 +525,45 @@ export default {
           }
         })
     },
+
     /**
-    获取测试列表
+      *添加单选
+     */
+     addRadio(formName){
+       let vm = this;
+      
+        vm.ridioForm.choiceCourseId = vm.$route.query.courseId;
+        vm.$refs[formName].validate((valid) => {
+          if (valid) {
+            vm.$axios.post('/choice/choice',vm.ridioForm)
+            .then(function(res){
+                  let data = res.data
+
+                  //成功后
+                  if(data.result){
+                      vm.$message({
+                      type: 'success',
+                      message: '添加单选成功'
+                      });
+                      vm.finalTest = false;
+                      vm.getRadioList();
+                  }else{
+                      vm.$message({
+                      type: 'error',
+                      message: '添加测试错误!'
+                      });
+                  }
+              })
+              .catch(function(err){
+                  return false
+              });
+          }else{
+            return false;
+          }
+        })
+     },
+    /**
+    获取测试列表:课后作业
       */
     getQuestionList(type,id){
       let vm= this;
@@ -437,6 +588,8 @@ export default {
                 vm.questionSectionData = data.data;
                 if(vm.questionSectionData.length){
                   vm.disabled = true;
+                }else{
+                  vm.disabled = false;
                 }
               }
             }
@@ -448,8 +601,38 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+
     /**
-     * 删除章节测试
+    *获取单选题列表
+     */
+    getRadioList(){
+      let vm =this;
+
+      vm.$axios.get('/choice/course/'+vm.courseId)
+        .then(function(res){
+            let data = res.data
+
+            //成功后
+            if(data.result){
+                vm.$message({
+                type: 'success',
+                message: '获取单选成功'
+                });
+                vm.radioData = data.data;
+              
+            }else{
+                vm.$message({
+                type: 'error',
+                message: '获取单选失败!'
+                });
+            }
+        })
+        .catch(function(err){
+            return false
+        });
+    },
+    /**
+     * 删除章节测试：课后作业
      */
     deleteSectionQuestion(questionId){
       let vm =this;
