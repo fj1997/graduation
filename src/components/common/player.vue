@@ -54,6 +54,8 @@ export default {
 
 <style scoped lang="less">
 .video-player{
-    width: 500px;
+    width: 700px;
+    margin: 0 auto;
+    margin-top: 50px;
 }
 </style>
