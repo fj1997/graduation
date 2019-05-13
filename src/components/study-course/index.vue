@@ -20,6 +20,20 @@
           <iframe :src="'http://ow365.cn/?i=18546&furl=http://62.234.57.192:8080/file/'+sectionFileUrl" width='700px' height='500px' v-if="sectionType!=1">点我预览</iframe> 
           <player :videoSrc="'http://62.234.57.192:8080/file/'+sectionFileUrl" v-if="sectionType==1"></player>
           <div>章节介绍：{{sectionDescription}}</div>
+          <div v-for="(item,index) in questionData" :key="index">
+            <p>{{index+1}}、{{item.questionContent}}</p>
+            <div class="anwser-box">
+                <el-input
+                    type="textarea"
+                    :autosize="{ minRows:10, maxRows: 10}"
+                    placeholder="请输入内容"
+                    v-model="questionAnswer[index]">
+                </el-input>
+                <p class="questionbutton">
+                    <el-button type="primary" :disabled="!questionAnswer[index]" @click="postQuestionAnwser(item.questionId,questionAnswer[index])">提交答案</el-button>
+                </p>
+            </div>
+          </div>
         </div>
         
         <div v-if="!finalTest">
@@ -50,13 +64,19 @@ export default {
       sectionFileUrl:'',
       sectionId:'',
       sectionType:'',
-      sectionDescription:''
+      sectionDescription:'',
+      questionData:[],
+      questionAnswer:[]
     }
   },
   computed:{
       courseId(){
           let vm = this;
           return vm.$route.query.courseId;
+      },
+      userId(){
+        let vm = this;
+          return window.localStorage.userId;
       }
   },
   mounted(){
@@ -83,6 +103,8 @@ export default {
                 vm.sectionFileUrl = vm.dataList[0].sectionFileUrl;
                 vm.sectionType = vm.dataList[0].sectionType;
                 vm.sectionDescription = vm.dataList[0].sectionDescription;
+                vm.sectionId = vm.dataList[0].sectionId;
+                vm.getQuestionList();
             }
             })
             .catch(err => {
@@ -101,12 +123,59 @@ export default {
         vm.sectionFileUrl = url;
         vm.sectionDescription = description;
         vm.finalTest = true;
+        vm.getQuestionList();
       },
       changeTest(){
         let vm =this;
         vm.finalTest = false;
-      }
+      },
+      /**
+        * 获取简答题列表
+        */
+        getQuestionList(){
+          
+            let vm = this;
+            vm.$axios.post('/question/type/courseOrSectionId',{
+                questionType:1,
+                questionCourseOrSectionId:vm.sectionId
+            })
+            .then(function(res){
+            let data =res.data;
+            if(data.result){
+                vm.questionData= data.data;
+            }
+            })
+            .catch(err => {
+                return false
+            });
+        },
+
+        /**
+         * 提交简答题答案
+         */
+
+        postQuestionAnwser(id,anwser){
+            let vm = this;
+            vm.$axios.post('/work/work',{
+                userId:vm.userId,
+                workQuestionId:id,
+	            workContent:anwser
+            })
+            .then(function(res){
+                let data =res.data;
+                if(data.result){
+                    vm.$message({
+                        type: 'success',
+                        message: '提交成功'
+                    });
+                }
+            })
+            .catch(err => {
+                return false
+            });
+        },
   }
+   
   
 }
 </script>
@@ -149,5 +218,19 @@ export default {
     line-height: 320px;
   }
 }
+.radio-choice{
+    line-height: 30px;
+    margin-left: 20px;
+}
+.tijiao{
+    text-align: center;
+}
+.anwser-box{
+    width: 60%;
+}
 
+.questionbutton{
+    padding-left: 550px;
+    padding-top: 20px;
+}
 </style>
