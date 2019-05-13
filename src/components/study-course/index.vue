@@ -8,15 +8,23 @@
             default-active="0Stirng"
             class="el-menu-vertical-demo">
             <el-menu-item  v-for="(item,idx) in dataList" :key="idx" :index="idx+'Stirng'">
-                <span slot="title" @click="changeSection(item.sectionId,item.sectionType,item.sectionFileUrl)">{{item.sectionName}}</span>
+                <span slot="title" @click="changeSection(item.sectionId,item.sectionType,item.sectionFileUrl,item.sectionDescription)">{{item.sectionName}}</span>
+            </el-menu-item>
+            <el-menu-item  :index="dataList.length+'Stirng'">
+                <span slot="title" @click="changeTest">期末考试</span>
             </el-menu-item>
         </el-menu>
     </el-aside>
     <el-main>
+        <div v-if="finalTest">
+          <iframe :src="'http://ow365.cn/?i=18546&furl=http://62.234.57.192:8080/file/'+sectionFileUrl" width='700px' height='500px' v-if="sectionType!=1">点我预览</iframe> 
+          <player :videoSrc="'http://62.234.57.192:8080/file/'+sectionFileUrl" v-if="sectionType==1"></player>
+          <div>章节介绍：{{sectionDescription}}</div>
+        </div>
         
-        <iframe :src="'http://ow365.cn/?i=18546&furl=http://62.234.57.192:8080/file/'+sectionFileUrl" width='700px' height='500px' v-if="sectionType!=1">点我预览</iframe> 
-        <player :videoSrc="'http://62.234.57.192:8080/file/'+sectionFileUrl" v-if="sectionType==1"></player>
-       
+        <div v-if="!finalTest">
+          <final-test></final-test>
+        </div>
     </el-main>
   </el-container>
 
@@ -33,13 +41,16 @@
 <script>
 import Header from '@/components/header/index.vue'
 import player from '@/components/common/player.vue' 
+import Test from'./final-test.vue'
 export default {
   data () {
     return {
+      finalTest:true,
       dataList:[],
       sectionFileUrl:'',
       sectionId:'',
-      sectionType:''
+      sectionType:'',
+      sectionDescription:''
     }
   },
   computed:{
@@ -54,7 +65,8 @@ export default {
   },
   components:{
       'player':player,
-      'header-bar': Header
+      'header-bar': Header,
+      'final-test': Test
   },
   methods:{
       /**
@@ -70,6 +82,7 @@ export default {
                 vm.dataList = data.data;
                 vm.sectionFileUrl = vm.dataList[0].sectionFileUrl;
                 vm.sectionType = vm.dataList[0].sectionType;
+                vm.sectionDescription = vm.dataList[0].sectionDescription;
             }
             })
             .catch(err => {
@@ -81,11 +94,17 @@ export default {
         let vm = this;
         vm.sectionFileUrl = key;
       },
-      changeSection(id,type,url){
+      changeSection(id,type,url,description){
          let vm = this;
         vm.sectionId = id;
         vm.sectionType = type;
         vm.sectionFileUrl = url;
+        vm.sectionDescription = description;
+        vm.finalTest = true;
+      },
+      changeTest(){
+        let vm =this;
+        vm.finalTest = false;
       }
   }
   
@@ -112,8 +131,8 @@ export default {
   .el-main {
     // background-color: #E9EEF3;
     color: #333;
-    text-align: center;
-    line-height: 160px;
+    // text-align: center;
+    line-height: 40px;
     margin-top: 70px;
   }
   
