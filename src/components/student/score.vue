@@ -9,12 +9,12 @@
       <el-table-column
         prop="courseName"
         label="课程名"
-        width="180">
+        width="100">
       </el-table-column>
       <el-table-column
         prop="courseUserName"
         label="授课老师"
-        width="180"
+        width="100"
         >
       </el-table-column>
       <el-table-column
@@ -30,14 +30,31 @@
         >
       </el-table-column>
       <el-table-column
-        prop="normalScore"
-        label="满分成绩"
+        
+        label="平时作业成绩"
         >
+        <template slot-scope="scope">
+          {{scope.row.normalScore}}*30%
+        </template>
       </el-table-column>
       <el-table-column
-        prop="finalScore"
-        label="实际得分"
+        label="期末简答题成绩"
         width="180"
+        >
+        <template slot-scope="scope">
+          {{scope.row.finalScore}}*42%
+        </template>
+        </el-table-column>
+        <el-table-column
+        label="期末单选成绩"
+        >
+        <template slot-scope="scope">
+          {{scope.row.score}}*28%
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="totalScore"
+        label="总成绩"
         >
       </el-table-column>
       
@@ -97,13 +114,28 @@ export default {
                       if(data.result){
                         courseData.finalScore = data.data.finalScore;
                         courseData.normalScore = data.data.normalScore;
+
+                        vm.$axios.get(`/score/user/course/${vm.userId}/${courseData.courseId}`)
+                          .then(function(res){
+                              let data =res.data;
+                              if(data.result){
+                                  courseData.score= data.data;
+                                  courseData.totalScore =parseInt(courseData.normalScore*0.3+0.42*courseData.finalScore*0.6+courseData.score*0.28);
+                                  vm.dataList.push(courseData);
+                                  vm.loading = false;
+                                  
+                              }
+                              })
+                              .catch(err => {
+                              return false
+                              });
+                       
                       }
                     })
                     .catch(err => {
                       return false
                     });
-                  vm.dataList.push(courseData);
-                  vm.loading = false;
+                  
                 }
               })
               .catch(err => {
