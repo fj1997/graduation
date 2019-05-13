@@ -12,6 +12,8 @@ import StudyCourse from '../components/study-course/index.vue'
 import Teacher from '../components/teacher/index.vue'
 import AddCourse from '../components/teacher/add-course/index.vue'
 import CorrectWork from '../components/teacher/correct-work/index.vue'
+import Work from'../components/teacher/correct-work/work.vue'
+import WorkDetail from'../components/teacher/correct-work/work-detail.vue'
 import CourseManage from '../components/teacher/course-manage/index.vue'
 import AddSection from '../components/teacher/course-manage/add-section.vue'
 import ReplyQuestion from '../components/teacher/reply-question/index.vue'
@@ -104,6 +106,16 @@ export default new Router({
           path: 'correctWork',
           name: 'CorrectWork',
           component: CorrectWork
+        },
+        {
+          path: '/correctWork/work',
+          name: 'Work',
+          component: Work
+        },
+        {
+          path: '/correctWork/workDetail',
+          name: 'WorkDetail',
+          component: WorkDetail
         },
         {
           path: 'replyQuestion',

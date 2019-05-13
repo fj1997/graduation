@@ -8,7 +8,7 @@
         <p class="course-name">{{item.courseName}}</p>
         <p class="course-teacher-info">
           <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
-          <span class="detele" @click.stop='deleteCourse(item.courseId)'>删除</span>
+          
         </p>
       </li>
     </ul>
@@ -58,16 +58,6 @@ export default {
       vm.getList();
     },
     /**
-     * 获取未发布课程列表
-     */
-    getUnPublish() {
-      let vm = this;
-      vm.isActive = false;
-      vm.courseStatus = 1;
-       vm.pageNum=1;
-      vm.getList();
-    },
-    /**
      * 获取校内课程列表
      */
     getList() {
@@ -111,42 +101,12 @@ export default {
         vm.getCourseList();
     },
     /**
-     * 删除课程
-     */
-    deleteCourse(courseId){
-      let vm= this;
-      vm.$axios.delete(`/course/course/${courseId}`)
-      .then(function(res){
-        let data =res.data;
-        if(data.result){
-          vm.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-        if( vm.userType ==1){
-          vm.getPublish()
-        }else{
-          vm.getUnPublish();
-        }
-      }else{
-          vm.$message({
-          type: 'error',
-          message: '删除失败!'
-          });
-      }
-        
-      })
-      .catch(err => {
-        return false
-      });
-    },
-    /**
      * 进去课程详情页面
      */
    courseDetail(id,name){
       let vm = this;
         vm.$router.push({
-            path:'/teacher/courseManage/addSection',
+            path:'/correctWork/work',
             query:{
               courseId:id,
               courseName:name
