@@ -51,7 +51,7 @@ export default {
     },
     userId(){
       let vm = this;
-      return window.localStorage.userId;
+      return sessionStorage.getItem('userId');
     },
     courseId (){
       let vm = this;

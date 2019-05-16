@@ -99,7 +99,7 @@ export default {
         vm.$refs[formName].validate((valid) => {
           if (valid) {
     
-            vm.ruleForm.userId = window.localStorage.userId;
+            vm.ruleForm.userId = sessionStorage.getItem('userId');
             //【课程】添加课程（需要登陆）
             vm.$axios.post('/course/course',vm.ruleForm)
                 .then(function(res){

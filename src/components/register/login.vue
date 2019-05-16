@@ -106,13 +106,19 @@ export default {
                                     // vm.getUserNumber(userData.userNumber);
                                     // vm.getUserId(userData.userId);
 
-                                    
-                                    window.localStorage.userPassword = userData.userPassword;
-                                    window.localStorage.userPhone = userData.userPhone;
-                                    window.localStorage.userType = userData.userType;
-                                    window.localStorage.userName = userData.userName;
-                                    window.localStorage.userNumber= userData.userNumber;
-                                    window.localStorage.userId = userData.userId;
+
+                                    sessionStorage.setItem('userPassword',userData.userPassword);
+                                    sessionStorage.setItem('userPhone',userData.userPhone);
+                                    sessionStorage.setItem('userType',userData.userType);
+                                    sessionStorage.setItem('userName',userData.userName);
+                                    sessionStorage.setItem('userNumber',userData.userNumber);
+                                    sessionStorage.setItem('userId',userData.userId);
+                                    // window.localStorage.userPassword = userData.userPassword;
+                                    // window.localStorage.userPhone = userData.userPhone;
+                                    // window.localStorage.userType = userData.userType;
+                                    // window.localStorage.userName = userData.userName;
+                                    // window.localStorage.userNumber= userData.userNumber;
+                                    // window.localStorage.userId = userData.userId;
                                     if(userData.userType =='教师'){
                                         //老师管理页面
                                         vm.$router.push({

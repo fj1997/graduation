@@ -32,7 +32,7 @@ import ManageInCourse from '../components/manage/course/in-course.vue'
 import ManageOutCourse from '../components/manage/course/out-course.vue'
 Vue.use(Router)
 
-export default new Router({
+const router=new Router({
   routes: [
     {
       path: '/',
@@ -180,3 +180,23 @@ export default new Router({
 
   ]
 })
+
+
+// 注册一个全局守卫，作用是在路由跳转前，对路由进行判断，防止未登录的用户跳转到其他需要登录的页面去
+router.beforeEach((to, from, next) => {
+  let token = sessionStorage.getItem('userId');
+  
+  // 如果已经登录，那我不干涉你，让你随便访问
+  if(token){
+  next()
+  }else {
+  // 如果没有登录，但你访问其他需要登录的页面，那我就让你跳到登录页面去
+  if(to.path !== '/login') {
+    debugger
+  next({path: '/login'})
+  }else {
+  next()
+  }
+  }
+  })
+  export default  router

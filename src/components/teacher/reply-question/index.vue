@@ -63,7 +63,7 @@ export default {
         vm.$axios.post('/course/status',{
             pageNum:vm.pageNum,
             pageSize:vm.pageSize,
-            userId:window.localStorage.userId,
+            userId:sessionStorage.getItem('userId'),
             courseStatus:vm.courseStatus
         })
         .then(function(res){

@@ -103,7 +103,7 @@ export default {
     },
     userId(){
         let vm = this;
-        return window.localStorage.userId;
+        return sessionStorage.getItem('userId');
     }
   },
   mounted(){
