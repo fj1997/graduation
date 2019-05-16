@@ -2,9 +2,7 @@
   <el-row class="container">
     <!--头部-->
     <el-col :span="24" class="topbar-wrap">
-      <div class="topbar-logo topbar-btn">
-        <a href="/"><img src="../../assets/img/book.jpg" style="padding-left:8px;"></a>
-      </div>
+   
       <div class="topbar-logos" v-show="!collapsed">
         <a href="/"><img src="../../assets/img/book.jpg"></a>
       </div>

@@ -53,7 +53,9 @@
                 </div> 
                 <p class="evaluate-time clearfix">
                     <span>发表于{{item.commentTime}}</span>
-                    <span class="look-evaluate">查看老师回复</span>
+                </p>
+                <p  class="evaluate-time" v-if="item.commentAnswer">
+                    <span>老师回复：</span>
                 </p>
             </div>
         </li>
