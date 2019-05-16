@@ -168,33 +168,7 @@ export default {
         vm.$router.push({
             path:'/findpassword'
         })
-    },
-
-setCookie(c_name,value,expiredays){
-    var exdate=new Date();
-    exdate.setDate(exdate.getDate()+expiredays);
-    document.cookie=c_name+ "=" +escape(value)+
-    ((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
-},
- getCookie(name){
-     var strcookie = document.cookie;//获取cookie字符串
-    var arrcookie = strcookie.split("; ");//分割
-    //遍历匹配
-    for ( var i = 0; i < arrcookie.length; i++) {
-        var arr = arrcookie[i].split("=");
-        if (arr[0] == name){
-    debugger
-            return arr[1];
-        }
-    }
-    return "";
-},
-
-clearCookie(name) {
-    setCookie(name, "", -1);
-}
-
-   
+    }
     
   }
 }

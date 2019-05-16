@@ -205,7 +205,7 @@ export default {
      */
     sumbmitEvaluate(){
         let vm= this;
-        vm.$axios.post('/comment/answer',{
+        vm.$axios.put('/comment/answer',{
             commentId:vm.commentId,
 	        commentAnswer:vm.commentAnswer
         })
