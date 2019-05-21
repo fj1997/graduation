@@ -13,7 +13,7 @@
                     <el-option label="教师" value=3></el-option>
                 </el-select>
                 </el-form-item>
-                <el-form-item label="学号/教工号" prop="userNumber" v-if="ruleForm.userType!=0">
+                <el-form-item label="学号/教工号" prop="userNumber" v-if="ruleForm.userType!=1">
                 <el-input v-model="ruleForm.userNumber" placeholder="请输入学号/教工号"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名" prop="userName">
@@ -96,7 +96,7 @@ export default {
         ruleForm: {
             userName: '',
             userNumber: '',
-            userType: '',
+            userType: '1',
             userPassword: '',
             userPhone: '',
             validCode: ''

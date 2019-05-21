@@ -1,5 +1,6 @@
 <template>
   <div class="index">
+    <!-- <header-bar></header-bar> -->
     <el-container>
       <el-aside width="200px">
         <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :router="true">
@@ -26,19 +27,17 @@
 </template>
 
 <script>
-
+import Header from '@/components/header/index.vue'
 export default {
   name: 'Index',
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    };
-    return {
-      tableData: Array(20).fill(item)
-    }
-  }
+    },
+  components:{
+      
+    'header-bar': Header
+  },
+   
+    
 }
 </script>
 
