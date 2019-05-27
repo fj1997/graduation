@@ -6,7 +6,7 @@
             <p>共{{total}}条数据</p>
         </div>
         <span class="my-evaluate">
-            <el-button type="primary"  @click="dialogFormVisible = true">我要评论</el-button>
+            <el-button type="primary"  @click="dialogFormVisible = true">我要提问</el-button>
         </span>
         <!-- 添加评论 -->
         <el-dialog :title="courseName" :visible.sync="dialogFormVisible">

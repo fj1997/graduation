@@ -1,184 +1,193 @@
 <template>
-  <div>
-    <el-select v-model="value" placeholder="请选择" :ilter-method="selectCourse(value)">
-        <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-        </el-option>
-    </el-select>
-    <div class="line"></div>
-    <el-table
-        :data="tableData"
-        border
-        style="width: 80%;">
-        <el-table-column
-            prop="name"
-            label="姓名"
-            width="180">
-        </el-table-column>
-        <el-table-column
-            prop="address"
-            label="地址">
-        </el-table-column>
-    </el-table>
-    <empty-state  v-if="false">
-        <p slot="tip">暂无数据</p>
-    </empty-state>
+  <div class="course-manage">
+    <ul class="course-list-wrap clearfix" v-if="tableData.length">
+      <li v-for="(item,idx) in tableData" :key="idx" @click='studentDetail(item.courseId,item.courseName)'>
+        <img :src="`http://62.234.57.192:8080/file/`+item.coursePhotoUrl" alt="" >
+        <p class="course-name">{{item.courseName}}</p>
+        <p class="course-teacher-info">
+          <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
+        </p>
+      </li>
+    </ul>
+    <div v-if="!tableData.length" class="empty">
+      暂无数据
+    </div>
+    <!-- 分页 -->
+    <div class="block">
+    <el-pagination
+      background
+      @current-change= "handleCurrentChange"
+      :current-page.sync= "pageNum"
+      :page-size= "pageSize"
+      layout= "prev, pager, next, jumper"
+      :total= "total">
+    </el-pagination>
+  </div>
   </div>
 </template>
-
 <script>
-import EmptyState from '@/components/common/empty-state.vue';
+import { format } from '@assets/js/date.js';
 export default {
- data() {
-      return {
-          options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
-        tableData: [{
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-         
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-         
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }, {
-         
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-        
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-         
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-         
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-         
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-         
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-         
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-         
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }]
-      }
-    },
-    components: {
-        EmptyState
-    },
-    methods: {
-        selectCourse(val){
-            console.log(val)
-        }
+  data () {
+    return {
+      isActive:true,
+      pageNum:1,
+      pageSize: 10,
+      total:100,
+      courseStatus: 1, //1未发布，2已发布
+      tableData: []
     }
-    
+  },
+  mounted(){
+    let vm = this;
+    vm.getPublish();
+  },
+  methods:{
+
+     /**
+     * 获取已发布课程列表
+     */
+   getPublish() {
+      let vm = this;
+     vm.isActive = true;
+      vm.courseStatus = 2;
+      vm.pageNum=1;
+      vm.getList();
+    },
+    /**
+     * 获取课程列表
+     */
+    getList() {
+        let vm= this;
+          vm.loading = true;
+        vm.$axios.post('/course/status',{
+            pageNum:vm.pageNum,
+            pageSize:vm.pageSize,
+            userId:sessionStorage.getItem('userId'),
+            courseStatus:vm.courseStatus
+        })
+        .then(function(res){
+        let data = res.data
+        //成功后
+         
+        if(data.result){
+            vm.tableData = data.data.list;
+            vm.tableData.forEach(function (item, index, array) {
+                item.courseBeginTime = format(item.courseBeginTime);
+                item.courseEndTime = format(item.courseEndTime);
+            });
+            vm.total = data.data.total;
+            vm.loading=false;
+        }else{
+            vm.$message({
+            type: 'error',
+            message: '未知错误!'
+            });
+        }
+    })
+    .catch(function(err){
+        return false
+    });
+    },
+     /**
+     * 获取当前页的数据
+     */
+    handleCurrentChange(val) {
+        let vm=this;
+        vm.pageNum=val;
+        vm.getCourseList();
+    },
+    /**
+     * 进去课程详情页面
+     */
+   studentDetail(id,name){
+      let vm = this;
+        vm.$router.push({
+            path:'studentManage/studentTable',
+            query:{
+              courseId:id,
+              courseName:name
+            }
+        })
+    }
+  }
 }
 </script>
 
 <style scoped lang="less">
-.line{
-    margin-top: 20px;
+.course-manage{
+  // position: relative;
 }
+.empty{
+  text-align: center;
+  margin-top: 200px;
+}
+.active-button{
+  color: #409EFF;
+  border-color: #c6e2ff;
+  background-color: #ecf5ff;
+}
+.block{
+    width: 572px;
+    text-align: center;
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    margin-left: -289px;
+}
+.course-list-wrap {
+      // width: 1300px;
+      margin: 30px auto;
+      li {
+        width: 285px;
+        display: inline-block;
+        margin: 0 20px 25px;
+        background: #fff;
+        border-radius: 6px;
+        list-style: none ;
+        cursor: pointer;
+        &:hover{
+          -moz-box-shadow: 2px 2px 2px #777; /* 老的 Firefox */
+          box-shadow: 2px 2px 2px #ddd;
+        }
+        img{
+          width: 285px;
+          height: 160px;
+          object-fit: cover;
+          border-radius: 6px;
+        }
+        .course-name{
+          padding: 0 15px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin-top: 17px;
+          line-height: 22px;
+          color: #3D4059;
+          font-size: 16px;
+        }
+        .course-teacher-info{
+          padding: 0 15px;
+          margin-top: 11px;
+          line-height: 16px;
+          color: #a1a2b2;
+          margin-bottom: 50px;
+          span{
+            color: #777993;
+            font-size: 12px;
+            margin-right: 10px;
+          }
+          .delete{
+            z-index:100;
+            position:relative;
+          }
+          
+        }
+      }
+      .clearfix {
+        clear: both;
+        zoom: 1;
+      }
+    }
+    
 </style>

@@ -19,6 +19,7 @@ import AddSection from '../components/teacher/course-manage/add-section.vue'
 import ReplyQuestion from '../components/teacher/reply-question/index.vue'
 import QuestionDetail from '../components/teacher/reply-question/question-detail.vue'
 import StudentManage from '../components/teacher/student-manage/index.vue'
+import studentTable from '../components/teacher/student-manage/student.vue'
 
 import Student from '../components/student/index.vue'
 import StudentCourse from '../components/student/course-manage.vue'
@@ -171,6 +172,13 @@ const router=new Router({
           path: 'studentManage',
           name: 'StudentManage',
           component: StudentManage,
+          meta:{
+            auth:true
+          }
+        },{
+          path: 'studentManage/studentTable',
+          name: 'studentTable',
+          component: studentTable,
           meta:{
             auth:true
           }
