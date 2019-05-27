@@ -57,7 +57,7 @@ import Header from '@/components/header/index.vue'
 import player from '@/components/common/player.vue' 
 import Test from'./final-test.vue'
 export default {
-  data () {
+data () {
     return {
       finalTest:true,
       dataList:[],
@@ -81,7 +81,7 @@ export default {
   },
   mounted(){
       let vm =this;
-      vm.getCourse()
+      vm.getCourse();
   },
   components:{
       'player':player,
