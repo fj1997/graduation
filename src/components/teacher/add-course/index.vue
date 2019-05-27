@@ -13,9 +13,10 @@
     <el-col :span="11">
       <el-form-item prop="courseBeginTime">
         <el-date-picker type="date" 
-            placeholder="选择日期" 
+            placeholder="起始日期" 
             v-model="ruleForm.courseBeginTime" 
             style="width: 100%;"
+            :picker-options="pickerOptions"
             value-format="timestamp">
         </el-date-picker>
       </el-form-item>
@@ -24,9 +25,10 @@
     <el-col :span="11">
       <el-form-item prop="courseEndTime">
         <el-date-picker type="date" 
-            placeholder="选择日期" 
+            placeholder="结束日期" 
             v-model="ruleForm.courseEndTime" 
             style="width: 100%;"
+            :picker-options="pickerOptions"
             value-format="timestamp"></el-date-picker>
       </el-form-item>
     </el-col>
@@ -43,8 +45,10 @@
       action="http://62.234.57.192:8080/studywebsite/file/upload"
       :show-file-list="false"
       :limit="1"
+      :before-upload="beforeAvatarUpload"
+      :on-progress="loadingProgress"
       :on-success="handleAvatarSuccess">
-      <el-button slot="trigger" size="small" type="primary">上传图片</el-button>
+      <el-button slot="trigger" size="small" type="primary" :loading="loading">上传图片</el-button>
     </el-upload>
   </el-form-item>
   <el-form-item label="课程介绍" prop="courseContent">
@@ -52,7 +56,7 @@
   </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-    <el-button @click="resetForm('ruleForm')">重置</el-button>
+    <el-button @click="resetForm('ruleForm')">取消</el-button>
   </el-form-item>
 </el-form>
   </div>
@@ -62,7 +66,12 @@
 export default {
   data () {
     return {
-       fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+       loading:false,
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() <Date.now();
+          }
+        },
      ruleForm: {
           courseName: '',
           courseBeginTime: '',
@@ -111,7 +120,7 @@ export default {
                         type: 'success',
                         message: '该课程创建成功'
                         });
-                      
+                      vm.$refs[formName].resetFields();
                     }else{
                         vm.$message({
                         type: 'error',
@@ -133,11 +142,25 @@ export default {
       
       handleAvatarSuccess(response, file, fileList) {
         let vm = this;
+       
         vm.$message({
           type: 'success',
           message: '上传成功'
           });
+           vm.loading = false;
         vm.ruleForm.coursePhotoUrl=response.data;
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = (file.type === 'image/jpeg'||file.type === 'image/jpg'||file.type === 'image/png');
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 jpg/jpeg/png 格式!');
+        }
+      
+        return isJPG;
+      },
+      loadingProgress(){
+        let vm = this;
+        vm.loading = true;
       }
     }
 }
