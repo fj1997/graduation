@@ -39,21 +39,23 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="block">
+     
+    <div class="block" v-show="pageSwith">
     <el-pagination
       background
       @current-change= "handleCurrentChange"
       :current-page.sync= "pageNum"
       :page-size= "pageSize"
+      :hide-on-single-page= "pageSwith"
       layout= "prev, pager, next, jumper"
       :total= "total">
     </el-pagination>
+   
   </div>
   </div>
 </template>
 
 <script>
-import { runInDebugContext } from 'vm';
 export default {
   data () {
     return {
@@ -62,9 +64,10 @@ export default {
       userType:2,
       pageNum:1,
        pageSize: 10,
-       total:100,
+       total:10,
        courseList:[],
-      tableData: []
+      tableData: [],
+      pageSwith:true
     }
   },
   mounted(){
@@ -110,6 +113,11 @@ export default {
         if(data.result){
           vm.tableData = data.data.list;
           vm.total = data.data.total;
+          if(vm.total){
+            vm.pageSwith = true;
+          }else{
+            vm.pageSwith = false;
+          }
           vm.loading=false;
         }else{
             vm.$message({

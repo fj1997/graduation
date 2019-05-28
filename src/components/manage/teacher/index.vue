@@ -97,7 +97,7 @@
     </el-table>
 
     <!-- 分页 -->
-    <div class="block">
+    <div class="block" v-show="pageSwith">
     <el-pagination
       background
       @current-change= "handleCurrentChange"
@@ -120,9 +120,10 @@ export default {
       userAttest: 1, //1已审核，0未审核
       pageNum:1,
        pageSize: 10,
-       total:100,
+       total:10,
       tableData: [],
-       multipleSelection: []
+       multipleSelection: [],
+      pageSwith:true
     }
   },
   mounted(){
@@ -168,6 +169,11 @@ export default {
         if(data.result){
           vm.tableData = data.data.list;
           vm.total = data.data.total;
+          if(vm.total){
+            vm.pageSwith = true;
+          }else{
+            vm.pageSwith = false;
+          }
           vm.loading=false;
         }else{
             vm.$message({

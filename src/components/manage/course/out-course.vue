@@ -132,7 +132,7 @@
       <player :videoSrc="'http://62.234.57.192:8080/file/'+sectionFileUrl" v-show="sectionType==1"></player>
     </el-dialog>
     <!-- 分页 -->
-    <div class="block">
+    <div class="block" v-show="pageSwith">
     <el-pagination
       background
       @current-change= "handleCurrentChange"
@@ -158,9 +158,10 @@ export default {
       courseStatus: 1, //1未发布，2已发布
       pageNum:1,
        pageSize: 10,
-       total:100,
+       total:10,
       tableData: [],
        multipleSelection: [],
+      pageSwith:true,
         dialogTableVisible: false,
         sectionData:[],
         resourceVisible:false,
@@ -221,6 +222,11 @@ export default {
                 item.courseEndTime = format(item.courseEndTime);
             });
             vm.total = data.data.total;
+            if(vm.total){
+              vm.pageSwith = true;
+            }else{
+              vm.pageSwith = false;
+            }
             vm.loading=false;
         }else{
             vm.$message({
