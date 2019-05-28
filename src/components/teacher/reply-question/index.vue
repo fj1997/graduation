@@ -33,7 +33,7 @@ export default {
       isActive:true,
       pageNum:1,
       pageSize: 10,
-      total:100,
+      total:10,
       courseStatus: 1, //1未发布，2已发布
       tableData: [],
       pageSwitch:true

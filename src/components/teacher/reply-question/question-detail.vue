@@ -81,7 +81,7 @@ export default {
     return {
         pageNum:1,
         pageSize: 10,
-        total:100,
+        total:10,
         tableData: [],
         commentStatus:1,//commentStatus: 1、老师未评论 2、已评论（会有个commentAnswer字段） 3、忽略（老师忽略，即老师不再评论）
         commentAnswer:'',
