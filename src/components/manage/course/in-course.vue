@@ -165,7 +165,8 @@ export default {
         resourceVisible:false,
          sectionFileUrl:'',
       sectionType:'',
-      sectionName:''
+      sectionName:'',
+      courseName:''
     }
   },
   mounted(){

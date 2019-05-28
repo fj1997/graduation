@@ -1,6 +1,11 @@
 <template>
   <div class="index">
+     <el-header>
+       <p class="title-name">后台管理系统</p>
+       <p class="login-out" @click="loginOut">退出</p>
+     </el-header>
     <el-container>
+     
       <el-aside width="200px">
         <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :router="true">
           <el-menu-item index="/manage/student">
@@ -47,14 +52,21 @@ export default {
   components: {
     'header-bar': Header
   },
+  methods:{
+    loginOut(){
+      let vm = this;
+      sessionStorage.clear();
+      vm.$router.push({
+        path:'/manage/login'
+      })
+    }
+  }
 }
 </script>
 
 <style scoped lang="less">
-.header{
-  width: 100%;
-  height: 55px;
-}
+.index{
+
 .mian-container{
   margin: 10px 0;
   // background: #ccc;
@@ -85,21 +97,31 @@ export default {
  
   }
   .el-menu {
-    height: 100vh;
+    height: calc(100vh - 60px);
   }
 
   .el-header {
-    background-color: #B3C0D1;
-    color: #333;
+    background-color:rgb(84, 92, 100);
+    color: #fff;
     line-height: 60px;
   }
-  
+  .title-name{
+    font-size: 24px;
+    display: inline-block;
+  }
+  .login-out{
+    display: inline-block;
+    float:right;
+    cursor: pointer;
+  }
   .el-aside {
-    height: 100vh;
+    height: calc(100vh - 60px);
     color: #333;
   }
 
   .el-container {
-    height: 100vh;
+    height: calc(100vh - 60px);
   }
+}
+
 </style>
