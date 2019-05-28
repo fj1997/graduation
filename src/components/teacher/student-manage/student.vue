@@ -93,14 +93,12 @@ methods: {
         if(data.result){
             vm.tableData = data.data;
             vm.tableData.forEach(function(item){
-                debugger
                 vm.$axios.get(`/work/score/${vm.courseId}/${item.userId}`)
                     .then(function(res){
                     let data = res.data;
                     if(data.result){
                         item.finalScore = data.data.finalScore;
                         item.normalScore = data.data.normalScore;
-                        debugger
                         vm.$axios.get(`/score/user/course/${item.userId}/${vm.courseId}`)
                         .then(function(res){
                             let data =res.data;

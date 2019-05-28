@@ -40,13 +40,13 @@
         <el-table-column
             prop="courseBeginTime"
             label="开始时间"
-            width="320"
+            width="300"
             >
         </el-table-column>
         <el-table-column
             prop="courseEndTime"
             label="结束时间"
-            width="320"
+            width="300"
             >
         </el-table-column>
         <el-table-column
@@ -62,6 +62,10 @@
             label="操作"
             align="right">
             <template slot-scope="scope">
+                <el-button
+                size="mini"
+                type="primary"
+                @click="lookCourse(scope.$index, scope.row)">查看</el-button>   
             <el-button
                 size="mini"
                 type="danger"
@@ -74,6 +78,10 @@
             label="操作"
             align="right">
             <template slot-scope="scope">
+                <el-button
+                size="mini"
+                type="primary"
+                @click="lookCourse(scope.$index, scope.row)">查看</el-button>   
             <el-button
                 size="mini"
                 type="success"
@@ -81,7 +89,48 @@
             </template>
         </el-table-column>
     </el-table>
+    <!-- 查看课程详情 -->
+    <el-dialog :title="courseName" :visible.sync="dialogTableVisible">
+    <el-table
+      v-loading="loading"
+      ref="multipleTable"
+      :data="sectionData"
+      tooltip-effect="dark"
+      style="width: 100%">
+      <el-table-column
+        prop="sectionName"
+        label="章节名称"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="sectionDescription"
+        label="章节描述">
+      </el-table-column>
+      <el-table-column
+        label="章节类型"
+        width="80"
+        prop="sectionType1">
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        fixed="right"
+        width="80">
+      <template slot-scope="scope">
+       
+        <el-button @click="lookResource(scope.$index,scope.row)" type="danger" size="mini">查看</el-button>
+      </template>
+      </el-table-column>
+    </el-table>
+    </el-dialog>
 
+    <el-dialog
+      width="60%"
+      :title="sectionName"
+      :visible.sync="resourceVisible"
+      >
+      <iframe :src="'http://ow365.cn/?i=18546&furl=http://62.234.57.192:8080/file/'+sectionFileUrl" width='700px' height='500px' v-if="sectionType!=1">点我预览</iframe> 
+      <player :videoSrc="'http://62.234.57.192:8080/file/'+sectionFileUrl" v-show="sectionType==1"></player>
+    </el-dialog>
     <!-- 分页 -->
     <div class="block">
     <el-pagination
@@ -98,19 +147,30 @@
 
 <script>
 import { format } from '@assets/js/date.js';
+import player from '@/components/common/player.vue'
 export default {
   data () {
     return {
       isActive:true,
       loading:true,
+      sectionName:'',
       courseType:2,   //校外课程
       courseStatus: 1, //1未发布，2已发布
       pageNum:1,
        pageSize: 10,
        total:100,
       tableData: [],
-       multipleSelection: []
+       multipleSelection: [],
+        dialogTableVisible: false,
+        sectionData:[],
+        resourceVisible:false,
+         sectionFileUrl:'',
+      sectionType:'',
+      sectionName:''
     }
+  },
+  components:{
+      'player':player
   },
   mounted(){
     let vm = this;
@@ -209,6 +269,47 @@ export default {
         .catch(err => {
           return false
         });
+    },
+    /**
+     * 查看课程
+     */
+    lookCourse(index, row){
+      let vm= this;
+      vm.dialogTableVisible = true;
+      vm.courseName = row.courseName;
+      vm.$axios.get(`/section/course/${row.courseId}`)
+        .then(function(res){
+          let data = res.data
+        //成功后
+         
+        if(data.result){
+            vm.sectionData = data.data;
+            vm.sectionData.forEach(function (item, index, array) {
+              if(item.sectionType == 1){
+                item.sectionType1 = '视频';
+              }else if(item.sectionType == 2){
+                item.sectionType1 = 'ppt';
+              }else{
+                item.sectionType1 = '文章';
+              }
+            });
+        
+            vm.loading=false;
+          }
+        })
+      .catch(err => {
+        return false
+      });
+    },
+    /**
+     * 查看资源
+     */
+    lookResource(index, row){
+        let vm = this;
+        vm.resourceVisible = true;
+        vm.sectionFileUrl = row.sectionFileUrl;
+        vm.sectionType = row.sectionType;
+        vm.sectionName = row.sectionName;
     },
     /**
      * 发布课程

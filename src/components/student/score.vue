@@ -114,7 +114,7 @@ export default {
                       if(data.result){
                         courseData.finalScore = data.data.finalScore;
                         courseData.normalScore = data.data.normalScore;
-
+                      //获取单选的分数
                         vm.$axios.get(`/score/user/course/${vm.userId}/${courseData.courseId}`)
                           .then(function(res){
                               let data =res.data;
