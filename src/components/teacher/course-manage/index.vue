@@ -16,7 +16,7 @@
       暂无数据
     </div>
     <!-- 分页 -->
-    <div class="block">
+    <div class="block" v-show="pageSwitch">
     <el-pagination
       background
       @current-change= "handleCurrentChange"
@@ -38,7 +38,8 @@ export default {
       pageSize: 10,
       total:100,
       courseStatus: 1, //1未发布，2已发布
-      tableData: []
+      tableData: [],
+      pageSwitch:true
     }
   },
   mounted(){
@@ -90,6 +91,11 @@ export default {
                 item.courseEndTime = format(item.courseEndTime);
             });
             vm.total = data.data.total;
+            if(vm.total){
+              vm.pageSwitch = true;
+            }else{
+              vm.pageSwitch = false;
+            }
             vm.loading=false;
         }else{
             vm.$message({

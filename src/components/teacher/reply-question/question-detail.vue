@@ -61,7 +61,7 @@
         </li>
     </ul>
     <!-- 分页 -->
-    <div class="block">
+    <div class="block" v-show="pageSwitch">
     <el-pagination
       background
       @current-change= "handleCurrentChange"
@@ -89,7 +89,8 @@ export default {
         dialogFormVisible: false,
         ignore:false,
         uncomment:false,
-        comment:true
+        comment:true,
+        pageSwitch:true
     }
   },
   computed:{
@@ -170,6 +171,11 @@ export default {
                         item.commentTime = format(item.commentTime);
                     });
                 vm.total = data.data.total;
+                if(vm.total){
+                vm.pageSwitch = true;
+                }else{
+                vm.pageSwitch = false;
+                }
             }else{
                 vm.$message({
                 type: 'error',
