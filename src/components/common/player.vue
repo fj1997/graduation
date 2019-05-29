@@ -56,6 +56,5 @@ export default {
 .video-player{
     width: 700px;
     margin: 0 auto;
-    margin-top: 50px;
 }
 </style>

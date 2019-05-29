@@ -15,7 +15,7 @@
       <el-table-column
         prop="sectionName"
         label="章节名称"
-        width="280">
+        width="200">
       </el-table-column>
       <el-table-column
         prop="sectionDescription"
@@ -23,21 +23,30 @@
       </el-table-column>
       <el-table-column
         label="章节类型"
-        width="380"
-        prop="sectionType">
+        width="100"
+        prop="sectionType1">
       </el-table-column>
       <el-table-column
         label="操作"
         fixed="right"
-        width="300">
+        width="400">
       <template slot-scope="scope">
-        <el-button @click="addSectionQuestion(scope.row)" type="primary" size="small">添加测试</el-button>
-        <el-button @click="LookSectionQuestion(scope.row)" type="primary" size="small">查看测试</el-button>
-        <el-button @click="deleteSection(scope.row)" type="danger" size="small">删除章节</el-button>
+        <el-button @click="lookResource(scope.$index,scope.row)" type="primary" size="mini">查看</el-button>
+        <el-button @click="addSectionQuestion(scope.row)" type="primary" size="mini">添加测试</el-button>
+        <el-button @click="LookSectionQuestion(scope.row)" type="primary" size="mini">查看测试</el-button>
+        <el-button @click="deleteSection(scope.row)" type="danger" size="mini">删除章节</el-button>
       </template>
       </el-table-column>
     </el-table>
-
+    <!-- 查看教学资源 -->
+    <el-dialog
+      width="60%"
+      :title="sectionName"
+      :visible.sync="resourceVisible"
+      >
+      <iframe :src="'http://ow365.cn/?i=18546&furl=http://62.234.57.192:8080/file/'+sectionFileUrl" width='700px' height='500px' v-if="sectionType!=1">点我预览</iframe> 
+      <player :videoSrc="'http://62.234.57.192:8080/file/'+sectionFileUrl" v-show="sectionType==1"></player>
+    </el-dialog>
     <el-card 
       class="box-card question-box" 
       v-loading='questionLoading'
@@ -78,7 +87,7 @@
         <el-input type="file" v-model="outerAddForm.sectionFileUrl" id="file-url"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="uploadFile('outerAddForm')">下一步</el-button>
+        <el-button type="primary" @click="uploadFile('outerAddForm')" :loading="resourceLoading">下一步</el-button>
         <el-button @click="outerAddSection=false">取消</el-button>
       </el-form-item>
     </el-form>
@@ -191,10 +200,12 @@
 </template>
 
 <script>
+import player from '@/components/common/player.vue'
 export default {
   data () {
     return {
       loading:true,
+      resourceLoading: false,
       questionLoading:false,
       tableData: [],          //章节列表
       questionData:[],        //期末测试主观题列表
@@ -279,8 +290,15 @@ export default {
       innerAddSection:false,
       dialogTest:false,
       dialogLookTest:false,
-      finalTest:false
+      finalTest:false,
+      resourceVisible:false,
+      sectionFileUrl:'',
+      sectionType:'',
+      sectionName:'',
     }
+  },
+  components:{
+      'player':player
   },
   computed:{
     courseId (){
@@ -292,7 +310,6 @@ export default {
       return vm.$route.query.courseName;
     }
   },
-
   mounted(){
     this.getSectionList();
     this.getQuestionList(2,this.courseId);
@@ -318,11 +335,11 @@ export default {
             vm.tableData = data.data;
             vm.tableData.forEach(function (item, index, array) {
               if(item.sectionType == 1){
-                item.sectionType = '视频';
+                item.sectionType1 = '视频';
               }else if(item.sectionType == 2){
-                item.sectionType = 'ppt';
+                item.sectionType1 = 'ppt';
               }else{
-                item.sectionType = '文章';
+                item.sectionType1 = '文章';
               }
             });
             vm.loading=false;
@@ -368,10 +385,46 @@ export default {
 
           vm.innerAddForm.sectionType = vm.outerAddForm.sectionType;
           let formData = new FormData();
+          let fileValue = document.getElementById("file-url").value;
+          let index= fileValue.indexOf(".");
           formData.append('file',document.getElementById("file-url").files[0]);
+          fileValue=fileValue.substring(index); 
+
+          //对上传的资源进行校验
+          if(vm.outerAddForm.sectionType ==1){
+            if(fileValue!=".mp4"){ //根据后缀，判断是否符合视频格式
+              vm.$message({
+                type: 'error',
+                message: '视频格式必须为MP4,重新选择'
+              });
+              document.getElementById('file-url').value="";   // 不符合，就清除，重新选择
+              return;
+           }
+          }else if (vm.outerAddForm.sectionType ==2){
+            if(fileValue!=".ppt"){ //根据后缀，判断是否符合视频格式
+              vm.$message({
+                type: 'error',
+                message: '视频格式必须为ppt,重新选择'
+              });
+              document.getElementById('file-url').value="";   // 不符合，就清除，重新选择
+              return;
+           }
+          }else {
+            if(fileValue!=".doc"){ //根据后缀，判断是否符合视频格式
+              vm.$message({
+                type: 'error',
+                message: '视频格式必须为doc,重新选择'
+              });
+              document.getElementById('file-url').value="";   // 不符合，就清除，重新选择
+              return;
+           }
+          }
+          
+          vm.resourceLoading = true;
+
           vm.$axios.post('/file/upload',formData)
             .then(function(res){
-              let data = res.data
+              let data = res.data;
 
               //成功后
               if(data.result){
@@ -379,7 +432,7 @@ export default {
                   type: 'success',
                   message: '上传教学资源成功'
                 });
-
+                vm.resourceLoading = false;
                 vm.innerAddForm.sectionFileUrl = res.data.data;
                 vm.innerAddSection= true;
               }else{
@@ -398,27 +451,12 @@ export default {
         });
     },
 
-    //上传资源
-    handleVideoSuccess(response, file, fileList){
-      let vm = this;
-      vm.$message({
-        type: 'success',
-        message: '上传成功'
-      });
-    },
-
     //添加章节
     submitForm(formName) {
         let vm =this;
         vm.$refs[formName].validate((valid) => {
 
           if (valid) {
-            // let formData = new FormData();
-            // formData.append('sectionFileUrl',document.getElementById("file-url").files[0]);
-            // formData.append('sectionName',vm.ruleForm.sectionName);
-            // formData.append('sectionType',vm.ruleForm.sectionType);
-            // formData.append('sectionDescription',vm.ruleForm.sectionDescription);
-            // formData.append('sectionCourseId',vm.$route.query.courseId);
             vm.innerAddForm.sectionCourseId = vm.$route.query.courseId;
             vm.$axios.post('/section/section',vm.innerAddForm)
                 .then(function(res){
@@ -431,6 +469,8 @@ export default {
                         message: '该课程创建成功'
                         });
                         
+                        vm.$refs[formName].resetFields();
+                        vm.$refs['outerAddForm'].resetFields();
                         vm.innerAddSection=false;
                         vm.outerAddSection=false;
                         vm.getSectionList();
@@ -450,6 +490,16 @@ export default {
             return false;
           }
         });
+    },
+     /**
+     * 查看资源
+     */
+    lookResource(index, row){
+        let vm = this;
+        vm.resourceVisible = true;
+        vm.sectionFileUrl = row.sectionFileUrl;
+        vm.sectionType = row.sectionType;
+        vm.sectionName = row.sectionName;
     },
 
     /**
