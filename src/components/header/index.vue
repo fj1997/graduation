@@ -55,9 +55,12 @@ export default {
       let vm = this;
       vm.activeName = false;
     },
-    loginOut () {
-      let vm = this
-      
+    loginOut(){
+      let vm = this;
+      sessionStorage.clear();
+      vm.$router.push({
+        path:'/login'
+      })
     },
     search () {
       let vm = this

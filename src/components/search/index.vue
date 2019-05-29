@@ -9,8 +9,8 @@
                 <input type="text" 
                     class="search-text"
                     v-model="courseName"
-                    @keyup.enter="getCourseList1"
-                    placeholder="输入课程名称或教师">
+                    @keyup.enter="getCourseList"
+                    placeholder="输入课程名称">
                 <span class="search-button" @click="getCourseList">搜索</span>
             </div>
         </div>
@@ -49,7 +49,8 @@ export default {
        pageNum:1,
        pageSize: 12,
        total:100,
-       list:[]
+       list:[],
+       courseName:this.$route.query.searchName
       }
     },
     mounted(){
@@ -57,10 +58,7 @@ export default {
         vm.getCourseList();
     },
     computed:{
-        courseName(){
-            let vm = this;
-            return vm.$route.query.searchName
-        }
+        
     },
     methods:{
       
