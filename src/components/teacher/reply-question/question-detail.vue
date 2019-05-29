@@ -55,7 +55,7 @@
                     <!-- <span class="look-evaluate">查看老师回复</span> -->
                 </p>
                 <p  class="evaluate-time" v-if="item.commentAnswer">
-                    <span>老师回复：</span>
+                    <span>老师回复：{{item.commentAnswer}}</span>
                 </p>
             </div>
         </li>
@@ -224,6 +224,7 @@ export default {
                 type: 'success',
                 message: '回复成功!'
             })
+            vm.getUnComment();
             vm.dialogFormVisible = false;
         }else{
             vm.$message({
@@ -253,6 +254,7 @@ export default {
                 type: 'success',
                 message: '成功忽略!'
             })
+            vm.getUnComment();
             vm.dialogFormVisible = false;
         }else{
             vm.$message({

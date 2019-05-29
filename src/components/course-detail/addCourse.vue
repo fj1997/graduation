@@ -89,6 +89,7 @@ export default {
                 type: 'success',
                 message: '成功报名,请进入个人中心进行学习！'
               });
+              vm.getCourseCount();
             }else{
               vm.$message({
                 type: 'error',

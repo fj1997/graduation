@@ -55,13 +55,13 @@
                     <span>发表于{{item.commentTime}}</span>
                 </p>
                 <p  class="evaluate-time" v-if="item.commentAnswer">
-                    <span>老师回复：</span>
+                    <span>老师回复：{{item.commentAnswer}}</span>
                 </p>
             </div>
         </li>
     </ul>
     <!-- 分页 -->
-    <div class="block">
+    <div class="block" v-show="pageSwitch">
     <el-pagination
       background
       @current-change= "handleCurrentChange"
@@ -84,7 +84,8 @@ export default {
         total:100,
         tableData: [],
         commentContent:'',
-        dialogFormVisible: false
+        dialogFormVisible: false,
+        pageSwitch:true
     }
   },
   computed:{
@@ -128,6 +129,11 @@ export default {
                         item.commentTime = format(item.commentTime);
                     });
                 vm.total = data.data.total;
+                if(vm.total){
+                    vm.pageSwitch = true;
+                    }else{
+                    vm.pageSwitch = false;
+                    }
             }else{
                 vm.$message({
                 type: 'error',

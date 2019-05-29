@@ -1,27 +1,5 @@
 <template>
   <div>
-    <!-- <div class="course-overview">
-      <p>
-        <svg class="icon icon-style" aria-hidden="true" >
-          <use xlink:href="#icon-gaishu"></use>
-        </svg>
-        <span class="detail-title">课程概述</span>
-      </p>
-      <p class="course-intro-text">
-        {{courseDetail.courseOverview}}
-      </p>
-    </div> -->
-    <!-- <div class="course-target">
-      <p>
-        <svg class="icon icon-style" aria-hidden="true" >
-          <use xlink:href="#icon-xueshimao2"></use>
-        </svg>
-        <span class="detail-title">授课目标</span>
-      </p>
-      <p class="course-intro-text">
-        {{courseDetail.courseTarget}}
-      </p>
-    </div> -->
     <div class="course-chapter">
       <p>
         <svg class="icon icon-style" aria-hidden="true" >
@@ -35,18 +13,11 @@
             <span>{{idx+1}}、</span>
             <span>{{item.sectionName}}:</span>
             <span>{{item.sectionDescription}}</span>
-            
-            <!-- <div class="chapter-list">
-              <ul>
-                <li v-for="(i,index) in sectionList" :key="index" class="chapter-list-wrap">
-                  <p class="cricle"></p>
-                  <p class="small-chapter">{{i.sectionName}}</p>
-                </li>
-              </ul>
-            </div> -->
-            
           </li>
         </ul>
+        <div v-if="!sectionList.length" class="empty">
+          暂无数据
+        </div>
     </div>
     <div>
         
