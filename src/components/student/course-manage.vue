@@ -14,6 +14,9 @@
         </div>
       </li>
     </ul>
+    <div v-if="!dataList.length" class="empty">
+      暂无数据
+    </div>
   </div>
 </template>
 
@@ -191,4 +194,8 @@ export default {
         zoom: 1;
       }
     }
+    .empty{
+  text-align: center;
+  margin-top: 200px;
+}
 </style>

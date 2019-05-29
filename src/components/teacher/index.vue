@@ -1,6 +1,7 @@
 <template>
   <div class="index">
     <el-header>
+      <img  class="school-logo" src="../../assets/img/school_logo.png">
        <p class="title-name">教师系统</p>
        <p class="login-out" @click="loginOut">退出</p>
      </el-header>
