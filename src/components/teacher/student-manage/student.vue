@@ -3,6 +3,7 @@
  
     <h3>{{courseName}}</h3>
     <el-table
+        v-loading="loading"
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%">
@@ -12,8 +13,13 @@
             width="180">
         </el-table-column>
         <el-table-column
-            prop="userNumber"
-            label="学号">
+        prop="userNumber"
+        label="学号"
+        >
+        <template slot-scope="scope">
+          <span style="margin-left: 10px" v-if="scope.row.userNumber">{{ scope.row.userNumber }}</span>
+          <span style="margin-left: 10px" v-else>--</span>
+        </template>
         </el-table-column>
         <el-table-column
             prop="userAttest"
@@ -57,7 +63,7 @@ export default {
       return {
 
         tableData:[],
-        loading:false
+        loading:true
       }
 },
 computed:{
@@ -93,6 +99,11 @@ methods: {
         if(data.result){
             vm.tableData = data.data;
             vm.tableData.forEach(function(item){
+                if(item.userAttest==0){
+                    item.userAttest = '自由学习人员';
+                }else{
+                    item.userAttest = '重邮学生'
+                }
                 vm.$axios.get(`/work/score/${vm.courseId}/${item.userId}`)
                     .then(function(res){
                     let data = res.data;
