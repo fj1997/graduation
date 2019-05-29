@@ -1,5 +1,5 @@
 <template>
-  <div class="block">
+  <div class="block" v-show="pageSwitch">
     <el-pagination
       background
       @current-change= "handleCurrentChange"
@@ -18,8 +18,9 @@ export default {
     return {
        pageNum:1,
        pageSize: 12,
-       total:100,
-       list:[]
+       total:10,
+       list:[],
+      pageSwitch:true
       }
     },
     props:{
@@ -50,6 +51,11 @@ export default {
                         item.courseEndTime = format(item.courseEndTime);
                     });
                     vm.total = data.data.total;
+                    if(vm.total){
+                    vm.pageSwitch = true;
+                    }else{
+                    vm.pageSwitch = false;
+                    }
                     vm.$emit('getList', vm.list);
                    
                 }else{

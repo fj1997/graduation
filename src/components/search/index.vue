@@ -24,8 +24,10 @@
         </p>
       </li>
     </ul>
-
-    <div class="block">
+    <div v-if="!list.length" class="empty">
+        暂无数据
+        </div>
+    <div class="block" v-show="pageSwitch">
         <el-pagination
         background
         @current-change= "handleCurrentChange"
@@ -55,7 +57,8 @@ export default {
        type:{
         1:'校内',
         2:'校外'
-        }
+        },
+         pageSwitch:true
       }
     },
     mounted(){
@@ -86,6 +89,11 @@ export default {
                     item.courseEndTime = format(item.courseEndTime);
                 });
                 vm.total = data.data.total;
+                if(vm.total){
+                    vm.pageSwitch = true;
+                    }else{
+                    vm.pageSwitch = false;
+                    }
                 vm.$emit('getList', vm.list);
                 
             }else{

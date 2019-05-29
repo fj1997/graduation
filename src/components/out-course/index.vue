@@ -20,6 +20,9 @@
         </p>
       </li>
     </ul>
+    <div v-if="!list.length" class="empty">
+      暂无数据
+    </div>
     <pagination 
       v-on:getList="getCourseList1"
       :url="url"
