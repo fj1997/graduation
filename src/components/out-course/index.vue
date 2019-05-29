@@ -1,6 +1,6 @@
 <template>
   <div class="main-box">
-    <p class="course-img">
+    <!-- <p class="course-img">
       重庆邮电大学优质校内课程
     </p>
     <div class="course-title">
@@ -9,11 +9,12 @@
         <p class="excellent-course">精品课程</p>
         <p class="couser-explain">自主学习，让优秀成为一种习惯</p>
       </div>
-    </div>
+    </div> -->
     <ul class="course-list-wrap clearfix">
       <li v-for="(item,idx) in list" :key="idx" @click='courseDetail(item.courseId,item.courseName)'>
         <img :src="`http://62.234.57.192:8080/file/`+item.coursePhotoUrl" alt="" >
-        <p class="course-name">{{item.courseName}}</p>
+        <span class="course-name">{{item.courseName}}</span>
+        <span class="course-type">{{type[item.courseType]}}</span>
         <p class="course-teacher-info">
           <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
         </p>
@@ -37,7 +38,11 @@ export default {
     return {
      list:[],
      url:'/course/type',
-     courseType:2
+     courseType:2,
+     type:{
+       1:'校内',
+       2:'校外'
+     }
     }
   },
   components:{
@@ -129,10 +134,22 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          margin-top: 10px;
+          line-height: 22px;
+          color: #3D4059;
+          font-size: 16px;
+          display: inline-block;
+        }
+        .course-type{
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
           margin-top: 17px;
           line-height: 22px;
           color: #3D4059;
           font-size: 16px;
+          display: inline-block;
+          margin-left: 120px;
         }
         .course-teacher-info{
           padding: 0 15px;
