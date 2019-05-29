@@ -47,10 +47,11 @@
       <iframe :src="'http://ow365.cn/?i=18546&furl=http://62.234.57.192:8080/file/'+sectionFileUrl" width='700px' height='500px' v-if="sectionType!=1">点我预览</iframe> 
       <player :videoSrc="'http://62.234.57.192:8080/file/'+sectionFileUrl" v-show="sectionType==1"></player>
     </el-dialog>
+    <!-- 期末试题展示 -->
     <el-card 
       class="box-card question-box" 
       v-loading='questionLoading'
-      v-if="questionData.length">
+      v-if="questionData.length||radioData.length">
       <div slot="header" class="clearfix">
         <span>期末测试题目</span>
       </div>
@@ -132,54 +133,53 @@
 
 <!-- 添加期末测试 -->
 <el-dialog :title="title" :visible.sync="finalTest">
-  <span @click="showRadio = true">单选题</span><span @click="showRadio = false">主观题</span>
-   <!-- 添加单选 -->
-    <el-form ref="ridioForm" :model="ridioForm" :rules="ridioRules" label-width="80px" v-show="showRadio">
-        <el-form-item label="单选题目">
-          <el-input type="textarea" v-model="ridioForm.choiceQuestion"></el-input>
-        </el-form-item>
-        <el-form-item label="A：">
-          <el-input type="text" v-model="ridioForm.choiceA"></el-input> 
-        </el-form-item>
-        <el-form-item label="B：">
-          <el-input type="text" v-model="ridioForm.choiceB"></el-input>
-        </el-form-item>
-        <el-form-item label="C：">
-        <el-input type="text" v-model="ridioForm.choiceC"></el-input>
-        </el-form-item>
-        <el-form-item label="D：">
-          <el-input type="text" v-model="ridioForm.choiceD"></el-input>
-        </el-form-item>
-        <el-form-item label="正确答案:" prop="choiceAnswer">
-          <el-radio-group v-model="ridioForm.choiceAnswer">
-            <el-radio :label="ridioForm.choiceA">A</el-radio>
-            <el-radio :label="ridioForm.choiceB">B</el-radio>
-            <el-radio :label="ridioForm.choiceC">C</el-radio>
-            <el-radio :label="ridioForm.choiceD">D</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      
-      
-      <el-form-item>
-        <el-button type="primary" @click="addRadio('ridioForm')">立即创建</el-button>
-        <el-button @click="finalTest=false">取消</el-button>
-      </el-form-item>
-</el-form>
+  <span @click="showRadio = true;textColor=true" class="redioText" :class="textColor?'textColor':''">单选题</span>
+  <span @click="showRadio = false;textColor=false" class="question" :class="!textColor?'textColor':''">主观题</span>
+  <!-- 添加单选 -->
+  <el-form ref="ridioForm" :model="ridioForm" :rules="ridioRules" label-width="100px" v-show="showRadio">
+    <el-form-item label="单选题目" prop="choiceQuestion">
+      <el-input type="textarea" v-model="ridioForm.choiceQuestion"></el-input>
+    </el-form-item>
+    <el-form-item label="A：" prop="choiceA">
+      <el-input type="text" v-model="ridioForm.choiceA"></el-input> 
+    </el-form-item>
+    <el-form-item label="B：" prop="choiceB">
+      <el-input type="text" v-model="ridioForm.choiceB"></el-input>
+    </el-form-item>
+    <el-form-item label="C：" prop="choiceB">
+    <el-input type="text" v-model="ridioForm.choiceC"></el-input>
+    </el-form-item>
+    <el-form-item label="D：" prop="choiceD">
+      <el-input type="text" v-model="ridioForm.choiceD"></el-input>
+    </el-form-item>
+    <el-form-item label="正确答案:" prop="choiceAnswer">
+      <el-radio-group v-model="ridioForm.choiceAnswer">
+        <el-radio :label="ridioForm.choiceA">A</el-radio>
+        <el-radio :label="ridioForm.choiceB">B</el-radio>
+        <el-radio :label="ridioForm.choiceC">C</el-radio>
+        <el-radio :label="ridioForm.choiceD">D</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="addRadio('ridioForm')">立即创建</el-button>
+      <el-button @click="finalTest=false">取消</el-button>
+    </el-form-item>
+  </el-form>
 
 <!-- 添加主观题 -->
-   <el-form  v-show="!showRadio" :model="questionForm" :rules="questionRules" ref="questionForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="测试题目" prop="questionContent">
-    <el-input 
-      type="textarea" 
-      v-model="questionForm.questionContent"
-      placeholder="期末测试可以添加多道，章节测试添加一次"
-      ></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="addCourseQuestion('questionForm',type,id)" :disabled="disabled">添加测试</el-button>
-    <el-button @click="finalTest=false">取消</el-button>
-  </el-form-item>
-</el-form>
+  <el-form  v-show="!showRadio" :model="questionForm" :rules="questionRules" ref="questionForm" label-width="100px" class="demo-ruleForm">
+    <el-form-item label="测试题目" prop="questionContent">
+      <el-input 
+        type="textarea" 
+        v-model="questionForm.questionContent"
+        placeholder="期末测试可以添加多道，章节测试添加一次"
+        ></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="addCourseQuestion('questionForm',type,id)" :disabled="disabled">添加测试</el-button>
+      <el-button @click="finalTest=false">取消</el-button>
+    </el-form-item>
+  </el-form>
 </el-dialog>
 
 <!-- 查看章节测试题目 -->
@@ -234,7 +234,7 @@ export default {
         choiceB:'',
         choiceC:'',
         choiceD:'',
-        choiceAnswer:''
+        choiceAnswer:0
       },
       questionForm:{
         questionType:'',   //1、章节问题 （平时作业）2、课程问题（课程测试）
@@ -270,16 +270,16 @@ export default {
           { required: true, message: '请输入题目', trigger: 'blur' }
         ],
         choiceA: [
-          { required: true, message: '请填写A选选项内容', trigger: 'blur' }
+          { required: true, message: '请填写A选项内容', trigger: 'blur' }
         ],
         choiceB: [
-          { required: true, message: '请填写B选选项内容', trigger: 'blur' }
+          { required: true, message: '请填写B选项内容', trigger: 'blur' }
         ],
         choiceC: [
-          { required: true, message: '请填写C选选项内容', trigger: 'blur' }
+          { required: true, message: '请填写C选项内容', trigger: 'blur' }
         ],
         choiceD: [
-          { required: true, message: '请填写D选选项内容', trigger: 'blur' }
+          { required: true, message: '请填写D选项内容', trigger: 'blur' }
         ],
         choiceAnswer: [
           { required: true, message: '请选择答案', trigger: 'blur' }
@@ -295,6 +295,7 @@ export default {
       sectionFileUrl:'',
       sectionType:'',
       sectionName:'',
+      textColor:true
     }
   },
   components:{
@@ -316,9 +317,7 @@ export default {
     this.getRadioList();
   },
   methods:{
-    onSubmit() {
-        console.log(this.form.resource);
-      },
+
     /**
       获取章节列表
      */
@@ -377,12 +376,11 @@ export default {
         });
     },
 
-    //上传视频，ppt，文章等
+    //添加章节：上传视频，ppt，文章等
     uploadFile(formName){
       let vm =this;
       vm.$refs[formName].validate((valid) => {
         if (valid) {
-
           vm.innerAddForm.sectionType = vm.outerAddForm.sectionType;
           let formData = new FormData();
           let fileValue = document.getElementById("file-url").value;
@@ -392,11 +390,13 @@ export default {
 
           //对上传的资源进行校验
           if(vm.outerAddForm.sectionType ==1){
+            
             if(fileValue!=".mp4"){ //根据后缀，判断是否符合视频格式
               vm.$message({
                 type: 'error',
                 message: '视频格式必须为MP4,重新选择'
               });
+
               document.getElementById('file-url').value="";   // 不符合，就清除，重新选择
               return;
            }
@@ -451,7 +451,7 @@ export default {
         });
     },
 
-    //添加章节
+    //添加章节：上传章节介绍
     submitForm(formName) {
         let vm =this;
         vm.$refs[formName].validate((valid) => {
@@ -491,6 +491,7 @@ export default {
           }
         });
     },
+
      /**
      * 查看资源
      */
@@ -664,10 +665,6 @@ export default {
 
             //成功后
             if(data.result){
-                vm.$message({
-                type: 'success',
-                message: '获取单选成功'
-                });
                 vm.radioData = data.data;
               
             }else{
@@ -681,35 +678,37 @@ export default {
             return false
         });
     },
+
     /**
      * 删除章节测试：课后作业
      */
     deleteSectionQuestion(questionId){
       let vm =this;
-    vm.$axios.delete('/question/question/'+questionId)
-      .then(function(res){
-          let data = res.data
+      vm.$axios.delete('/question/question/'+questionId)
+        .then(function(res){
+            let data = res.data
 
-          //成功后
-          if(data.result){
-              vm.$message({
-              type: 'success',
-              message: '删除成功'
-              });
-              vm.dialogLookTest = false;
-            vm.getSectionList();
-            
-          }else{
-              vm.$message({
-              type: 'error',
-              message: '删除失败!'
-              });
-          }
-      })
-      .catch(function(err){
-          return false
-      });
+            //成功后
+            if(data.result){
+                vm.$message({
+                type: 'success',
+                message: '删除成功'
+                });
+                vm.dialogLookTest = false;
+              vm.getSectionList();
+              
+            }else{
+                vm.$message({
+                type: 'error',
+                message: '删除失败!'
+                });
+            }
+        })
+        .catch(function(err){
+            return false
+        });
     },
+
     /**
      * 删除期末测试
      */
@@ -755,5 +754,15 @@ export default {
 }
 .text{
   position: relative;
+  }
+  .redioText,.question{
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .textColor{
+    color: #409EFF;
   }
 </style>
