@@ -1,8 +1,8 @@
 <template>
   <div>
-      <div>
+      <div v-show="radioData.length">
           <p>一、单选题: 总分100分</p>
-          <p>最终得分：{{score}}</p>
+          <span>最终得分：{{score}}</span>
           <div v-for="(item,idx) in radioData" :key="idx">
               <p>{{idx+1}}、{{item.choiceQuestion}}</p>
             <el-radio-group v-model="checkedValue[idx]">
@@ -25,12 +25,13 @@
           </p>
           
       </div>
-      <div>
-          <p v-if="questionData.length">二、简答题</p>
-          <p>最终得分：{{qustionScore}}</p>
+      <div v-show="questionData.length">
+          <p>二、简答题</p>
+          <span>最终得分：个人中心查看</span>
           <div v-for="(item,index) in questionData" :key="index">
-            <p>{{index+1}}、{{item.questionContent}}</p>
-            <div class="anwser-box">
+              <p>{{index+1}}、{{item.questionContent}}</p>
+              <p v-show="item.whetherDo">答题状态：已答题</p>
+            <div class="anwser-box" v-show="!item.whetherDo">
                 <el-input
                     type="textarea"
                     :autosize="{ minRows:10, maxRows: 10}"
@@ -43,6 +44,9 @@
             </div>
           </div>
       </div>
+      <div v-if="!radioData.length && !questionData.length" class="empty">
+      暂无数据
+    </div>
   </div>
 </template>
 
@@ -59,9 +63,10 @@ export default {
       score:0,                   //单选最后得分
       questionData:[],            //简答题列表
       questionAnswer:[],            //简答题答案
-      qustionScore:0                //简答题分数
+      qustionScore:0                //简答题分数\
     }
   },
+  
   computed:{
       courseId(){
           let vm =this;
@@ -137,7 +142,6 @@ export default {
                 }
 
                 vm.score=parseInt((vm.yesCount/vm.checkedValue.length)*100);
-
                 //提交成绩
                 vm.$axios.post('/score/score',{
                     scoreUserId:vm.userId,
@@ -150,7 +154,7 @@ export default {
                             type: 'success',
                             message: '提交成功'
                             });
-                        vm. getRadioScore();
+                        vm.getRadioScore();
                     }
                     })
                     .catch(err => {
@@ -193,7 +197,23 @@ export default {
             .then(function(res){
             let data =res.data;
             if(data.result){
+                
                 vm.questionData= data.data;
+                vm.questionData.forEach(function(item){
+                    vm.$axios.get('/work/question/'+vm.userId+'/'+item.questionId)
+                    .then(function(res){
+                    let data1 =res.data;
+                    if(data1.result){
+                        vm.$set(item,'whetherDo',data1.data);
+                    }
+                    })
+                    .catch(err => {
+                        return false
+                    });
+                });
+               
+                
+
             }
             })
             .catch(err => {
@@ -219,6 +239,7 @@ export default {
                         type: 'success',
                         message: '提交成功'
                     });
+                    vm.getQuestionList();
                 }
             })
             .catch(err => {
@@ -237,14 +258,6 @@ export default {
                     let data =res.data;
                     if(data.result){
                         vm.questionScore= data.data.finalScore;
-                        // if(vm.score!=0){
-                        //     vm.disabled = true;
-                        // }
-                        vm.$message({
-                        type: 'success',
-                        message: '获取简答题成绩成功'
-                    });
-                        
                     }
                     })
                     .catch(err => {

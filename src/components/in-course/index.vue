@@ -40,7 +40,7 @@ export default {
     let vm = this;
     return {
      list:[],
-     url:'/course/type',
+     url:'/course/type/status',
      courseType:1,
      type:{
        1:'校内',

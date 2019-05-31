@@ -154,7 +154,7 @@ export default {
       let vm =this;
       vm.$refs[formName].validate((valid) => {
         if (valid) {
-          vm.$axios.post('/user/login',vm.ruleForm)
+          vm.$axios.post('/user/register',vm.ruleForm)
             .then(function(res){
               let data = res.data;
               if(data.result){

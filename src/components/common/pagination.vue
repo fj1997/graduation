@@ -40,7 +40,8 @@ export default {
             vm.$axios.post(vm.url,{
                 pageNum:vm.pageNum,
                 pageSize:vm.pageSize,
-                courseType:vm.courseType
+                courseType:vm.courseType,
+                courseStatus:2
             })
             .then(function(res){
                 let data = res.data;
