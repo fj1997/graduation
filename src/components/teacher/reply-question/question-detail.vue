@@ -54,7 +54,7 @@
                     <span>发表于{{item.commentTime}}</span>
                     <!-- <span class="look-evaluate">查看老师回复</span> -->
                 </p>
-                <p  class="evaluate-time" v-if="item.commentAnswer">
+                <p  class="evaluate-time" v-if="item.commentAnswer && item.commentStatus!=3">
                     <span>老师回复：{{item.commentAnswer}}</span>
                 </p>
             </div>

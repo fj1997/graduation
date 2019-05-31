@@ -31,7 +31,7 @@
             label="操作"
             align="right">
             <template slot-scope="scope">
-            <el-input-number v-model="scope.row.score" :step="2" :min="0" :max="100"></el-input-number>
+            <el-input-number v-model="scope.row.score" :step="10" :min="0" :max="100" class="number"></el-input-number>
             <el-button
                 size="mini"
                 type="success"
@@ -125,7 +125,7 @@ export default {
      */
     postScore(row){
         let vm= this;
-          vm.loading = true;
+          
             vm.$axios.put('/work/score',{
                 workId:row.workId,
 	            workScore:row.score
@@ -139,7 +139,7 @@ export default {
                     type: 'success',
                     message: '成功打分!'
                     });
-                    vm.loading=false;
+                   vm.getCourseScore();
                 }else{
                     vm.$message({
                     type: 'error',
@@ -183,5 +183,9 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 100%;
+  }
+  .number{
+      position: relative;
+      z-index: 100;
   }
 </style>

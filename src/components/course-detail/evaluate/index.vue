@@ -54,9 +54,12 @@
                 <p class="evaluate-time clearfix">
                     <span>发表于{{item.commentTime}}</span>
                 </p>
-                <p  class="evaluate-time" v-if="item.commentAnswer">
+                <p  class="evaluate-time" v-if="item.commentAnswer&& item.commentStatus!=3">
                     <span>老师回复：{{item.commentAnswer}}</span>
                 </p>
+                <div v-if="item.commentStatus==3" class="evaluate-time">
+                    <span>老师忽略了你的问题</span>
+                </div>
             </div>
         </li>
     </ul>
