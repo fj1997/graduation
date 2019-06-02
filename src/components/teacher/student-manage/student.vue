@@ -98,7 +98,8 @@ methods: {
     
         if(data.result){
             vm.tableData = data.data;
-            vm.tableData.forEach(function(item){
+            if(vm.tableData.length){
+                vm.tableData.forEach(function(item){
                 if(item.userAttest==0){
                     item.userAttest = '自由学习人员';
                 }else{
@@ -131,6 +132,9 @@ methods: {
 
                 })
                     
+            }else{
+                 vm.loading = false;
+            }
         }else{
                 vm.$message({
                 type: 'error',
