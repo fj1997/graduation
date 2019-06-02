@@ -5,7 +5,8 @@
     <ul class="course-list-wrap clearfix" v-if="tableData.length">
       <li v-for="(item,idx) in tableData" :key="idx" @click='courseDetail(item.courseId,item.courseName)'>
         <img :src="`http://62.234.57.192:8080/file/`+item.coursePhotoUrl" alt="" >
-        <p class="course-name">{{item.courseName}}</p>
+        <span class="course-name">{{item.courseName}}</span>
+        <span class="course-type">{{type[item.courseType]}}</span>
         <p class="course-teacher-info">
           <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>
           
@@ -39,7 +40,11 @@ export default {
       total:10,
       courseStatus: 1, //1未发布，2已发布
       tableData: [],
-      pageSwitch:true
+      pageSwitch:true,
+      type:{
+       1:'校内',
+       2:'校外'
+     }
     }
   },
   mounted(){
@@ -170,10 +175,22 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          margin-top: 10px;
+          line-height: 22px;
+          color: #3D4059;
+          font-size: 16px;
+          display: inline-block;
+        }
+        .course-type{
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
           margin-top: 17px;
           line-height: 22px;
           color: #3D4059;
           font-size: 16px;
+          display: inline-block;
+          margin-left: 120px;
         }
         .course-teacher-info{
           padding: 0 15px;
