@@ -73,7 +73,7 @@ export default {
       if (!value) {
         callback(new Error('请输入密码'))
       } else if (!isvalidPass(value)) {
-        callback(new Error('密码必须包括字母和数字，6~8个字符'))
+        callback(new Error('密码必须包括字母和数字，6~18个字符'))
       } else {
         callback()
       }

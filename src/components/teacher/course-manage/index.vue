@@ -3,6 +3,7 @@
     <el-button :autofocus="true" @click="getPublish" :class="isActive?'active-button':''">已发布</el-button>
     <el-button @click="getUnPublish" :class="!isActive?'active-button':''">未发布</el-button>
     <ul class="course-list-wrap clearfix" v-if="tableData.length">
+     
       <li v-for="(item,idx) in tableData" :key="idx" @click='courseDetail(item.courseId,item.courseName)'>
         <img :src="`http://62.234.57.192:8080/file/`+item.coursePhotoUrl" alt="" >
         <p class="course-name">{{item.courseName}}</p>
@@ -151,13 +152,16 @@ export default {
      */
    courseDetail(id,name){
       let vm = this;
-        vm.$router.push({
+      if(vm.courseStatus == 2){
+         vm.$router.push({
             path:'/teacher/courseManage/addSection',
             query:{
               courseId:id,
               courseName:name
             }
         })
+      }
+       
     }
   }
 }
