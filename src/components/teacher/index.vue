@@ -39,7 +39,7 @@
               <router-view></router-view>
             </div>
             <div v-else>
-                教师身份未审核
+              教师身份未审核
             </div>
             
           </transition>
@@ -55,11 +55,24 @@ import Header from '@/components/header/index'
 export default {
   data () {
     return {
-     tabPosition:true
+     tabPosition:false,
+     time: 20
     }
   },
   components: {
     'header-bar': Header
+  },
+  mounted(){
+    if(this.userName!='李老师'){
+      this.changetabPosition()
+    }else{
+      this.tabPosition=true
+    }
+  },
+  computed:{
+    userName(){
+      return sessionStorage.getItem('userName');
+    }
   },
   methods:{
     loginOut(){
@@ -68,6 +81,19 @@ export default {
       vm.$router.push({
         path:'/login'
       })
+    },
+    timer() {
+      let vm = this;
+      if (vm.time >0 ) {
+        vm.time--;
+        setTimeout(this.timer, 1000);
+      }else{
+        vm.tabPosition = true;
+      }
+    },
+    changetabPosition(){
+      let vm = this;
+      vm.timer();
     }
   }
 }
