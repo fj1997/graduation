@@ -116,7 +116,7 @@ methods: {
                             let data =res.data;
                             if(data.result){
                                 item.score= data.data;
-                                item.totalScore =parseInt(item.normalScore*0.3+0.42*item.finalScore*0.6+item.score*0.28);
+                                item.totalScore =parseInt(item.normalScore*0.3+0.42*item.finalScore+item.score*0.28);
                                 vm.loading = false;
                             }
                             })

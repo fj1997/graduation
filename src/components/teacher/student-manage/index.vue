@@ -106,7 +106,7 @@ export default {
     handleCurrentChange(val) {
         let vm=this;
         vm.pageNum=val;
-        vm.getCourseList();
+        vm.getList();
     },
     /**
      * 进去课程详情页面

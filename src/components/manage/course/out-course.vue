@@ -40,13 +40,13 @@
         <el-table-column
             prop="courseBeginTime"
             label="开始时间"
-            width="300"
+            width="200"
             >
         </el-table-column>
         <el-table-column
             prop="courseEndTime"
             label="结束时间"
-            width="300"
+            width="200"
             >
         </el-table-column>
         <el-table-column
@@ -60,6 +60,7 @@
         <el-table-column
             v-if="courseStatus==2"
             label="操作"
+            width="300"
             align="right">
             <template slot-scope="scope">
                 <el-button
@@ -80,6 +81,7 @@
             <template slot-scope="scope">
                 <el-button
                 size="mini"
+                width="300"
                 type="primary"
                 @click="lookCourse(scope.$index, scope.row)">查看</el-button>   
             <el-button

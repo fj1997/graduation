@@ -1,6 +1,6 @@
 <template>
   <div class="course-box">
-    <p class="course-name">{{basicData.courseName}}</p>
+    <p class="course-name-title">{{basicData.courseName}}</p>
     <div class="course-info">
       <p class="course-time">
           <span>课程类型：</span>
@@ -109,7 +109,7 @@ export default {
 .course-box{
   width: 600px;
   height: 284px;
-  .course-name{
+  .course-name-title{
     margin-bottom: 20px;
     font-size: 24px;
     color: 24px;

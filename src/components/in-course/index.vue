@@ -13,7 +13,7 @@
     <ul class="course-list-wrap clearfix">
       <li v-for="(item,idx) in list" :key="idx" @click='courseDetail(item.courseId,item.courseName)'>
         <img :src="`http://62.234.57.192:8080/file/`+item.coursePhotoUrl" alt="" >
-        <span class="course-name">{{item.courseName}}</span>
+        <span class="course-name ellipsis">{{item.courseName}}</span>
         <span class="course-type">{{type[item.courseType]}}</span>
         <p class="course-teacher-info">
           <span>开课时间：{{item.courseBeginTime}}</span>-<span> {{item.courseEndTime}}</span>

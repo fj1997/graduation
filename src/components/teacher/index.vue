@@ -35,7 +35,13 @@
       <el-container>
         <el-main>
           <transition>
-            <router-view></router-view>
+            <div v-if="tabPosition">
+              <router-view></router-view>
+            </div>
+            <div v-else>
+                教师身份未审核
+            </div>
+            
           </transition>
         </el-main>
       </el-container>
@@ -49,7 +55,7 @@ import Header from '@/components/header/index'
 export default {
   data () {
     return {
-      tabPosition: 'left'
+     tabPosition:true
     }
   },
   components: {

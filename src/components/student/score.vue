@@ -120,7 +120,7 @@ export default {
                               let data =res.data;
                               if(data.result){
                                   courseData.score= data.data;
-                                  courseData.totalScore =parseInt(courseData.normalScore*0.3+0.42*courseData.finalScore*0.6+courseData.score*0.28);
+                                  courseData.totalScore =parseInt(courseData.normalScore*0.3+0.42*courseData.finalScore+courseData.score*0.28);
                                   vm.dataList.push(courseData);
                                   vm.loading = false;
                                   
